@@ -15,7 +15,7 @@ A game about limited sight
         - traps?
         - rocks?
 
-** May 6 - May 9 **
+**May 6 - May 9**
 - Light tracking
 - Possible particle detection for fog
     - this will need to be only in the players vicinity otherwise the
@@ -23,11 +23,11 @@ A game about limited sight
 - Monster tracking
     - primitive tracking (monster does not have to avoid obstacles)
 
-** May 10 - May 13 **
+**May 10 - May 13**
 - Collision detection
 - Fix other errors
 
-** May 14 **
+**May 14**
 Dean's Date. Project Due date.
 
 ## Features
