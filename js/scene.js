@@ -9,9 +9,14 @@ var dom;
 var hero;
 var sun;
 var ground;
-var orbitControl;
+//var orbitControl;
 var player;
+var controls;
+var clock;
 
+var MOVESPEED = 30,
+    LOOKSPEED = 0.075
+    
 init();
 function init() {
 	// set up the scene
@@ -20,7 +25,7 @@ function init() {
 	//call game loop
     update();
 
-  console.log("hello");
+  //console.log("hello");
 }
 
 function createScene(){
@@ -32,6 +37,20 @@ function createScene(){
 
 	// 2. camera aka player
   player = new Player();
+  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 0.1, 1000 );//perspective camera
+  camera.position.y = player.position.y;
+  camera.position.z = player.position.z;
+  
+  scene.add(camera);
+
+    // setup player movement
+    controls = new THREE.FirstPersonControls(camera);
+    controls.movementSpeed = MOVESPEED;
+    controls.lookSpeed= LOOKSPEED;
+    controls.lookVertical = false;
+    controls.noFly = true;
+    controls.activeLook = false;
+    //document.onkeydown = handleKeyDown;
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
@@ -50,6 +69,10 @@ function createScene(){
 	sun.position.set( 0,4,1 );
 	sun.castShadow = true;
 
+    // setup time
+    clock=new THREE.Clock();
+    clock.start();
+    
 	//Set up shadow properties for the sun light
 	sun.shadow.mapSize.width = 256;
 	sun.shadow.mapSize.height = 256;
@@ -75,11 +98,11 @@ function createScene(){
 	ground.rotation.x=-Math.PI/2;
 	scene.add( ground );
 
-	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
-	orbitControl.addEventListener( 'change', render );
+	//orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
+	//orbitControl.addEventListener( 'change', render );
 	//orbitControl.enableDamping = true;
 	//orbitControl.dampingFactor = 0.8;
-	orbitControl.enableZoom = true;
+	//orbitControl.enableZoom = true;
 
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
@@ -91,6 +114,8 @@ function update(){
     //animate
     hero.rotation.x += 0.01;
     hero.rotation.y += 0.01;
+    var delta = clock.getDelta();
+	controls.update(delta); // Move camera
     render();
     requestAnimationFrame(update); //request next update
 }
@@ -106,4 +131,8 @@ function onWindowResize() {
 	renderer.setSize(sceneWidth, sceneHeight);
 	camera.aspect = sceneWidth/sceneHeight;
 	camera.updateProjectionMatrix();
+}
+
+function handleKeyDown(keyEvent){
+
 }
