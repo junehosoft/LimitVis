@@ -145,6 +145,23 @@ function createScene(){
   frontWall.position.z = -200;
   scene.add(frontWall);
 
+  // key
+  var loader = new THREE.STLLoader();
+  loader.load('Key.stl', function (geometry) {
+    var material = new THREE.MeshPhongMaterial(
+      { color: 0xff5533, specular: 0x111111, shininess: 200 } );
+    var mesh = new THREE.Mesh(geometry, material);
+
+    mesh.position.set(0,0,0);
+    mesh.rotation.set(0,0,0);
+    mesh.scale.set(2,2,2);
+
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    scene.add(mesh);
+  });
+
 
 
 	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
