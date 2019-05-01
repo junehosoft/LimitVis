@@ -10,6 +10,7 @@ var hero;
 var sun;
 var ground;
 var orbitControl;
+var player;
 
 init();
 function init() {
@@ -17,7 +18,7 @@ function init() {
 	createScene();
 
 	//call game loop
-  update();
+    update();
 
   console.log("hello");
 }
@@ -27,13 +28,10 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  scene.fog = new THREE.Fog(0x00ff00, 50, 800); //enable fog
+  scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
 
-	// 2. camera
-  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 0.1, 1000 );//perspective camera
-	camera.position.y = 4;
-	camera.position.z = 15;
-	scene.add(camera);
+	// 2. camera aka player
+  player = new Player();
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
@@ -90,11 +88,11 @@ function createScene(){
 }
 
 function update(){
-  //animate
-  hero.rotation.x += 0.01;
-  hero.rotation.y += 0.01;
-  render();
-	requestAnimationFrame(update); //request next update
+    //animate
+    hero.rotation.x += 0.01;
+    hero.rotation.y += 0.01;
+    render();
+    requestAnimationFrame(update); //request next update
 }
 
 function render(){
