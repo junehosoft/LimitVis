@@ -8,6 +8,7 @@ var renderer;
 var dom;
 var hero;
 var sun;
+var key;
 
 // room objects
 var ground;
@@ -57,7 +58,7 @@ function createScene(){
   //controls.noFly = true;
   //controls.activeLook = false;
   //document.onkeydown = handleKeyDown;
-  console.log(camera.position);
+  //console.log(camera.position);
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
@@ -87,14 +88,14 @@ function createScene(){
 	sun.shadow.camera.far = 50 ;
 	scene.add(sun);
 
-	// add items to scene
-	var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
-	var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
-	hero = new THREE.Mesh( heroGeometry, heroMaterial );
-	hero.castShadow=true;
-	hero.receiveShadow=false;
-	hero.position.y=2;
-	scene.add( hero );
+	// add items to scene (this is the rotating box)
+	// var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
+	// var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
+	// hero = new THREE.Mesh( heroGeometry, heroMaterial );
+	// hero.castShadow=true;
+	// hero.receiveShadow=false;
+	// hero.position.y=2;
+	// scene.add( hero );
 
 	var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
 	var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
@@ -102,15 +103,16 @@ function createScene(){
 	ground.receiveShadow = true;
 	ground.castShadow = false;
 	ground.rotation.x = -Math.PI/2;
-  console.log("ground pos")
-  console.log(ground.position.y)
+  // console.log("ground pos")
+  // console.log(ground.position.y)
   scene.add(ground);
-  console.log(ground)
+  // console.log(ground)
 
 
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
   var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
+
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.rotation.y = Math.PI;
   backWall.recieveShadow = true;
@@ -146,22 +148,22 @@ function createScene(){
   scene.add(frontWall);
 
   // key
-  var loader = new THREE.STLLoader();
+  let loader = new THREE.STLLoader();
   loader.load('Key.stl', function (geometry) {
-    var material = new THREE.MeshPhongMaterial(
-      { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-    var mesh = new THREE.Mesh(geometry, material);
+    let material = new THREE.MeshPhongMaterial(
+      { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
+    key = new THREE.Mesh(geometry, material);
+      
+    key.position.set(0,2,0);
+    key.rotation.set(0,0,0);
+    key.scale.set(1,1,1);
 
-    mesh.position.set(0,0,0);
-    mesh.rotation.set(0,0,0);
-    mesh.scale.set(2,2,2);
+    key.castShadow = true;
+    key.receiveShadow = true;
 
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
+    scene.add(key);
+   
   });
-
 
 
 	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
@@ -178,8 +180,9 @@ function createScene(){
 
 function update(){
     //animate
-    hero.rotation.x += 0.01;
-    hero.rotation.y += 0.01;
+    // hero.rotation.x += 0.01;
+    // hero.rotation.y += 0.01;
+
     //var delta = clock.getDelta();
     //controls.update(delta); // Move camera
     //playerControls();
