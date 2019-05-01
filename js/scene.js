@@ -96,7 +96,7 @@ function createScene(){
 	hero.position.y=2;
 	scene.add( hero );
 
-	var planeGeometry = new THREE.PlaneGeometry(2000, 2000, 4, 4 );
+	var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
 	var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
 	ground = new THREE.Mesh( planeGeometry, planeMaterial );
 	ground.receiveShadow = true;
@@ -105,26 +105,44 @@ function createScene(){
   console.log("ground pos")
   console.log(ground.position.y)
   scene.add(ground);
+  console.log(ground)
 
 
   // set up back wall
-  var wallGeometery = new THREE.PlaneGeometry(2000, 2000, 4, 4);
+  var wallGeometry = new THREE.PlaneGeometry(600, 600);
   var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
-  backWall = new THREE.Mesh(planeGeometry, wallMaterial);
+  backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.recieveShadow = true;
   backWall.castShadow = true;
-  backWall.position.y = 1000;
-  backWall.position.z = -1000;
-  console.log(backWall.position.y)
+  backWall.position.y = 50;
+  backWall.position.z = 200;
   scene.add(backWall);
 
   // right wall
-  rightWall = new THREE.Mesh(planeGeometry, wallMaterial);
+  rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
   rightWall.recieveShadow = true;
   rightWall.castShadow = true;
   rightWall.rotation.y = -Math.PI/2;
+  rightWall.position.x = 250;
+  rightWall.position.y = 50;
   scene.add(rightWall);
 
+  // left wall
+  leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  leftWall.recieveShadow = true;
+  leftWall.castShadow = true;
+  leftWall.rotation.y = Math.PI/2;
+  leftWall.position.x = -250;
+  leftWall.position.y = 50;
+  scene.add(leftWall);
+
+  // front wall
+  frontWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  frontWall.recieveShadow = true;
+  frontWall.castShadow = true;
+  frontWall.position.y = 50;
+  frontWall.position.z = -200;
+  scene.add(frontWall);
 
 
 
