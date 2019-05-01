@@ -8,7 +8,13 @@ var renderer;
 var dom;
 var hero;
 var sun;
+
+// room objects
 var ground;
+var backWall;
+var leftWall;
+var rightWall;
+var frontWall; // front means facing player initially
 //var orbitControl;
 var player;
 var controls;
@@ -17,48 +23,50 @@ var velocity = new THREE.Vector3();
 
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
-    
+
 init();
+
 function init() {
 	// set up the scene
 	createScene();
 
 	//call game loop
-    update();
+  update();
 
   //console.log("hello");
 }
 
 function createScene(){
 	// 1. set up scene
-    sceneWidth=window.innerWidth;
-    sceneHeight=window.innerHeight;
-    scene = new THREE.Scene();//the 3d scene
-    scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
+  sceneWidth=window.innerWidth;
+  sceneHeight=window.innerHeight;
+  scene = new THREE.Scene();//the 3d scene
+  // scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
 
 	// 2. camera aka player
-    camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 0.1, 1000 );//perspective camera
-    camera.position.y = 2;
-    camera.position.z = 10;
-    scene.add(camera);
+  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 0.1, 1000 );//perspective camera
+  camera.position.y = 2;
+  camera.position.z = 10;
+  scene.add(camera);
 
-    // setup player movement
-    controls = new THREE.PlayerControls(camera);
-    //controls.movementSpeed = MOVESPEED;
-    //controls.lookSpeed= LOOKSPEED;
-    //controls.lookVertical = false;
-    //controls.noFly = true;
-    //controls.activeLook = false;
-    //document.onkeydown = handleKeyDown;
-    console.log(camera.position);
+  // setup player movement
+  // controls = new THREE.PlayerControls(camera);
+  //controls.movementSpeed = MOVESPEED;
+  //controls.lookSpeed= LOOKSPEED;
+  //controls.lookVertical = false;
+  //controls.noFly = true;
+  //controls.activeLook = false;
+  //document.onkeydown = handleKeyDown;
+  console.log(camera.position);
+
 	// 3. renderer
-    renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
+  renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
 	renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
 	// renderer.setClearColor(scene.fog.color); // sets it to the grass color
-    renderer.shadowMap.enabled = true;//enable shadow
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.setSize( sceneWidth, sceneHeight );
-    dom = document.getElementById('TutContainer');
+  renderer.shadowMap.enabled = true;//enable shadow
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setSize( sceneWidth, sceneHeight );
+  dom = document.getElementById('TutContainer');
 	dom.appendChild(renderer.domElement);
 
 	// 4. lights
@@ -68,10 +76,10 @@ function createScene(){
 	sun.position.set( 0,4,1 );
 	sun.castShadow = true;
 
-    // setup time
-    clock=new THREE.Clock();
-    clock.start();
-    
+  // setup time
+  clock = new THREE.Clock();
+  clock.start();
+
 	//Set up shadow properties for the sun light
 	sun.shadow.mapSize.width = 256;
 	sun.shadow.mapSize.height = 256;
@@ -79,7 +87,7 @@ function createScene(){
 	sun.shadow.camera.far = 50 ;
 	scene.add(sun);
 
-	//add items to scene
+	// add items to scene
 	var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
 	var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
 	hero = new THREE.Mesh( heroGeometry, heroMaterial );
@@ -88,21 +96,43 @@ function createScene(){
 	hero.position.y=2;
 	scene.add( hero );
 
-	var planeGeometry = new THREE.PlaneGeometry( 20, 20, 4, 4 );
-	var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } )
-
-    console.log(hero.position);
+	var planeGeometry = new THREE.PlaneGeometry(2000, 2000, 4, 4 );
+	var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
 	ground = new THREE.Mesh( planeGeometry, planeMaterial );
 	ground.receiveShadow = true;
-	ground.castShadow=false;
-	ground.rotation.x=-Math.PI/2;
-	scene.add( ground );
+	ground.castShadow = false;
+	ground.rotation.x = -Math.PI/2;
+  console.log("ground pos")
+  console.log(ground.position.y)
+  scene.add(ground);
 
-	//orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
-	//orbitControl.addEventListener( 'change', render );
-	//orbitControl.enableDamping = true;
-	//orbitControl.dampingFactor = 0.8;
-	//orbitControl.enableZoom = true;
+
+  // set up back wall
+  var wallGeometery = new THREE.PlaneGeometry(2000, 2000, 4, 4);
+  var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
+  backWall = new THREE.Mesh(planeGeometry, wallMaterial);
+  backWall.recieveShadow = true;
+  backWall.castShadow = true;
+  backWall.position.y = 1000;
+  backWall.position.z = -1000;
+  console.log(backWall.position.y)
+  scene.add(backWall);
+
+  // right wall
+  rightWall = new THREE.Mesh(planeGeometry, wallMaterial);
+  rightWall.recieveShadow = true;
+  rightWall.castShadow = true;
+  rightWall.rotation.y = -Math.PI/2;
+  scene.add(rightWall);
+
+
+
+
+	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
+	orbitControl.addEventListener( 'change', render );
+	orbitControl.enableDamping = true;
+	orbitControl.dampingFactor = 0.8;
+	orbitControl.enableZoom = true;
 
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone

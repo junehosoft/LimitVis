@@ -7,7 +7,7 @@ A game about limited sight
 - WebGL
 
 ## Timeline
-** April 29 - May 5 **
+**April 29 - May 5**
 - Basic scene and rendering pipeline set up
     - floor/background
     - obstacles (must determine what they are)
@@ -36,4 +36,5 @@ Dean's Date. Project Due date.
 - Light/camera should track player
 
 ## Objects in scene
-- ?? 
+- Mostly primitives (cubes, triangles)
+- some spikes
