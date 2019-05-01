@@ -112,6 +112,7 @@ function createScene(){
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
   var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  backWall.rotation.y = Math.PI;
   backWall.recieveShadow = true;
   backWall.castShadow = true;
   backWall.position.y = 50;
