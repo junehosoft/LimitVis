@@ -10,17 +10,28 @@ var hero;
 var sun;
 var key;
 
-// room objects
+// room boundaries
 var ground;
 var backWall;
 var leftWall;
 var rightWall;
 var frontWall; // front means facing player initially
+
+var backDist = 200;
+var leftDist = -250;
+var rightDist = 250;
+var frontDist = -200;
 //var orbitControl;
 var player;
 var controls;
 var clock;
 var velocity = new THREE.Vector3();
+
+// obstacles in the game
+var tube;
+var ring;
+var lathe;
+var boxes = new Array();
 
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
@@ -108,7 +119,6 @@ function createScene(){
   scene.add(ground);
   // console.log(ground)
 
-
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
   var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
@@ -118,7 +128,7 @@ function createScene(){
   backWall.recieveShadow = true;
   backWall.castShadow = true;
   backWall.position.y = 50;
-  backWall.position.z = 200;
+  backWall.position.z = backDist;
   scene.add(backWall);
 
   // right wall
@@ -126,7 +136,7 @@ function createScene(){
   rightWall.recieveShadow = true;
   rightWall.castShadow = true;
   rightWall.rotation.y = -Math.PI/2;
-  rightWall.position.x = 250;
+  rightWall.position.x = rightDist;
   rightWall.position.y = 50;
   scene.add(rightWall);
 
@@ -135,7 +145,7 @@ function createScene(){
   leftWall.recieveShadow = true;
   leftWall.castShadow = true;
   leftWall.rotation.y = Math.PI/2;
-  leftWall.position.x = -250;
+  leftWall.position.x = leftDist;
   leftWall.position.y = 50;
   scene.add(leftWall);
 
@@ -144,7 +154,7 @@ function createScene(){
   frontWall.recieveShadow = true;
   frontWall.castShadow = true;
   frontWall.position.y = 50;
-  frontWall.position.z = -200;
+  frontWall.position.z = frontDist;
   scene.add(frontWall);
 
   // key
@@ -164,6 +174,76 @@ function createScene(){
     scene.add(key);
    
   });
+
+  // add in objects/obstacles
+  function CustomSinCurve( scale ) {
+  	THREE.Curve.call( this );
+  	this.scale = ( scale === undefined ) ? 1 : scale;
+  }
+
+  CustomSinCurve.prototype = Object.create( THREE.Curve.prototype );
+  CustomSinCurve.prototype.constructor = CustomSinCurve;
+
+  CustomSinCurve.prototype.getPoint = function ( t ) {
+
+  	var tx = t * 3 - 1.5;
+  	var ty = Math.sin( 2 * Math.PI * t );
+  	var tz = 0;
+  	return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
+  };
+
+  var path = new CustomSinCurve(10);
+  var tubeGeometry = new THREE.TubeGeometry( path, 50, 5, 8, false );
+  var tubeMat = new THREE.MeshBasicMaterial( { color: 0x3044c9 } );
+  var tube = new THREE.Mesh( tubeGeometry, tubeMat );
+  tube.rotation.x = -Math.PI/2;
+  tube.position.y = 0;
+  tube.position.z = -75;
+  scene.add(tube);
+
+  var points = [];
+  for ( var i = 0; i < 10; i ++ ) {
+  	points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 10 + 5, ( i - 5 ) * 2 ) );
+  }
+  var latheGeometry = new THREE.LatheGeometry( points );
+  var latheMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+  lathe = new THREE.Mesh(latheGeometry, latheMaterial );
+  lathe.rotation.x = -Math.PI;
+  lathe.position.z = 100;
+  lathe.position.x = 80;
+  scene.add( lathe );
+
+  // add in torus later
+
+  // random cubes
+  console.log(boxes)
+  for (let i = 0; i < 3; i++) {
+    let width = Math.round(Math.random()*50+10);
+    let height = Math.round(Math.random()*300+100);
+    let depth = Math.round(Math.random()*50+10);
+    let boxGeo = new THREE.BoxGeometry(width, height, depth);
+
+    boxMaterial = new THREE.MeshPhongMaterial({
+      color: 0xaaaaaa,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 1.0,
+    });
+
+
+    box = new THREE.Mesh(boxGeo, boxMaterial);
+    box.position.x = Math.random()*400-200;// for some reason these are clustering
+    box.position.y = 0;
+    box.position.z = Math.random()*400-200;
+    box.receiveShadow = true;
+    box.castShadow = true;
+    scene.add(box);
+    boxes.push(box);
+    console.log(boxes)
+
+
+  }
+
 
 
 	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
