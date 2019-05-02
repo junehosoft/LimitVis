@@ -214,25 +214,24 @@ function createScene(){
 
   // random cubes
   console.log(boxes)
-  // for (let i = 0; i < 3; i++) {
-    let width = Math.round(Math.random()*150+100);
+  for (let i = 0; i < 3; i++) {
+    let width = Math.round(Math.random()*50+10);
     let height = Math.round(Math.random()*300+100);
-    let depth = Math.round(Math.random()*150+100);
-    let boxGeo = new THREE.BoxGeometry(200, 200, 200);
+    let depth = Math.round(Math.random()*50+10);
+    let boxGeo = new THREE.BoxGeometry(width, height, depth);
 
     boxMaterial = new THREE.MeshPhongMaterial({
       color: 0xaaaaaa,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.01,
-      // opacity: 1.0,
+      opacity: 1.0,
     });
 
 
     box = new THREE.Mesh(boxGeo, boxMaterial);
-    // box.position.x = Math.random()*400-300;
+    box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
-    // box.position.z = Math.random()*200-200;
+    box.position.z = Math.random()*400-200;
     box.receiveShadow = true;
     box.castShadow = true;
     scene.add(box);
@@ -240,7 +239,7 @@ function createScene(){
     console.log(boxes)
 
 
-  // }
+  }
 
 
 
