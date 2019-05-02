@@ -214,9 +214,9 @@ function createScene(){
 
   // random cubes
   console.log(boxes)
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     let width = Math.round(Math.random()*50+10);
-    let height = Math.round(Math.random()*300+100);
+    let height = Math.round(Math.random()*200+100);
     let depth = Math.round(Math.random()*50+10);
     let boxGeo = new THREE.BoxGeometry(width, height, depth);
 
@@ -240,8 +240,6 @@ function createScene(){
 
 
   }
-
-
 
 
 	orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
