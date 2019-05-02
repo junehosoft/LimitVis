@@ -297,6 +297,9 @@ function update(){
     // hero.rotation.x += 0.01;
     // hero.rotation.y += 0.01;
 
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
     //var delta = clock.getDelta();
     //controls.update(delta); // Move camera
     //playerControls();
