@@ -8,6 +8,7 @@ var renderer;
 var dom;
 var hero;
 var sun;
+var key;
 
 // room boundaries
 var ground;
@@ -68,7 +69,7 @@ function createScene(){
   //controls.noFly = true;
   //controls.activeLook = false;
   //document.onkeydown = handleKeyDown;
-  console.log(camera.position);
+  //console.log(camera.position);
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
@@ -98,14 +99,14 @@ function createScene(){
 	sun.shadow.camera.far = 50 ;
 	scene.add(sun);
 
-	// add items to scene
-	var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
-	var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
-	hero = new THREE.Mesh( heroGeometry, heroMaterial );
-	hero.castShadow=true;
-	hero.receiveShadow=false;
-	hero.position.y=2;
-	scene.add( hero );
+	// add items to scene (this is the rotating box)
+	// var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
+	// var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
+	// hero = new THREE.Mesh( heroGeometry, heroMaterial );
+	// hero.castShadow=true;
+	// hero.receiveShadow=false;
+	// hero.position.y=2;
+	// scene.add( hero );
 
 	var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
 	var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
@@ -113,14 +114,16 @@ function createScene(){
 	ground.receiveShadow = true;
 	ground.castShadow = false;
 	ground.rotation.x = -Math.PI/2;
-  console.log("ground pos")
-  console.log(ground.position.y)
+  // console.log("ground pos")
+  // console.log(ground.position.y)
   scene.add(ground);
-  console.log(ground)
+  // console.log(ground)
 
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
-  var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
+  // var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
+  var wallMaterial = new THREE.MeshNormalMaterial({color: 0xdfaff7});
+  wallMaterial.fog = true;
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.rotation.y = Math.PI;
   backWall.recieveShadow = true;
@@ -156,21 +159,55 @@ function createScene(){
   scene.add(frontWall);
 
   // key
-  var loader = new THREE.STLLoader();
+  let loader = new THREE.STLLoader();
   loader.load('Key.stl', function (geometry) {
-    var material = new THREE.MeshPhongMaterial(
-      { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-    var mesh = new THREE.Mesh(geometry, material);
+    let material = new THREE.MeshPhongMaterial(
+      { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
+    key = new THREE.Mesh(geometry, material);
 
-    mesh.position.set(0,0,0);
-    mesh.rotation.set(0,0,0);
-    mesh.scale.set(2,2,2);
+    key.position.set(0,2,0);
+    key.rotation.set(0,0,0);
+    key.scale.set(1,1,1);
 
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    key.castShadow = true;
+    key.receiveShadow = true;
 
-    scene.add(mesh);
+    scene.add(key);
+
   });
+
+  // different colors at face vertices create gradient effect
+  var cubeMaterial = new THREE.MeshBasicMaterial(
+    { color: 0xffffff, vertexColors: THREE.VertexColors }
+  );
+
+  var color, face, numberOfSides, vertexIndex;
+
+  var faceIndices = ['a', 'b', 'c', 'd'];
+
+  // cube gradient trial
+  var size = 5;
+  var point;
+  var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
+  for (var i = 0; i < cubeGeometry.faces.length; i++) {
+    face = cubeGeometry.faces[i];
+    // determine if current face is triangle or rectangle
+    numberOfSides = (face instanceof THREE.Face3) ? 3 : 4;
+    // assign color to each vertex of current face
+    for (var j = 0; j < numberOfSides; j++) {
+      vertexIndex = face[faceIndices[j]];
+      // store coordinates of vertex
+      point = cubeGeometry.vertices[vertexIndex];
+      // initialize color variable
+      color = new THREE.Color(0xffffff);
+      color.setRGB(0.5 + point.x / size, 0.5 + point.y / size, 0.5 + point.z / size);
+      face.vertexColors[j] = color;
+    }
+  }
+  cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+  cube.position.set(10,10,0);
+  scene.add(cube);
+
 
   // add in objects/obstacles
   function CustomSinCurve( scale ) {
@@ -256,8 +293,12 @@ function createScene(){
 
 function update(){
     //animate
-    hero.rotation.x += 0.01;
-    hero.rotation.y += 0.01;
+    // hero.rotation.x += 0.01;
+    // hero.rotation.y += 0.01;
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
     //var delta = clock.getDelta();
     //controls.update(delta); // Move camera
     //playerControls();
