@@ -107,25 +107,9 @@ function createScene(){
 	// hero.receiveShadow=false;
 	// hero.position.y=2;
 	// scene.add( hero );
-  const sceneSubject = [new Background(scene)];
 
-  // key
-  let loader = new THREE.STLLoader();
-  loader.load('Key.stl', function (geometry) {
-    let material = new THREE.MeshPhongMaterial(
-      { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
-    key = new THREE.Mesh(geometry, material);
-
-    key.position.set(0,2,0);
-    key.rotation.set(0,0,0);
-    key.scale.set(1,1,1);
-
-    key.castShadow = true;
-    key.receiveShadow = true;
-
-    scene.add(key);
-
-  });
+  // create the background
+  const sceneSubject = [new Background(scene), new Key(scene)];
 
   // different colors at face vertices create gradient effect
   var cubeMaterial = new THREE.MeshBasicMaterial(
