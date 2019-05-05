@@ -1,22 +1,24 @@
-// initializes the player 
+// initializes the player
 THREE.PlayerControls = function(camera, domElement) {
+	console.log(domElement)
 	var scope = this;
+	console.log(scope)
 
-    this.position = new THREE.Vector3();
-    this.velocity = new THREE.Vector3();
+  this.position = new THREE.Vector3();
+  this.velocity = new THREE.Vector3();
 
-    this.domElement = ( domElement !== undefined ) ? domElement : document;
+  this.domElement = ( domElement !== undefined ) ? domElement : document;
 
-    this.position.x = camera.position.x;
-    this.position.y = camera.position.y;
-    this.position.z = camera.position.z;
+  this.position.x = camera.position.x;
+  this.position.y = camera.position.y;
+  this.position.z = camera.position.z;
 
-    // The four arrow keys
+  // The four arrow keys
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
 	// Mouse buttons
-    this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
-    
+  this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
+
 	var euler = new THREE.Euler( 0, 0, 0, 'YXZ' );
 	var PI_2 = Math.PI / 2;
 
@@ -152,6 +154,3 @@ THREE.PlayerControls = function(camera, domElement) {
 		element.requestPointerLock();
 	});
 };
-
-
-

@@ -23,10 +23,26 @@ var leftDist = -250;
 var rightDist = 250;
 var frontDist = -200;
 //var orbitControl;
+
+var blocker = document.getElementById('blocker');
+
+// control global variables
 var player;
 var controls;
+var controlsEnabled = false;
+// Flags to determine which direction the player is moving
+var moveForward = false;
+var moveBackward = false;
+var moveLeft = false;
+var moveRight = false;
 var clock;
-var velocity = new THREE.Vector3();
+// Velocity vector for the player
+var playerVelocity = new THREE.Vector3();
+
+// How fast the player will move
+var PLAYERSPEED = 800.0;
+
+
 
 // obstacles in the game
 var tube;
@@ -37,14 +53,19 @@ var boxes = new Array();
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
 
+
 init();
 
 function init() {
+  clock = new THREE.Clock();
+  listenForPlayerMovement();
+
 	// set up the scene
 	createScene();
 
 	//call game loop
-  update();
+  getPointerLock();
+  animate();
 
   //console.log("hello");
 }
@@ -57,20 +78,10 @@ function createScene(){
   // scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
 
 	// 2. camera aka player
-  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 0.1, 1000 );//perspective camera
+  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, 2000 );//perspective camera
   camera.position.y = 2;
   camera.position.z = 10;
   scene.add(camera);
-
-  // setup player movement
-  controls = new THREE.PlayerControls(camera);
-  controls.movementSpeed = MOVESPEED;
-  controls.lookSpeed= LOOKSPEED;
-  controls.lookVertical = false;
-  controls.noFly = true;
-  controls.activeLook = false;
-  document.onkeydown = handleKeyDown;
-  console.log(camera.position);
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
@@ -79,8 +90,19 @@ function createScene(){
   renderer.shadowMap.enabled = true;//enable shadow
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize( sceneWidth, sceneHeight );
-  dom = document.getElementById('TutContainer');
+  dom = document.getElementById('container');
 	dom.appendChild(renderer.domElement);
+
+  // setup player movement
+  controls = new THREE.PointerLockControls(camera, dom);
+  scene.add(controls.getObject());
+  // controls.movementSpeed = MOVESPEED;
+  // controls.lookSpeed= LOOKSPEED;
+  // controls.lookVertical = false;
+  // controls.noFly = true;
+  // controls.activeLook = false;
+  // document.onkeydown = handleKeyDown;
+  // console.log(camera.position);
 
 	// 4. lights
 	var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
@@ -159,7 +181,7 @@ function createScene(){
 	window.addEventListener('resize', onWindowResize, false);//resize callback
 }
 
-function update(){
+function animate(){
     //animate
     // hero.rotation.x += 0.01;
     // hero.rotation.y += 0.01;
@@ -167,12 +189,15 @@ function update(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
-    //var delta = clock.getDelta();
-    //controls.update(delta); // Move camera
-    playerControls();
+
     render();
-    requestAnimationFrame(update); //request next update
+
+    // keep requesting renderer
+    requestAnimationFrame(animate); //request next update
     //console.log(camera.position);
+
+    var delta = clock.getDelta();
+    animatePlayer(delta);
 }
 
 function playerControls() {
@@ -227,7 +252,10 @@ function playerControls() {
 }
 
 function render(){
-    renderer.render(scene, camera);//draw
+  var delta = clock.getDelta();
+  // controls.update(delta); // Move camera
+
+  renderer.render(scene, camera);//draw
 }
 
 function onWindowResize() {
@@ -241,4 +269,112 @@ function onWindowResize() {
 
 function handleKeyDown(keyEvent){
 
+}
+
+function getPointerLock() {
+  document.onclick = function () {
+    dom.requestPointerLock();
+  }
+  document.addEventListener('pointerlockchange', lockChange, false);
+}
+
+function lockChange() {
+    // Turn on controls
+    if (document.pointerLockElement === dom) {
+        // Hide blocker and instructions
+        blocker.style.display = "none";
+        controls.enabled = true;
+    // Turn off the controls
+    } else {
+      // Display the blocker and instruction
+        blocker.style.display = "";
+        controls.enabled = false;
+    }
+}
+
+function listenForPlayerMovement() {
+
+    // A key has been pressed
+    var onKeyDown = function(event) {
+
+    switch (event.keyCode) {
+
+      case 38: // up
+      case 87: // w
+        moveForward = true;
+        break;
+
+      case 37: // left
+      case 65: // a
+        moveLeft = true;
+        break;
+
+      case 40: // down
+      case 83: // s
+        moveBackward = true;
+        break;
+
+      case 39: // right
+      case 68: // d
+        moveRight = true;
+        break;
+    }
+  };
+
+  // A key has been released
+    var onKeyUp = function(event) {
+
+    switch (event.keyCode) {
+
+      case 38: // up
+      case 87: // w
+        moveForward = false;
+        break;
+
+      case 37: // left
+      case 65: // a
+        moveLeft = false;
+        break;
+
+      case 40: // down
+      case 83: // s
+        moveBackward = false;
+        break;
+
+      case 39: // right
+      case 68: // d
+        moveRight = false;
+        break;
+    }
+  };
+
+  // Add event listeners for when movement keys are pressed and released
+  document.addEventListener('keydown', onKeyDown, false);
+  document.addEventListener('keyup', onKeyUp, false);
+}
+
+function animatePlayer(delta) {
+  // Gradual slowdown
+  playerVelocity.x -= playerVelocity.x * 10.0 * delta;
+  playerVelocity.z -= playerVelocity.z * 10.0 * delta;
+
+  if (moveForward) {
+    playerVelocity.z -= PLAYERSPEED * delta;
+  }
+  if (moveBackward) {
+    playerVelocity.z += PLAYERSPEED * delta;
+  }
+  if (moveLeft) {
+    playerVelocity.x -= PLAYERSPEED * delta;
+  }
+  if (moveRight) {
+    playerVelocity.x += PLAYERSPEED * delta;
+  }
+  if( !( moveForward || moveBackward || moveLeft ||moveRight)) {
+    // No movement key being pressed. Stop movememnt
+    playerVelocity.x = 0;
+    playerVelocity.z = 0;
+  }
+  controls.getObject().translateX(playerVelocity.x * delta);
+  controls.getObject().translateZ(playerVelocity.z * delta);
 }
