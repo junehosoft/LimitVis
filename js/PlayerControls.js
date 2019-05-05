@@ -75,7 +75,7 @@ THREE.PlayerControls = function(camera, domElement) {
 	this.getDirection = function () {
 		var direction = new THREE.Vector3( 0, 0, 0 );
 		camera.getWorldDirection(direction);
-		direction.z = direction.z * -1;
+		//direction.z = direction.z * -1;
 		return direction;
 	};
 
@@ -148,18 +148,25 @@ THREE.PlayerControls = function(camera, domElement) {
 		var velocity = this.velocity;
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
-	  
+		
+		var dir = this.getDirection();
+		dir.y = 0;
+		dir.normalize();
+		dir.multiplyScalar(speed * delta);
+
 		if (this.moveForward) {
-		  velocity.z -= speed * delta;
+		  velocity.add(dir);
 		}
 		if (this.moveBackward) {
-		  velocity.z += speed * delta;
+		  velocity.sub(dir);
 		}
 		if (this.moveLeft) {
-		  velocity.x -= speed * delta;
+		  velocity.x += dir.z;
+		  velocity.z += dir.x;
 		}
 		if (this.moveRight) {
-		  velocity.x += speed * delta;
+			velocity.x -= dir.z;
+			velocity.z -= dir.x;
 		}
 		if( !(this.moveForward || this.moveBackward || this.moveLeft || this.moveRight)) {
 		  // No movement key being pressed. Stop movememnt
