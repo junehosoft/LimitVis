@@ -9,7 +9,11 @@ THREE.PlayerControls = function(camera, domElement) {
 
     this.position.x = camera.position.x;
     this.position.y = camera.position.y;
-    this.position.z = camera.position.z;
+	this.position.z = camera.position.z;
+	
+	this.block = new THREE.Object3D();
+	this.block.add(camera);
+	this.block.position = this.position;
 
     // The four arrow keys
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
@@ -18,37 +22,81 @@ THREE.PlayerControls = function(camera, domElement) {
     this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
     
 	var euler = new THREE.Euler( 0, 0, 0, 'YXZ' );
+
 	var PI_2 = Math.PI / 2;
 
-	var onMouseMove = function ( event ) {
+	function onMouseMove( event ) {
+		if ( scope.isLocked === false ) return;
 
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
 		euler.setFromQuaternion( camera.quaternion );
-
 		euler.y -= movementX * 0.002;
 		euler.x -= movementY * 0.002;
-
 		euler.x = Math.max( - PI_2, Math.min( PI_2, euler.x ) );
-
 		camera.quaternion.setFromEuler( euler );
+	}
+
+	function onPointerlockChange() {
+		if ( document.pointerLockElement === scope.domElement ) {
+			scope.dispatchEvent( { type: 'lock' } );
+			scope.isLocked = true;
+		} else {
+			scope.dispatchEvent( { type: 'unlock' } );
+			scope.isLocked = false;
+		}
+
+	}
+
+	function onPointerlockError() {
+		console.error( 'THREE.PointerLockControls: Unable to use Pointer Lock API' );
+	}
+
+	this.connect = function () {
+		document.addEventListener( 'mousemove', onMouseMove, false );
+		document.addEventListener( 'pointerlockchange', onPointerlockChange, false );
+		document.addEventListener( 'pointerlockerror', onPointerlockError, false );
 	};
 
-	this.enabled = false;
+	this.disconnect = function () {
+		document.removeEventListener( 'mousemove', onMouseMove, false );
+		document.removeEventListener( 'pointerlockchange', onPointerlockChange, false );
+		document.removeEventListener( 'pointerlockerror', onPointerlockError, false );
+	};
+
+	this.dispose = function () {
+		this.disconnect();
+	};
 
 	this.getObject = function () {
-
-		//return yawObject;
-
+		return this.block;
 	};
+
+	this.getDirection = function () {
+		var direction = new THREE.Vector3( 0, 0, 0 );
+		camera.getWorldDirection(direction);
+		direction.z = direction.z * -1;
+		return direction;
+	};
+
+	this.lock = function () {
+		this.domElement.requestPointerLock();
+	};
+
+	this.unlock = function () {
+		document.exitPointerLock();
+	};
+
+	this.connect();
+
+	this.enabled = false;
 
 	this.moveForward = false;
 	this.moveBackward = false;
 	this.moveLeft = false;
 	this.moveRight = false;
 
-	var onKeyDown = function ( event ) {
+	this.onKeyDown = function ( event ) {
 		switch ( event.keyCode ) {
 			case scope.keys.UP: // up
 			case 87: // w
@@ -69,7 +117,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 	};
 
-	var onKeyUp = function ( event ) {
+	this.onKeyUp = function ( event ) {
 		switch( event.keyCode ) {
 			case 38: // up
 			case 87: // w
@@ -90,8 +138,37 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 	};
 
-	document.addEventListener( 'keydown', onKeyDown, false );
-	document.addEventListener( 'keyup', onKeyUp, false );
+	document.addEventListener( 'keydown', this.onKeyDown, false );
+	document.addEventListener( 'keyup', this.onKeyUp, false );
+
+	this.animatePlayer = function(delta) {
+		// Gradual slowdown
+		//console.log(this.getDirection());
+		var speed = 100;
+		var velocity = this.velocity;
+		velocity.x -= velocity.x * 10.0 * delta;
+		velocity.z -= velocity.z * 10.0 * delta;
+	  
+		if (this.moveForward) {
+		  velocity.z -= speed * delta;
+		}
+		if (this.moveBackward) {
+		  velocity.z += speed * delta;
+		}
+		if (this.moveLeft) {
+		  velocity.x -= speed * delta;
+		}
+		if (this.moveRight) {
+		  velocity.x += speed * delta;
+		}
+		if( !(this.moveForward || this.moveBackward || this.moveLeft || this.moveRight)) {
+		  // No movement key being pressed. Stop movememnt
+		  velocity.x = 0;
+		  velocity.z = 0;
+		}
+		this.block.translateX(velocity.x * delta);
+		this.block.translateZ(velocity.z * delta);
+	}
 
 	var havePointerLock = 'pointerLockElement' in document ||
 	 											'mozPointerLockElement' in document ||
@@ -124,24 +201,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		document.body.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 	}
 
-	this.getDirection = function() {
-
-		// assumes the camera itself is not rotated
-
-		var direction = new THREE.Vector3( 0, 0, - 1 );
-		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
-
-		return function( v ) {
-
-			//rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
-
-			v.copy( direction ).applyEuler( rotation );
-
-			return v;
-
-		};
-
-	}();
 
 	//var newDiv = document.createElement("div");
 	//newDiv.innerHTML = "Click to play";

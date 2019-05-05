@@ -59,7 +59,7 @@ init();
 
 function init() {
   clock = new THREE.Clock();
-  listenForPlayerMovement();
+  //listenForPlayerMovement();
 
 	// set up the scene
 	createScene();
@@ -78,7 +78,7 @@ function createScene(){
   scene = new THREE.Scene();//the 3d scene
   // scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
 
-	// 2. camera aka player
+	// 2. camera 
   camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, 2000 );//perspective camera
   camera.position.y = 2;
   camera.position.z = 10;
@@ -95,7 +95,7 @@ function createScene(){
 	dom.appendChild(renderer.domElement);
 
   // setup player movement
-  controls = new THREE.PointerLockControls(camera, dom);
+  controls = new THREE.PlayerControls(camera, dom);
   scene.add(controls.getObject());
 	// 4. lights
 	var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
@@ -114,15 +114,6 @@ function createScene(){
 	sun.shadow.camera.near = 0.5;
 	sun.shadow.camera.far = 50 ;
 	scene.add(sun);
-
-	// add items to scene (this is the rotating box)
-	// var heroGeometry = new THREE.BoxGeometry( 1, 1, 1 );//cube
-	// var heroMaterial = new THREE.MeshStandardMaterial( { color: 0x883333 } );
-	// hero = new THREE.Mesh( heroGeometry, heroMaterial );
-	// hero.castShadow=true;
-	// hero.receiveShadow=false;
-	// hero.position.y=2;
-	// scene.add( hero );
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene)];
@@ -159,13 +150,6 @@ function createScene(){
   cube.position.set(10,10,0);
   scene.add(cube);
 
-  // OLD ORBITCONTROLS, NO LONGER USED
-	// orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
-	// orbitControl.addEventListener( 'change', render );
-	// orbitControl.enableDamping = true;
-	// orbitControl.dampingFactor = 0.8;
-	// orbitControl.enableZoom = true;
-
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -186,7 +170,7 @@ function animate(){
     requestAnimationFrame(animate);
 
     var delta = clock.getDelta();
-    animatePlayer(delta);
+    controls.animatePlayer(delta);
 }
 
 function render(){
@@ -201,8 +185,6 @@ function onWindowResize() {
 	camera.aspect = sceneWidth/sceneHeight;
 	camera.updateProjectionMatrix();
 }
-
-
 
 function getPointerLock() {
   document.onclick = function () {
@@ -225,28 +207,23 @@ function lockChange() {
     }
 }
 
-function listenForPlayerMovement() {
-
+/*function listenForPlayerMovement() {
     // A key has been pressed
     var onKeyDown = function(event) {
 
     switch (event.keyCode) {
-
       case 38: // up
       case 87: // w
         moveForward = true;
         break;
-
       case 37: // left
       case 65: // a
         moveLeft = true;
         break;
-
       case 40: // down
       case 83: // s
         moveBackward = true;
         break;
-
       case 39: // right
       case 68: // d
         moveRight = true;
@@ -256,54 +233,49 @@ function listenForPlayerMovement() {
 
   // A key has been released
     var onKeyUp = function(event) {
-
     switch (event.keyCode) {
-
       case 38: // up
       case 87: // w
         moveForward = false;
         break;
-
       case 37: // left
       case 65: // a
         moveLeft = false;
         break;
-
       case 40: // down
       case 83: // s
         moveBackward = false;
         break;
-
       case 39: // right
       case 68: // d
         moveRight = false;
         break;
     }
-  };
+  }; 
 
   // Add event listeners for when movement keys are pressed and released
   document.addEventListener('keydown', onKeyDown, false);
   document.addEventListener('keyup', onKeyUp, false);
-}
+} */
 
 function animatePlayer(delta) {
   // Gradual slowdown
   playerVelocity.x -= playerVelocity.x * 10.0 * delta;
   playerVelocity.z -= playerVelocity.z * 10.0 * delta;
 
-  if (moveForward) {
+  if (controls.moveForward) {
     playerVelocity.z -= PLAYERSPEED * delta;
   }
-  if (moveBackward) {
+  if (controls.moveBackward) {
     playerVelocity.z += PLAYERSPEED * delta;
   }
-  if (moveLeft) {
+  if (controls.moveLeft) {
     playerVelocity.x -= PLAYERSPEED * delta;
   }
-  if (moveRight) {
+  if (controls.moveRight) {
     playerVelocity.x += PLAYERSPEED * delta;
   }
-  if( !( moveForward || moveBackward || moveLeft ||moveRight)) {
+  if( !(controls.moveForward || controls.moveBackward || controls.moveLeft || controls.moveRight)) {
     // No movement key being pressed. Stop movememnt
     playerVelocity.x = 0;
     playerVelocity.z = 0;
