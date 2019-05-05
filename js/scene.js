@@ -1,5 +1,6 @@
 /*global THREE*/
 
+/****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
 var camera;
@@ -11,7 +12,7 @@ var sun;
 var key;
 var sceneSubject;
 
-// room boundaries
+/****************************** ROOM VARS *************************************/
 var ground;
 var backWall;
 var leftWall;
@@ -22,9 +23,16 @@ var backDist = 200;
 var leftDist = -250;
 var rightDist = 250;
 var frontDist = -200;
-//var orbitControl;
 
+// obstacles in the game
+var tube;
+var ring;
+var lathe;
+var boxes = new Array();
+
+/****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
+//var orbitControl;
 
 // control global variables
 var player;
@@ -40,15 +48,8 @@ var clock;
 var playerVelocity = new THREE.Vector3();
 
 // How fast the player will move
-var PLAYERSPEED = 800.0;
+var PLAYERSPEED = 500.0;
 
-
-
-// obstacles in the game
-var tube;
-var ring;
-var lathe;
-var boxes = new Array();
 
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
@@ -96,14 +97,6 @@ function createScene(){
   // setup player movement
   controls = new THREE.PointerLockControls(camera, dom);
   scene.add(controls.getObject());
-  // controls.movementSpeed = MOVESPEED;
-  // controls.lookSpeed= LOOKSPEED;
-  // controls.lookVertical = false;
-  // controls.noFly = true;
-  // controls.activeLook = false;
-  // document.onkeydown = handleKeyDown;
-  // console.log(camera.position);
-
 	// 4. lights
 	var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
 	scene.add(hemisphereLight);
@@ -166,9 +159,7 @@ function createScene(){
   cube.position.set(10,10,0);
   scene.add(cube);
 
-
-
-
+  // OLD ORBITCONTROLS, NO LONGER USED
 	// orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
 	// orbitControl.addEventListener( 'change', render );
 	// orbitControl.enableDamping = true;
@@ -189,72 +180,16 @@ function animate(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
-
     render();
 
     // keep requesting renderer
-    requestAnimationFrame(animate); //request next update
-    //console.log(camera.position);
+    requestAnimationFrame(animate);
 
     var delta = clock.getDelta();
     animatePlayer(delta);
 }
 
-function playerControls() {
-    // Are the controls enabled? (Does the browser have pointer lock?)
-    if ( controls.controlsEnabled ) {
-
-        // Save the current time
-        var time = performance.now();
-        // Create a delta value based on current time
-        var delta = clock.getDelta();
-
-        // Set the velocity.x and velocity.z using the calculated time delta
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
-
-        // As velocity.y is our "gravity," calculate delta
-        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
-        if ( controls.moveForward ) {
-            velocity.z -= 400.0 * delta;
-        }
-
-        if ( controls.moveBackward ) {
-            velocity.z += 400.0 * delta;
-        }
-
-        if ( controls.moveLeft ) {
-            velocity.x -= 400.0 * delta;
-        }
-
-        if ( controls.moveRight ) {
-            velocity.x += 400.0 * delta;
-        }
-
-        // Update the position using the changed delta
-        controls.getObject().translateX( velocity.x * delta );
-        controls.getObject().translateY( velocity.y * delta );
-        controls.getObject().translateZ( velocity.z * delta );
-
-        // Prevent the camera/player from falling out of the 'world'
-        if ( controls.getObject().position.y < 10 ) {
-
-            velocity.y = 0;
-            controls.getObject().position.y = 10;
-
-        }
-
-        // Save the time for future delta calculations
-        prevTime = time;
-
-    }
-}
-
 function render(){
-  var delta = clock.getDelta();
-  // controls.update(delta); // Move camera
-
   renderer.render(scene, camera);//draw
 }
 
@@ -267,9 +202,7 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 }
 
-function handleKeyDown(keyEvent){
 
-}
 
 function getPointerLock() {
   document.onclick = function () {
