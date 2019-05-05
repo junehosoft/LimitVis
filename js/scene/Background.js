@@ -23,6 +23,7 @@ function Background(scene) {
   backWall.position.y = 50;
   backWall.position.z = backDist;
   scene.add(backWall);
+  collidableObjects.push(backWall);
 
   // right wall
   rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -32,6 +33,7 @@ function Background(scene) {
   rightWall.position.x = rightDist;
   rightWall.position.y = 50;
   scene.add(rightWall);
+  collidableObjects.push(rightWall);
 
   // left wall
   leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -41,6 +43,7 @@ function Background(scene) {
   leftWall.position.x = leftDist;
   leftWall.position.y = 50;
   scene.add(leftWall);
+  collidableObjects.push(leftWall);
 
   // front wall
   frontWall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -49,6 +52,7 @@ function Background(scene) {
   frontWall.position.y = 50;
   frontWall.position.z = frontDist;
   scene.add(frontWall);
+  collidableObjects.push(frontWall);
 
 
   this.update = function(time) {

@@ -1,4 +1,4 @@
-// initializes the player 
+// initializes the player
 THREE.PlayerControls = function(camera, domElement) {
 	var scope = this;
 
@@ -10,7 +10,7 @@ THREE.PlayerControls = function(camera, domElement) {
     this.position.x = camera.position.x;
     this.position.y = camera.position.y;
 	this.position.z = camera.position.z;
-	
+
 	this.block = new THREE.Object3D();
 	this.block.add(camera);
 	this.block.position = this.position;
@@ -20,7 +20,7 @@ THREE.PlayerControls = function(camera, domElement) {
 
 	// Mouse buttons
     this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
-    
+
 	var euler = new THREE.Euler( 0, 0, 0, 'YXZ' );
 
 	var PI_2 = Math.PI / 2;
@@ -147,29 +147,36 @@ THREE.PlayerControls = function(camera, domElement) {
 		var velocity = this.velocity;
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
-		
-		var dir = this.getDirection();
-		dir.y = 0;
-		dir.normalize();
-		dir.multiplyScalar(speed * delta);
+		if (detectPlayerCollision() == false) {
+			console.log("test")
+			var dir = this.getDirection();
+			dir.y = 0;
+			dir.normalize();
+			dir.multiplyScalar(speed * delta);
 
-		if (this.moveForward) {
-		  	velocity.add(dir);
-		}
-		if (this.moveBackward) {
-		  	velocity.sub(dir);
-		}
-		if (this.moveLeft) {
-		  	velocity.x += dir.z;
-		  	velocity.z -= dir.x;
-		}
-		if (this.moveRight) {
-			velocity.x -= dir.z;
-			velocity.z += dir.x;
+			if (this.moveForward) {
+			  	velocity.add(dir);
+			}
+			if (this.moveBackward) {
+			  	velocity.sub(dir);
+			}
+			if (this.moveLeft) {
+			  	velocity.x += dir.z;
+			  	velocity.z -= dir.x;
+			}
+			if (this.moveRight) {
+				velocity.x -= dir.z;
+				velocity.z += dir.x;
+			}
+
+			this.block.translateX(velocity.x * delta);
+			this.block.translateZ(velocity.z * delta);
+		} else {
+			// collision or no movement
+			velocity.x = 0;
+			velocity.z = 0;
 		}
 
-		this.block.translateX(velocity.x * delta);
-		this.block.translateZ(velocity.z * delta);
 	}
 
 	var havePointerLock = 'pointerLockElement' in document ||
@@ -213,6 +220,3 @@ THREE.PlayerControls = function(camera, domElement) {
 		element.requestPointerLock();
 	});
 };
-
-
-

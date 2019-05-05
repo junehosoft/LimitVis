@@ -30,6 +30,8 @@ var tube;
 var ring;
 var lathe;
 var boxes = new Array();
+var collidableObjects = []; // An array of collidable objects used later
+var PLAYERCOLLISIONDIST = 20;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -118,6 +120,8 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene)];
+  console.log("COLLIDABLE OBJECTS")
+  console.log(collidableObjects)
 
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
@@ -232,6 +236,58 @@ function lockChange() {
         blocker.style.display = "";
         controls.enabled = false;
     }
+}
+
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function radiansToDegrees(radians) {
+  return radians * 180 / Math.PI;
+}
+
+function detectPlayerCollision() {
+  // rotation matrix to apply direction vector
+  var rotationMat;
+
+  // get direction of camera
+  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
+
+  // check which direction we're moving
+  if (moveBackward) {
+    rotationMat = new THREE.Matrix4();
+    rotationMat.makeRotationY(degree(180));
+  } else if (moveLeft) {
+    rotationMat = new THREE.Matrix4();
+    rotationMat.makeRotationY(degreesToRadians(90));
+  } else if (moveRight) {
+    rotationMat = new THREE.Matrix4();
+    rotationMat.makeRotationY(degreesToRadians(270));
+  }
+
+  // player isn't moving forward, apply rotation matrix needed
+  if (rotationMat !== undefined)
+    cameraDirection.applyMatrix4(rotationMat);
+
+  // apply ray to new player camera
+  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
+
+  // if our ray hit a colidable object return true
+  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST))
+    return true;
+  else return false;
+
+}
+
+function rayIntersect(ray, distance) {
+    var intersects = ray.intersectObjects(collidableObjects);
+    for (var i = 0; i < intersects.length; i++) {
+        // Check if there's a collision
+        if (intersects[i].distance < distance) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*function listenForPlayerMovement() {
