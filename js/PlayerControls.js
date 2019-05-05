@@ -162,11 +162,11 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 		if (this.moveLeft) {
 		  velocity.x += dir.z;
-		  velocity.z += dir.x;
+		  velocity.z -= dir.x;
 		}
 		if (this.moveRight) {
 			velocity.x -= dir.z;
-			velocity.z -= dir.x;
+			velocity.z += dir.x;
 		}
 		if( !(this.moveForward || this.moveBackward || this.moveLeft || this.moveRight)) {
 		  // No movement key being pressed. Stop movememnt
