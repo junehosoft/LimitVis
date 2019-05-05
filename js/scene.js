@@ -45,10 +45,10 @@ var moveLeft = false;
 var moveRight = false;
 var clock;
 // Velocity vector for the player
-var playerVelocity = new THREE.Vector3();
+//var playerVelocity = new THREE.Vector3();
 
 // How fast the player will move
-var PLAYERSPEED = 500.0;
+//var PLAYERSPEED = 500.0;
 
 
 var MOVESPEED = 30,
@@ -158,9 +158,6 @@ function createScene(){
 
 function animate(){
     //animate
-    // hero.rotation.x += 0.01;
-    // hero.rotation.y += 0.01;
-
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
@@ -256,7 +253,7 @@ function lockChange() {
   // Add event listeners for when movement keys are pressed and released
   document.addEventListener('keydown', onKeyDown, false);
   document.addEventListener('keyup', onKeyUp, false);
-} */
+} 
 
 function animatePlayer(delta) {
   // Gradual slowdown
@@ -282,4 +279,4 @@ function animatePlayer(delta) {
   }
   controls.getObject().translateX(playerVelocity.x * delta);
   controls.getObject().translateZ(playerVelocity.z * delta);
-}
+} */
