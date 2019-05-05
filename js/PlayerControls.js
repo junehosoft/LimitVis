@@ -75,7 +75,6 @@ THREE.PlayerControls = function(camera, domElement) {
 	this.getDirection = function () {
 		var direction = new THREE.Vector3( 0, 0, 0 );
 		camera.getWorldDirection(direction);
-		//direction.z = direction.z * -1;
 		return direction;
 	};
 
@@ -144,10 +143,10 @@ THREE.PlayerControls = function(camera, domElement) {
 	this.animatePlayer = function(delta) {
 		// Gradual slowdown
 		//console.log(this.getDirection());
-		var speed = 100;
+		var speed = 200;
 		var velocity = this.velocity;
-		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
+		velocity.x -= velocity.x * 10 * delta;
+		velocity.z -= velocity.z * 10 * delta;
 		
 		var dir = this.getDirection();
 		dir.y = 0;
@@ -155,24 +154,20 @@ THREE.PlayerControls = function(camera, domElement) {
 		dir.multiplyScalar(speed * delta);
 
 		if (this.moveForward) {
-		  velocity.add(dir);
+		  	velocity.add(dir);
 		}
 		if (this.moveBackward) {
-		  velocity.sub(dir);
+		  	velocity.sub(dir);
 		}
 		if (this.moveLeft) {
-		  velocity.x += dir.z;
-		  velocity.z -= dir.x;
+		  	velocity.x += dir.z;
+		  	velocity.z -= dir.x;
 		}
 		if (this.moveRight) {
 			velocity.x -= dir.z;
 			velocity.z += dir.x;
 		}
-		if( !(this.moveForward || this.moveBackward || this.moveLeft || this.moveRight)) {
-		  // No movement key being pressed. Stop movememnt
-		  velocity.x = 0;
-		  velocity.z = 0;
-		}
+
 		this.block.translateX(velocity.x * delta);
 		this.block.translateZ(velocity.z * delta);
 	}
