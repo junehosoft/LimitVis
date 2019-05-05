@@ -39,11 +39,11 @@ THREE.PlayerControls = function(camera, domElement) {
 
 	function onPointerlockChange() {
 		if ( document.pointerLockElement === scope.domElement ) {
-			scope.dispatchEvent( { type: 'lock' } );
-			scope.isLocked = true;
+			//scope.dispatchEvent( { type: 'lock' } );
+			//scope.isLocked = true;
 		} else {
-			scope.dispatchEvent( { type: 'unlock' } );
-			scope.isLocked = false;
+			//scope.dispatchEvent( { type: 'unlock' } );
+			//scope.isLocked = false;
 		}
 
 	}
