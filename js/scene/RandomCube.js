@@ -22,7 +22,7 @@ function RandomCube(scene) {
     box.castShadow = true;
     scene.add(box);
     boxes.push(box);
-    console.log(boxes)
+    // console.log(boxes)
 
 
   }

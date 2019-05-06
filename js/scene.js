@@ -121,8 +121,8 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
-  console.log("COLLIDABLE OBJECTS")
-  console.log(collidableObjects)
+  // console.log("COLLIDABLE OBJECTS")
+  // console.log(collidableObjects)
 
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
