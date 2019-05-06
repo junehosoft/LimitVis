@@ -12,6 +12,7 @@ var sun;
 var key;
 var sceneSubject;
 var lightOrb;
+var door;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -119,7 +120,7 @@ function createScene(){
 	scene.add(sun);
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene)];
+  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
   console.log("COLLIDABLE OBJECTS")
   console.log(collidableObjects)
 
