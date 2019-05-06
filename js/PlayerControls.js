@@ -173,6 +173,7 @@ THREE.PlayerControls = function(camera, domElement) {
 			this.block.translateZ(velocity.z * delta);
 		} else {
 			// collision or no movement
+			console.log("collision");
 			velocity.x = 0;
 			velocity.z = 0;
 		}

@@ -13,6 +13,8 @@ function Key(scene) {
     key.castShadow = true;
     key.receiveShadow = true;
 
+    collidableObjects.push(key);
+
     scene.add(key);
 
   });

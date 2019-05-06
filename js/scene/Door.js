@@ -13,6 +13,8 @@ function Door(scene) {
       door.castShadow = true;
       door.receiveShadow = true;
   
+      collidableObjects.push(door);
+        
       scene.add(door);
   
     });

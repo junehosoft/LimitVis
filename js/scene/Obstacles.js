@@ -23,6 +23,9 @@ function Obstacles(scene) {
   tube.rotation.x = -Math.PI/2;
   tube.position.y = 0;
   tube.position.z = -75;
+
+  collidableObjects.push(tube);
+
   scene.add(tube);
 
   var points = [];
@@ -35,6 +38,9 @@ function Obstacles(scene) {
   lathe.rotation.x = -Math.PI;
   lathe.position.z = 100;
   lathe.position.x = 80;
+
+  collidableObjects.push(lathe);
+
   scene.add( lathe );
 
   // add in torus later

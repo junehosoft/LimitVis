@@ -24,6 +24,8 @@ function RandomCube(scene) {
     boxes.push(box);
     // console.log(boxes)
 
+    collidableObjects.push(box);
+
 
   }
 
