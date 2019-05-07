@@ -26,8 +26,6 @@ function RandomCube(scene) {
   scene.add(box);
   boxes.push(box);
   collidableObjects.push(box);
-
-
   this.update = function(time) {
 
   }

@@ -28,7 +28,7 @@ var frontDist = -200;
 // obstacles in the game
 var boxes = new Array();
 var collidableObjects = []; // An array of collidable objects used later
-var PLAYERCOLLISIONDIST = 3;
+var PLAYERCOLLISIONDIST = 5;
 var EPS = 0.1;
 
 /****************************** CONTROL VARS **********************************/
@@ -251,50 +251,18 @@ function radiansToDegrees(radians) {
 /* This code was adapted from
 https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-game-js3d
 */
-function detectPlayerCollision() {
-  // rotation matrix to apply direction vector
-  var rotationMat;
-
-  // get direction of camera
-  var cameraDirection = controls.getDirection().clone();
-
-  // check which direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degree(180));
-  } else if (moveLeft) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(270));
-  }
-
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-    cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var playerPos = controls.getObject().position
-  var rayCaster = new THREE.Raycaster(playerPos, cameraDirection);
-
-  // if our ray hit a colidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST))
-    return true;
-  else if (playerPos.z < backWall.position.z || playerPos.x > rightWall.position.x ||
-           playerPos.x > leftWall.position.x || playerPos.z > frontWall.position.z)
-    return false;
-  else return false;
-
-}
 
 function rayIntersect(ray, distance) {
-    var intersects = ray.intersectObjects(collidableObjects);
-    for (var i = 0; i < intersects.length; i++) {
-        // Check if there's a collision
-        if (intersects[i].distance < distance) {
-            return true;
-        }
+  var close = [];
+  var intersects = ray.intersectObjects(collidableObjects);
+  for (var i = 0; i < intersects.length; i++) {
+    // If there's a collision, push into close
+    if (intersects[i].distance < distance) {
+      console.log(i);
+      close.push[intersects[i]];
     }
-    return false;
+  }
+  if (close.length > 0)
+    console.log("close", close.length);
+  return close;
 }
