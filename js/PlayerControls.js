@@ -145,12 +145,14 @@ THREE.PlayerControls = function(camera, domElement) {
 		var playerPos = this.block.position;
 		var dir = deltaV.clone().normalize();
 		var rayCaster = new THREE.Raycaster(playerPos, dir);
-		//console.log(playerPos);
+
 		// if our ray hit a colidable object return true
 		var hits = rayIntersect(rayCaster, PLAYERCOLLISIONDIST);
-		//console.log(hits.length);
-		if (hits.length >= 1)
-		  return hits;
+		
+		if (hits.length >= 1) {
+			//console.log(hits.length)
+			return hits;
+		}
 		return undefined;
 	}
 
@@ -186,16 +188,17 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 		var hits = this.playerCollision(deltaV);
 		if (hits != undefined) {
-			console.log("lmao")
 			var correction = new THREE.Vector3();
 			for(let i = 0; i < hits.length; i++) {
 				var norm = hits[i].face.normal.clone();
 				var project = deltaV.clone().projectOnVector(norm);
 				correction.add(deltaV.clone().add(project).normalize());
 			}
-			deltaV = correction.multiplyScalar(speed * delta);
+			//velocity = correction.multiplyScalar(speed * delta);
+			velocty = new THREE.Vector3();
+		} else {
+			velocity.add(deltaV);
 		}
-		velocity.add(deltaV);
 		this.block.translateX(velocity.x * delta);
 		this.block.translateZ(velocity.z * delta);
 	}

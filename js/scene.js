@@ -82,7 +82,7 @@ function createScene(){
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, 2000 );//perspective camera
   camera.position.y = 2;
-  camera.position.z = 10;
+  camera.position.z = 0;
   scene.add(camera);
 
 	// 3. renderer
@@ -254,15 +254,16 @@ https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-ga
 
 function rayIntersect(ray, distance) {
   var close = [];
+  //console.log(distance);
   var intersects = ray.intersectObjects(collidableObjects);
   for (var i = 0; i < intersects.length; i++) {
     // If there's a collision, push into close
     if (intersects[i].distance < distance) {
-      console.log(i);
-      close.push[intersects[i]];
+      //console.log(intersects[i].distance);
+      close.push(intersects[i]);
     }
   }
-  if (close.length > 0)
-    console.log("close", close.length);
+  //if (close.length > 0)
+    //console.log("close", close.length);
   return close;
 }
