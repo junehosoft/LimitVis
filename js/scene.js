@@ -8,9 +8,9 @@ var scene;
 var renderer;
 var dom;
 var hero;
-var sun;
 var key;
 var sceneSubject;
+var pointLight;
 var lightOrb;
 var door = [];
 var fogDensity;
@@ -87,7 +87,7 @@ function createScene(){
   // scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
 
   // 1.5. fog effect
-  fogColor = new THREE.Color(0xf0fff0);
+  fogColor = new THREE.Color(0xfba500);
   scene.background = fogColor;
   farFog = 50;
   nearFog = 1;
@@ -112,23 +112,15 @@ function createScene(){
   // setup player movement
   controls = new THREE.PlayerControls(camera, dom);
   scene.add(controls.getObject());
+
 	// 4. lights
-	var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
-	scene.add(hemisphereLight);
-	sun = new THREE.DirectionalLight( 0xffffff, 0.8);
-	sun.position.set( 0,4,1 );
-	sun.castShadow = true;
+  pointLight = new THREE.PointLight( 0xeeef94, 5, 10);
+  pointLight.visible = true;
+  scene.add( pointLight );
 
   // setup time
   clock = new THREE.Clock();
   clock.start();
-
-	//Set up shadow properties for the sun light
-	sun.shadow.mapSize.width = 256;
-	sun.shadow.mapSize.height = 256;
-	sun.shadow.camera.near = 0.5;
-	sun.shadow.camera.far = 50 ;
-	scene.add(sun);
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene),
@@ -179,7 +171,7 @@ function animate(){
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
 
-    if (farFog > nearFog) farFog -= 0.06;
+    // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
     // fogCounter += 0.0005;
@@ -191,6 +183,12 @@ function animate(){
     requestAnimationFrame(animate);
 
     var delta = clock.getDelta();
+    // update light position
+    let currentPos = controls.getObject().position;
+    pointLight.position.set(currentPos.x + 6, 5, currentPos.z + 6);
+    if (pointLight.distance > 0.01)
+      pointLight.distance -= 0.05*delta;
+
     controls.animatePlayer(delta);
 }
 
@@ -272,7 +270,7 @@ function detectPlayerCollision() {
 function detectGameEnd() {
   var rotationMat;
 
-  // get direction of camera 
+  // get direction of camera
   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
   
   // check direction we're moving 
