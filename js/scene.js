@@ -123,7 +123,8 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
+  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene),
+                  new lightOrb(scene)];
   // console.log("COLLIDABLE OBJECTS")
   // console.log(collidableObjects)
 
@@ -295,6 +296,13 @@ function detectPlayerCollision() {
     return true;
   else return false;
 
+}
+
+function detectGameEnd() {
+  var rotationMat;
+
+  // get direction of camera
+  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
 }
 
 function rayIntersect(ray, distance) {
