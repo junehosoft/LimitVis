@@ -82,8 +82,9 @@ function createScene(){
   scene = new THREE.Scene();//the 3d scene
   // scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
 
-	// 2. camera
-  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, 2000 );//perspective camera
+  // 2. camera
+  let cameraSight = 300;
+  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, cameraSight );//perspective camera
   camera.position.y = 2;
   camera.position.z = 10;
   scene.add(camera);
