@@ -28,7 +28,7 @@ var frontDist = -200;
 // obstacles in the game
 var boxes = new Array();
 var collidableObjects = []; // An array of collidable objects used later
-var PLAYERCOLLISIONDIST = 5;
+var PLAYERCOLLISIONDIST = 3;
 var EPS = 0.1;
 
 /****************************** CONTROL VARS **********************************/
@@ -57,7 +57,6 @@ var MOVESPEED = 30,
 
 
 init();
-
 
 function init() {
   clock = new THREE.Clock();
@@ -99,6 +98,7 @@ function createScene(){
   // setup player movement
   controls = new THREE.PlayerControls(camera, dom);
   scene.add(controls.getObject());
+
 	// 4. lights
 	var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
 	scene.add(hemisphereLight);
@@ -117,8 +117,12 @@ function createScene(){
 	sun.shadow.camera.far = 50 ;
 	scene.add(sun);
 
-  // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene)];
+  // create the scene 
+  sceneSubject = [new Background(scene), new Key(scene), new Obstacles(scene)];
+  for (let i = 0; i < 7; i++) {
+    sceneSubject.push(new RandomCube(scene));
+  }
+
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
   var lightOrbMaterial = new THREE.MeshBasicMaterial(
@@ -252,7 +256,7 @@ function detectPlayerCollision() {
   var rotationMat;
 
   // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
+  var cameraDirection = controls.getDirection().clone();
 
   // check which direction we're moving
   if (moveBackward) {
@@ -294,80 +298,3 @@ function rayIntersect(ray, distance) {
     }
     return false;
 }
-
-/*function listenForPlayerMovement() {
-    // A key has been pressed
-    var onKeyDown = function(event) {
-
-    switch (event.keyCode) {
-      case 38: // up
-      case 87: // w
-        moveForward = true;
-        break;
-      case 37: // left
-      case 65: // a
-        moveLeft = true;
-        break;
-      case 40: // down
-      case 83: // s
-        moveBackward = true;
-        break;
-      case 39: // right
-      case 68: // d
-        moveRight = true;
-        break;
-    }
-  };
-
-  // A key has been released
-    var onKeyUp = function(event) {
-    switch (event.keyCode) {
-      case 38: // up
-      case 87: // w
-        moveForward = false;
-        break;
-      case 37: // left
-      case 65: // a
-        moveLeft = false;
-        break;
-      case 40: // down
-      case 83: // s
-        moveBackward = false;
-        break;
-      case 39: // right
-      case 68: // d
-        moveRight = false;
-        break;
-    }
-  };
-
-  // Add event listeners for when movement keys are pressed and released
-  document.addEventListener('keydown', onKeyDown, false);
-  document.addEventListener('keyup', onKeyUp, false);
-}
-
-function animatePlayer(delta) {
-  // Gradual slowdown
-  playerVelocity.x -= playerVelocity.x * 10.0 * delta;
-  playerVelocity.z -= playerVelocity.z * 10.0 * delta;
-
-  if (controls.moveForward) {
-    playerVelocity.z -= PLAYERSPEED * delta;
-  }
-  if (controls.moveBackward) {
-    playerVelocity.z += PLAYERSPEED * delta;
-  }
-  if (controls.moveLeft) {
-    playerVelocity.x -= PLAYERSPEED * delta;
-  }
-  if (controls.moveRight) {
-    playerVelocity.x += PLAYERSPEED * delta;
-  }
-  if( !(controls.moveForward || controls.moveBackward || controls.moveLeft || controls.moveRight)) {
-    // No movement key being pressed. Stop movememnt
-    playerVelocity.x = 0;
-    playerVelocity.z = 0;
-  }
-  controls.getObject().translateX(playerVelocity.x * delta);
-  controls.getObject().translateZ(playerVelocity.z * delta);
-} */

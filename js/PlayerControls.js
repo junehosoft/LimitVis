@@ -148,7 +148,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
 		if (detectPlayerCollision() == false) {
-
 			var dir = this.getDirection();
 			dir.y = 0;
 			dir.normalize();
@@ -168,7 +167,6 @@ THREE.PlayerControls = function(camera, domElement) {
 				velocity.x -= dir.z;
 				velocity.z += dir.x;
 			}
-
 			this.block.translateX(velocity.x * delta);
 			this.block.translateZ(velocity.z * delta);
 		} else {
