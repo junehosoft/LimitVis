@@ -6,7 +6,7 @@
   );
 
   lightOrb = new THREE.Mesh(sphereLight, lightOrbMaterial);
-  lightOrb.position.set(4.0,4.0,4.0);
+  lightOrb.position.set(2.0,2.0,2.0);
   lightOrb.receiveShadow = false;
   // lightOrb.castShadow = true;
   lightOrb.scale.set(0.5,0.5,0.5);
@@ -24,7 +24,7 @@
 
   var glowSphere = new THREE.SphereGeometry(2, 20, 20);
   var glowBall = new THREE.Mesh(glowSphere, customGlow);
-  glowBall.position.set(4.0,4.0,4.0);
+  glowBall.position.set(2.0,2.0,2.0);
   glowBall.scale.set(0.5,0.5,0.5);
   scene.add(glowBall);
 

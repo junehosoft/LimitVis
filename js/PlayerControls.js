@@ -148,7 +148,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
 		if (detectGameEnd() == true) {
-			
+			alert("Game Over");
 		}
 		if (detectPlayerCollision() == false) {
 			// console.log("test")
@@ -176,7 +176,7 @@ THREE.PlayerControls = function(camera, domElement) {
 			this.block.translateZ(velocity.z * delta);
 		} else {
 			// collision or no movement
-			console.log("collision");
+			// console.log("collision");
 			velocity.x = 0;
 			velocity.z = 0;
 		}

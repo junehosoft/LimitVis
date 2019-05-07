@@ -13,7 +13,6 @@ function RandomCube(scene) {
       opacity: 1.0,
     });
 
-
     box = new THREE.Mesh(boxGeo, boxMaterial);
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;

@@ -156,7 +156,18 @@ function createScene(){
       face.vertexColors[j] = color;
     }
   }
-  cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+  
+
+  var customGlow = new THREE.ShaderMaterial({
+    uniforms: {},
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: document.getElementById('fragmentShader').textContent,
+    side: THREE.BackSide,
+    blending: THREE.AdditiveBlending,
+    transparent: true
+  });
+
+  cube = new THREE.Mesh(cubeGeometry, customGlow);
   cube.position.set(10,10,0);
   scene.add(cube);
 
@@ -309,8 +320,7 @@ function rayIntersect(ray, distance, objects) {
           }
       }
     } else {
-      var intersect = ray.intersectObject(door);
-      console.log(intersect.distance);
+      var intersect = ray.intersectObject(objects);
       if (intersect.distance < distance) {
         return true;
       }
