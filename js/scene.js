@@ -26,9 +26,6 @@ var rightDist = 250;
 var frontDist = -200;
 
 // obstacles in the game
-var tube;
-var ring;
-var lathe;
 var boxes = new Array();
 var collidableObjects = []; // An array of collidable objects used later
 var PLAYERCOLLISIONDIST = 5;
