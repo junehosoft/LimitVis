@@ -31,7 +31,8 @@ var ring;
 var lathe;
 var boxes = new Array();
 var collidableObjects = []; // An array of collidable objects used later
-var PLAYERCOLLISIONDIST = 20;
+var PLAYERCOLLISIONDIST = 5;
+var EPS = 0.1;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -59,6 +60,7 @@ var MOVESPEED = 30,
 
 
 init();
+
 
 function init() {
   clock = new THREE.Clock();
@@ -120,9 +122,6 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene)];
-  console.log("COLLIDABLE OBJECTS")
-  console.log(collidableObjects)
-
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
   var lightOrbMaterial = new THREE.MeshBasicMaterial(
@@ -202,6 +201,8 @@ function animate(){
 
     var delta = clock.getDelta();
     controls.animatePlayer(delta);
+
+    // console.log(controls.getObject().position)
 }
 
 function render(){
@@ -269,12 +270,20 @@ function detectPlayerCollision() {
   if (rotationMat !== undefined)
     cameraDirection.applyMatrix4(rotationMat);
 
+  // console.log("===CAMERA DIR===")
+  // console.log(cameraDirection)
+  // console.log("================")
+
   // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
+  var playerPos = controls.getObject().position
+  var rayCaster = new THREE.Raycaster(playerPos, cameraDirection);
 
   // if our ray hit a colidable object return true
   if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST))
     return true;
+  else if (playerPos.z < backWall.position.z || playerPos.x > rightWall.position.x ||
+           playerPos.x > leftWall.position.x || playerPos.z > frontWall.position.z)
+    return false;
   else return false;
 
 }
