@@ -131,40 +131,41 @@ function createScene(){
 	scene.add(sun);
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
+  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene),
+                  new lightOrb(scene)];
   // console.log("COLLIDABLE OBJECTS")
   // console.log(collidableObjects)
 
-  // light orbs
-  var sphereLight = new THREE.SphereGeometry(1,10,10);
-  var lightOrbMaterial = new THREE.MeshBasicMaterial(
-    { color: 0xffffff, shininess: 200 }
-  );
+  // // light orbs
+  // var sphereLight = new THREE.SphereGeometry(1,10,10);
+  // var lightOrbMaterial = new THREE.MeshBasicMaterial(
+  //   { color: 0xffffff, shininess: 200 }
+  // );
 
-  console.log(lightOrbMaterial.fog);
+  // console.log(lightOrbMaterial.fog);
 
-  lightOrb = new THREE.Mesh(sphereLight, lightOrbMaterial);
-  lightOrb.position.set(4.0,4.0,4.0);
-  lightOrb.receiveShadow = false;
-  // lightOrb.castShadow = true;
-  lightOrb.scale.set(0.5,0.5,0.5);
-  scene.add(lightOrb);
+  // lightOrb = new THREE.Mesh(sphereLight, lightOrbMaterial);
+  // lightOrb.position.set(4.0,4.0,4.0);
+  // lightOrb.receiveShadow = false;
+  // // lightOrb.castShadow = true;
+  // lightOrb.scale.set(0.5,0.5,0.5);
+  // scene.add(lightOrb);
 
-  // now let's make them glow?
-  var customGlow = new THREE.ShaderMaterial({
-    uniforms: {},
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: document.getElementById('fragmentShader').textContent,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
-    transparent: true
-  });
+  // // now let's make them glow?
+  // var customGlow = new THREE.ShaderMaterial({
+  //   uniforms: {},
+  //   vertexShader: document.getElementById('vertexShader').textContent,
+  //   fragmentShader: document.getElementById('fragmentShader').textContent,
+  //   side: THREE.BackSide,
+  //   blending: THREE.AdditiveBlending,
+  //   transparent: true
+  // });
 
-  var glowSphere = new THREE.SphereGeometry(2, 20, 20);
-  var glowBall = new THREE.Mesh(glowSphere, customGlow);
-  glowBall.position.set(4.0,4.0,4.0);
-  glowBall.scale.set(0.5,0.5,0.5);
-  scene.add(glowBall);
+  // var glowSphere = new THREE.SphereGeometry(2, 20, 20);
+  // var glowBall = new THREE.Mesh(glowSphere, customGlow);
+  // glowBall.position.set(4.0,4.0,4.0);
+  // glowBall.scale.set(0.5,0.5,0.5);
+  // scene.add(glowBall);
 
   // different colors at face vertices create gradient effect
   var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -297,6 +298,13 @@ function detectPlayerCollision() {
     return true;
   else return false;
 
+}
+
+function detectGameEnd() {
+  var rotationMat;
+
+  // get direction of camera 
+  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
 }
 
 function rayIntersect(ray, distance) {
