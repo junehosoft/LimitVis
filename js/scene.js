@@ -247,6 +247,9 @@ function radiansToDegrees(radians) {
   return radians * 180 / Math.PI;
 }
 
+/* This code was adapted from
+https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-game-js3d
+*/
 function detectPlayerCollision() {
   // rotation matrix to apply direction vector
   var rotationMat;
@@ -269,10 +272,6 @@ function detectPlayerCollision() {
   // player isn't moving forward, apply rotation matrix needed
   if (rotationMat !== undefined)
     cameraDirection.applyMatrix4(rotationMat);
-
-  // console.log("===CAMERA DIR===")
-  // console.log(cameraDirection)
-  // console.log("================")
 
   // apply ray to new player camera
   var playerPos = controls.getObject().position

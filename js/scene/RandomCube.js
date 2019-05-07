@@ -18,11 +18,16 @@ function RandomCube(scene) {
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
     box.position.z = Math.random()*400-200;
+
+    if (Math.abs(box.position.x) < 20)
+      box.position.x *= 3.5;
+    if (Math.abs(box.position.z) < 20)
+      box.position.z *= 3.5;
     box.receiveShadow = true;
     box.castShadow = true;
     scene.add(box);
     boxes.push(box);
-    console.log(boxes)
+    collidableObjects.push(box)
 
 
   }
