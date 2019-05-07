@@ -14,7 +14,7 @@ function Background(scene) {
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
   // var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
-  var wallMaterial = new THREE.MeshNormalMaterial({color: 0xdfaff7});
+  var wallMaterial = new THREE.MeshBasicMaterial({color: 0xdfaff7});
   wallMaterial.fog = true;
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.rotation.y = Math.PI;

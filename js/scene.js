@@ -13,6 +13,9 @@ var key;
 var sceneSubject;
 var lightOrb;
 var door;
+var fogDensity;
+var nearFog;
+var farFog;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -80,11 +83,18 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  // scene.fog = new THREE.FogExp2(0xf0fff0, 0.14); //enable fog
+  // fogDensity = 0.01;
+  // scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
 
-  // 2. camera
-  let cameraSight = 300;
-  camera = new THREE.PerspectiveCamera( 60, sceneWidth / sceneHeight, 1, cameraSight );//perspective camera
+  // 1.5. fog effect
+  fogColor = new THREE.Color(0xf0fff0);
+  scene.background = fogColor;
+  farFog = 50;
+  nearFog = 1;
+  scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+
+	// 2. camera
+  camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
   camera.position.y = 2;
   camera.position.z = 10;
   scene.add(camera);
@@ -122,14 +132,16 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
-  console.log("COLLIDABLE OBJECTS")
-  console.log(collidableObjects)
+  // console.log("COLLIDABLE OBJECTS")
+  // console.log(collidableObjects)
 
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
   var lightOrbMaterial = new THREE.MeshBasicMaterial(
     { color: 0xffffff, shininess: 200 }
   );
+
+  console.log(lightOrbMaterial.fog);
 
   lightOrb = new THREE.Mesh(sphereLight, lightOrbMaterial);
   lightOrb.position.set(4.0,4.0,4.0);
@@ -196,6 +208,12 @@ function animate(){
     //animate
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+
+    if (farFog > nearFog) farFog -= 0.06;
+    scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+
+    // fogCounter += 0.0005;
+    // scene.fog = new THREE.FogExp2(0xf0fff0, fogCounter); //fog grows denser
 
     render();
 
