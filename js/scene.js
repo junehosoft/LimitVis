@@ -12,7 +12,7 @@ var sun;
 var key;
 var sceneSubject;
 var lightOrb;
-var door;
+var door = [];
 var fogDensity;
 var nearFog;
 var farFog;
@@ -132,40 +132,9 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene),
-                  new lightOrb(scene)];
+                  new LightOrb(scene)];
   // console.log("COLLIDABLE OBJECTS")
   // console.log(collidableObjects)
-
-  // // light orbs
-  // var sphereLight = new THREE.SphereGeometry(1,10,10);
-  // var lightOrbMaterial = new THREE.MeshBasicMaterial(
-  //   { color: 0xffffff, shininess: 200 }
-  // );
-
-  // console.log(lightOrbMaterial.fog);
-
-  // lightOrb = new THREE.Mesh(sphereLight, lightOrbMaterial);
-  // lightOrb.position.set(4.0,4.0,4.0);
-  // lightOrb.receiveShadow = false;
-  // // lightOrb.castShadow = true;
-  // lightOrb.scale.set(0.5,0.5,0.5);
-  // scene.add(lightOrb);
-
-  // // now let's make them glow?
-  // var customGlow = new THREE.ShaderMaterial({
-  //   uniforms: {},
-  //   vertexShader: document.getElementById('vertexShader').textContent,
-  //   fragmentShader: document.getElementById('fragmentShader').textContent,
-  //   side: THREE.BackSide,
-  //   blending: THREE.AdditiveBlending,
-  //   transparent: true
-  // });
-
-  // var glowSphere = new THREE.SphereGeometry(2, 20, 20);
-  // var glowBall = new THREE.Mesh(glowSphere, customGlow);
-  // glowBall.position.set(4.0,4.0,4.0);
-  // glowBall.scale.set(0.5,0.5,0.5);
-  // scene.add(glowBall);
 
   // different colors at face vertices create gradient effect
   var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -277,7 +246,7 @@ function detectPlayerCollision() {
   // check which direction we're moving
   if (moveBackward) {
     rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degree(180));
+    rotationMat.makeRotationY(degreesToRadians(180));
   } else if (moveLeft) {
     rotationMat = new THREE.Matrix4();
     rotationMat.makeRotationY(degreesToRadians(90));
@@ -294,7 +263,7 @@ function detectPlayerCollision() {
   var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
 
   // if our ray hit a colidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST))
+  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, collidableObjects))
     return true;
   else return false;
 
@@ -305,15 +274,48 @@ function detectGameEnd() {
 
   // get direction of camera 
   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
+  
+  // check direction we're moving 
+  if (moveBackward) {
+    rotationMat = new THREE.Matrix4();
+    rotationmat.makeRotationY(degree(180));
+  } else if (moveLeft) {
+    rotationmat = new THREE.Matrix4();
+    rotationMat.makeROtationY(degreesToRadians(90));
+  } else if (moveRight) {
+    rotationMat = new THREE.Matrix4();
+    rotationmat.makeRotationY(degreesToRadians(270));
+  }
+  // player isn't moving forward, apply rotation matrix needed
+  if (rotationMat !== undefined)
+  cameraDirection.applyMatrix4(rotationMat);
+
+  // apply ray to new player camera
+  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
+
+  // if our ray hit a collidable object return true
+  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door))
+    return true;
+  else return false;
+
+
 }
 
-function rayIntersect(ray, distance) {
-    var intersects = ray.intersectObjects(collidableObjects);
-    for (var i = 0; i < intersects.length; i++) {
-        // Check if there's a collision
-        if (intersects[i].distance < distance) {
-            return true;
-        }
+function rayIntersect(ray, distance, objects) {
+    if (Array.isArray(objects)) {
+      var intersects = ray.intersectObjects(objects);
+      for (var i = 0; i < intersects.length; i++) {
+          // Check if there's a collision
+          if (intersects[i].distance < distance) {
+              return true;
+          }
+      }
+    } else {
+      var intersect = ray.intersectObject(door);
+      console.log(intersect.distance);
+      if (intersect.distance < distance) {
+        return true;
+      }
     }
     return false;
 }

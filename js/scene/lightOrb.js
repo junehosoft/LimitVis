@@ -1,5 +1,4 @@
- 
- function lightOrb () {
+ function LightOrb (scene) {
   // light orbs
   var sphereLight = new THREE.SphereGeometry(1,10,10);
   var lightOrbMaterial = new THREE.MeshBasicMaterial(

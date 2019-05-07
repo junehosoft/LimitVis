@@ -12,11 +12,8 @@
 		<script src="libjs/OrbitControl.js"></script>
     <script src="libjs/dat.gui.min.js"></script>
     <script src="js/STLLoader.js"></script>
-    <!-- <script src="libjs/Three.js"></script> -->
 
-    <!-- shader code  -->
-
-    <!-- ---------------- Custom Shader Code ------------------------ -->
+    <!-- ---------------- CUSTOM SHADER CODE ------------------------ -->
     <script id="vertexShader" type="x-shader/x-vertex">
     varying vec3 vNormal;
     void main() 
@@ -35,8 +32,27 @@
         gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
     }
     </script>
-
-		<div id="blocker">
+    <!-- END OF SHADER CODE -->
+    
+  </head>
+  <body onload="init()">
+    <div id="gameWindow">
+        <div id="introScreen"></div>
+        <div id="btnGo" onclick = "go()">GO</div>
+        <div id = "playerPanel">
+            <h2>Player</h2>
+            <style type="text/css">
+              #introScreen{
+                position:absolute;
+                z-index: 100;
+                background-color:black;
+                }
+          </style>
+        </div>
+    </div>
+  </body>
+    
+    <div id="blocker">
 	    <div id="instructions">
 	    	<strong>Click to look!</strong>
 	    </div>
@@ -51,7 +67,7 @@
 		<script src="js/scene/Background.js"> </script>
     <script src="js/scene/Key.js"> </script>
     <script src="js/scene/Door.js"></script>
-    <script src="js/scene/lightOrb.js"></script>
+    <script src="js/scene/LightOrb.js"></script>
 		<script src="js/PlayerControls.js"> </script>
 		<script src="js/scene.js"> </script>
 

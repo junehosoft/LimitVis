@@ -147,6 +147,9 @@ THREE.PlayerControls = function(camera, domElement) {
 		var velocity = this.velocity;
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
+		if (detectGameEnd() == true) {
+			
+		}
 		if (detectPlayerCollision() == false) {
 			// console.log("test")
 			var dir = this.getDirection();
