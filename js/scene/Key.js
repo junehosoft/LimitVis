@@ -6,7 +6,7 @@ function Key(scene) {
       { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
     key = new THREE.Mesh(geometry, material);
 
-    key.position.set(0,2,0);
+    key.position.set(10,2,0);
     key.rotation.set(0,0,0);
     key.scale.set(1,1,1);
 
