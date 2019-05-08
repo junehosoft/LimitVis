@@ -147,9 +147,23 @@ THREE.PlayerControls = function(camera, domElement) {
 		var velocity = this.velocity;
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
-		if (detectGameEnd() == true) {
+		
+		// to determine whether the game ends
+		if (detectDoorFound() == true && detectKeyFound() == true) {
 			alert("Game Over");
 		}
+
+		// if the door is found without picking up the key first
+		if (detectDoorFound() == true && detectKeyFound() == false) {
+			alert("You must find a key to unlock this door");
+		}
+
+		if (detectKeyFound() == true) {
+			console.log("You found the key");
+			scene.remove(newkey);
+		}
+
+		// handle movement and basic collisions with obstacles
 		if (detectPlayerCollision() == false) {
 			// console.log("test")
 			var dir = this.getDirection();
