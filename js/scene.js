@@ -17,6 +17,8 @@ var door = [];
 var fogDensity;
 var nearFog;
 var farFog;
+var cube;
+var glowBox;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -129,48 +131,48 @@ function createScene(){
   // console.log("COLLIDABLE OBJECTS")
   // console.log(collidableObjects)
 
-  // different colors at face vertices create gradient effect
-  var cubeMaterial = new THREE.MeshBasicMaterial(
-    { color: 0xffffff, vertexColors: THREE.VertexColors }
-  );
+  // // different colors at face vertices create gradient effect
+  // var cubeMaterial = new THREE.MeshBasicMaterial(
+  //   { color: 0xffffff, vertexColors: THREE.VertexColors }
+  // );
 
-  var color, face, numberOfSides, vertexIndex;
+  // var color, face, numberOfSides, vertexIndex;
 
-  var faceIndices = ['a', 'b', 'c', 'd'];
+  // var faceIndices = ['a', 'b', 'c', 'd'];
 
-  // cube gradient trial
-  var size = 5;
-  var point;
-  var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
-  for (var i = 0; i < cubeGeometry.faces.length; i++) {
-    face = cubeGeometry.faces[i];
-    // determine if current face is triangle or rectangle
-    numberOfSides = (face instanceof THREE.Face3) ? 3 : 4;
-    // assign color to each vertex of current face
-    for (var j = 0; j < numberOfSides; j++) {
-      vertexIndex = face[faceIndices[j]];
-      // store coordinates of vertex
-      point = cubeGeometry.vertices[vertexIndex];
-      // initialize color variable
-      color = new THREE.Color(0xffffff);
-      color.setRGB(0.5 + point.x / size, 0.5 + point.y / size, 0.5 + point.z / size);
-      face.vertexColors[j] = color;
-    }
-  }
+  // // cube gradient trial
+  // var size = 5;
+  // var point;
+  // var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
+  // for (var i = 0; i < cubeGeometry.faces.length; i++) {
+  //   face = cubeGeometry.faces[i];
+  //   // determine if current face is triangle or rectangle
+  //   numberOfSides = (face instanceof THREE.Face3) ? 3 : 4;
+  //   // assign color to each vertex of current face
+  //   for (var j = 0; j < numberOfSides; j++) {
+  //     vertexIndex = face[faceIndices[j]];
+  //     // store coordinates of vertex
+  //     point = cubeGeometry.vertices[vertexIndex];
+  //     // initialize color variable
+  //     color = new THREE.Color(0xffffff);
+  //     color.setRGB(0.5 + point.x / size, 0.5 + point.y / size, 0.5 + point.z / size);
+  //     face.vertexColors[j] = color;
+  //   }
+  // }
   
 
-  var customGlow = new THREE.ShaderMaterial({
-    uniforms: {},
-    vertexShader: document.getElementById('vertexShader').textContent,
-    fragmentShader: document.getElementById('fragmentShader').textContent,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
-    transparent: true
-  });
+  // var customGlow = new THREE.ShaderMaterial({
+  //   uniforms: {},
+  //   vertexShader: document.getElementById('vertexShader').textContent,
+  //   fragmentShader: document.getElementById('fragmentShader').textContent,
+  //   side: THREE.BackSide,
+  //   blending: THREE.AdditiveBlending,
+  //   transparent: true
+  // });
 
-  cube = new THREE.Mesh(cubeGeometry, customGlow);
-  cube.position.set(10,10,0);
-  scene.add(cube);
+  // cube = new THREE.Mesh(cubeGeometry, customGlow);
+  // cube.position.set(10,10,0);
+  // scene.add(cube);
 
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
@@ -182,6 +184,8 @@ function animate(){
     //animate
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+    glowBox.rotation.x += 0.01;
+    glowBox.rotation.y += 0.01;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
