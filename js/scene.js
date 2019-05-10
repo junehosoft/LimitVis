@@ -33,12 +33,12 @@ var rightDist = 250;
 var frontDist = -200;
 
 // obstacles in the game
-var tube;
-var ring;
-var lathe;
 var boxes = new Array();
+var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
+var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 20;
+var PLAYERLIGHTDIST = 10;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -126,10 +126,11 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene),
-                  new LightOrb(scene)];
+  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
   // console.log("COLLIDABLE OBJECTS")
   // console.log(collidableObjects)
+  for (let i = 0; i < NUMLIGHTORBS; i++)
+    sceneSubject.push(new LightOrb(scene));
 
   // // different colors at face vertices create gradient effect
   // var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -199,11 +200,15 @@ function animate(){
     requestAnimationFrame(animate);
 
     var delta = clock.getDelta();
+
     // update light position
     let currentPos = controls.getObject().position;
     pointLight.position.set(currentPos.x + 6, 5, currentPos.z + 6);
     if (pointLight.distance > 0.01)
       pointLight.distance -= 0.05*delta;
+
+    // check if near light
+    getLight();
 
     controls.animatePlayer(delta);
 }
@@ -250,6 +255,22 @@ function radiansToDegrees(radians) {
   return radians * 180 / Math.PI;
 }
 
+function getLight() {
+
+  let currentPos = controls.getObject().position;
+
+  for (let i = 0; i < orbs.length; i++) {
+    let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
+    if (dist < PLAYERLIGHTDIST) {
+      scene.remove(scene.getObjectByName(orbs[i].name));
+      pointLight.distance *= 1.01;
+      pointLight.intensity += 0.1;
+    }
+
+
+  }
+}
+
 function detectPlayerCollision() {
   // rotation matrix to apply direction vector
   var rotationMat;
@@ -288,8 +309,8 @@ function detectDoorFound() {
 
   // get direction of camera
   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-  
-  // check direction we're moving 
+
+  // check direction we're moving
   if (moveBackward) {
     rotationMat = new THREE.Matrix4();
     rotationmat.makeRotationY(degree(180));
@@ -369,80 +390,3 @@ function rayIntersect(ray, distance, objects) {
     }
     return false;
 }
-
-/*function listenForPlayerMovement() {
-    // A key has been pressed
-    var onKeyDown = function(event) {
-
-    switch (event.keyCode) {
-      case 38: // up
-      case 87: // w
-        moveForward = true;
-        break;
-      case 37: // left
-      case 65: // a
-        moveLeft = true;
-        break;
-      case 40: // down
-      case 83: // s
-        moveBackward = true;
-        break;
-      case 39: // right
-      case 68: // d
-        moveRight = true;
-        break;
-    }
-  };
-
-  // A key has been released
-    var onKeyUp = function(event) {
-    switch (event.keyCode) {
-      case 38: // up
-      case 87: // w
-        moveForward = false;
-        break;
-      case 37: // left
-      case 65: // a
-        moveLeft = false;
-        break;
-      case 40: // down
-      case 83: // s
-        moveBackward = false;
-        break;
-      case 39: // right
-      case 68: // d
-        moveRight = false;
-        break;
-    }
-  };
-
-  // Add event listeners for when movement keys are pressed and released
-  document.addEventListener('keydown', onKeyDown, false);
-  document.addEventListener('keyup', onKeyUp, false);
-}
-
-function animatePlayer(delta) {
-  // Gradual slowdown
-  playerVelocity.x -= playerVelocity.x * 10.0 * delta;
-  playerVelocity.z -= playerVelocity.z * 10.0 * delta;
-
-  if (controls.moveForward) {
-    playerVelocity.z -= PLAYERSPEED * delta;
-  }
-  if (controls.moveBackward) {
-    playerVelocity.z += PLAYERSPEED * delta;
-  }
-  if (controls.moveLeft) {
-    playerVelocity.x -= PLAYERSPEED * delta;
-  }
-  if (controls.moveRight) {
-    playerVelocity.x += PLAYERSPEED * delta;
-  }
-  if( !(controls.moveForward || controls.moveBackward || controls.moveLeft || controls.moveRight)) {
-    // No movement key being pressed. Stop movememnt
-    playerVelocity.x = 0;
-    playerVelocity.z = 0;
-  }
-  controls.getObject().translateX(playerVelocity.x * delta);
-  controls.getObject().translateZ(playerVelocity.z * delta);
-} */
