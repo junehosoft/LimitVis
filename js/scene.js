@@ -356,7 +356,7 @@ function detectDoorFound() {
 
   // if our ray hit a collidable object return true
   if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door)) {
-    console.log("a door was found");
+    // console.log("a door was found");
     return true;
   }
   return false;
