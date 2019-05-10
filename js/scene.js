@@ -274,7 +274,7 @@ function getLight() {
       scene.children.splice(childIndex,childIndex);
       // scene.remove(scene.getObjectByName(orbs[i].name));
       pointLight.distance *= 1.01;
-      pointLight.intensity += 0.1;
+      pointLight.intensity += 0.5;
     }
   }
 
