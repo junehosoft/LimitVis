@@ -267,13 +267,15 @@ function getLight() {
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
     if (dist < PLAYERLIGHTDIST) {
-      scene.remove(scene.getObjectByName(orbs[i].name));
+      let childIndex = scene.children.indexOf(orbs[i]);
+      scene.children.splice(childIndex,childIndex);
+      // scene.remove(scene.getObjectByName(orbs[i].name));
       pointLight.distance *= 1.01;
       pointLight.intensity += 0.1;
     }
-
-
   }
+
+
 }
 
 function detectPlayerCollision() {
