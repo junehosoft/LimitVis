@@ -272,12 +272,16 @@ function getLight() {
     if (dist < PLAYERLIGHTDIST) {
       console.log("GOT A LIGHT")
       // remove the object
-      let childIndex = scene.children.indexOf(orbs[i]);
-      scene.children.splice(childIndex, 1);
+      let orbIndex = scene.children.indexOf(orbs[i]);
+      scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
+
+      let glowIndex = scene.children.indexOf(glows[i]);
+      scene.children.splice(glowIndex, 1);
+      glows.splice(i, 1);
       NUMLIGHTORBS--;
       // scene.remove(scene.getObjectByName(orbs[i].name));
-      pointLight.distance *= 1.005;
+      pointLight.distance *= 1.05;
       pointLight.intensity += 0.05;
     }
   }

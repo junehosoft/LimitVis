@@ -1,5 +1,5 @@
  function LightOrb (scene) {
- 
+
     // middle cube
     var cubeMaterial = new THREE.MeshBasicMaterial(
       { color: 0xffffff, vertexColors: THREE.VertexColors }
