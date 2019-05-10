@@ -35,6 +35,7 @@ var frontDist = -200;
 // obstacles in the game
 var boxes = new Array();
 var orbs = [];
+var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 20;
@@ -183,10 +184,14 @@ function createScene(){
 
 function animate(){
     //animate
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    glowBox.rotation.x += 0.01;
-    glowBox.rotation.y += 0.01;
+    for (let i = 0; i < NUMLIGHTORBS; i++) {
+
+      orbs[i].rotation.x += 0.01;
+      orbs[i].rotation.y += 0.01;
+      glows[i].rotation.x += 0.01;
+      glows[i].rotation.y += 0.01;
+
+    }
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);

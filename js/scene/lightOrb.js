@@ -1,43 +1,12 @@
  function LightOrb (scene) {
  
-    // different colors at face vertices create gradient effect
+    // middle cube
     var cubeMaterial = new THREE.MeshBasicMaterial(
       { color: 0xffffff, vertexColors: THREE.VertexColors }
     );
-  
-    // var color, face, numberOfSides, vertexIndex;
-  
-    // var faceIndices = ['a', 'b', 'c', 'd'];
-  
-    // cube gradient trial
     var size = 5;
-    // var point;
-    var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
-    // for (var i = 0; i < cubeGeometry.faces.length; i++) {
-    //   face = cubeGeometry.faces[i];
-    //   // determine if current face is triangle or rectangle
-    //   numberOfSides = (face instanceof THREE.Face3) ? 3 : 4;
-    //   // assign color to each vertex of current face
-    //   for (var j = 0; j < numberOfSides; j++) {
-    //     vertexIndex = face[faceIndices[j]];
-    //     // store coordinates of vertex
-    //     point = cubeGeometry.vertices[vertexIndex];
-    //     // initialize color variable
-    //     color = new THREE.Color(0xffffff);
-    //     color.setRGB(0.5 + point.x / size, 0.5 + point.y / size, 0.5 + point.z / size);
-    //     face.vertexColors[j] = color;
-    //   }
-    // }
-  
-    // var customGlow = new THREE.ShaderMaterial({
-    //   uniforms: {},
-    //   vertexShader: document.getElementById('vertexShader').textContent,
-    //   fragmentShader: document.getElementById('fragmentShader').textContent,
-    //   side: THREE.FrontSide,
-    //   blending: THREE.AdditiveBlending,
-    //   transparent: true
-    // });
 
+    var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
     var customMaterial = new THREE.ShaderMaterial(
       {
         uniforms:
@@ -51,21 +20,28 @@
         fragmentShader: document.getElementById('fragmentShader').textContent,
         side: THREE.BackSide,
         blending: THREE.AdditiveBlending,
-        // transparent: true
+        transparent: true
       }
     );
 
     cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.set(0,3,0);
+    cube.position.x = Math.random()*400-200;
+    cube.position.y = 2;
+    cube.position.z = Math.random()*400-200;
+    cube.receiveShadow = false;
     cube.scale.set(0.3,0.3,0.3)
+    orbs.push(cube);
     scene.add(cube);
 
     // now let's add glow effect
     var glowCube = new THREE.CubeGeometry(size, size, size, 1,1,1);
     glowBox = new THREE.Mesh(glowCube, customMaterial.clone());
-
-    glowBox.position.set(0,3,0);
+    glowBox.position.x = cube.position.x;
+    glowBox.position.y = cube.position.y;
+    glowBox.position.z = cube.position.z;
+    glowBox.receiveShadow = false;
     glowBox.scale.set(0.35,0.35,0.35);
+    glows.push(glowBox);
     scene.add(glowBox);
   
 
