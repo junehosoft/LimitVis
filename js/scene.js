@@ -193,6 +193,9 @@ function animate(){
 
     }
 
+    
+    pointLight.intensity -= 0.005;
+
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
@@ -276,6 +279,14 @@ function getLight() {
   }
 
 
+}
+
+function detectPlayerDeath() {
+  // console.log(pointLight.intensity)
+  if (pointLight.intensity <= 0) {
+    return true;
+  }
+  return false;
 }
 
 function detectPlayerCollision() {

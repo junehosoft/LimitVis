@@ -148,9 +148,14 @@ THREE.PlayerControls = function(camera, domElement) {
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
 		
+		// to determine whether the player died
+		if (detectPlayerDeath() == true) {
+			alert("You died");
+		}
+
 		// to determine whether the game ends
 		if (detectDoorFound() == true && detectKeyFound() == true) {
-			alert("Game Over");
+			alert("You beat the game!");
 		}
 
 		// if the door is found without picking up the key first
