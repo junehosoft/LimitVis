@@ -161,7 +161,7 @@ function createScene(){
   //     face.vertexColors[j] = color;
   //   }
   // }
-  
+
 
   // var customGlow = new THREE.ShaderMaterial({
   //   uniforms: {},
@@ -193,7 +193,7 @@ function animate(){
 
     }
 
-    
+
     pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
@@ -270,11 +270,15 @@ function getLight() {
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
     if (dist < PLAYERLIGHTDIST) {
+      console.log("GOT A LIGHT")
+      // remove the object
       let childIndex = scene.children.indexOf(orbs[i]);
-      scene.children.splice(childIndex,childIndex);
+      scene.children.splice(childIndex, 1);
+      orbs.splice(i, 1);
+      NUMLIGHTORBS--;
       // scene.remove(scene.getObjectByName(orbs[i].name));
-      pointLight.distance *= 1.01;
-      pointLight.intensity += 0.5;
+      pointLight.distance *= 1.005;
+      pointLight.intensity += 0.05;
     }
   }
 
@@ -361,8 +365,8 @@ function detectKeyFound() {
 
   // get direction of camera
   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-  
-  // check direction we're moving 
+
+  // check direction we're moving
   if (moveBackward) {
     rotationMat = new THREE.Matrix4();
     rotationmat.makeRotationY(degree(180));
@@ -384,7 +388,7 @@ function detectKeyFound() {
   if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key)) {
     console.log("a key was found");
     return true;
-  } 
+  }
   return false;
 
 
