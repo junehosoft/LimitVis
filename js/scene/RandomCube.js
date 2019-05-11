@@ -17,8 +17,8 @@ function RandomCube(scene) {
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
     box.position.z = Math.random()*400-200;
-    box.receiveShadow = true;
-    box.castShadow = true;
+    // box.receiveShadow = true;
+    // box.castShadow = true;
     scene.add(box);
     boxes.push(box);
     // console.log(boxes)
