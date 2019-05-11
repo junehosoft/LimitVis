@@ -4,10 +4,26 @@
 		<title>COS426 Assignment 5 &mdash; Cloth Simulation</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
 
 	</head>
 
 <body>
+
+		<div class="wrapper">
+			<div id="container"></div>
+			<div id="blocker">
+				<div id="instructions">
+					<strong><p>Click to start!</p> Use the arrow keys or WASD to move.</p>
+					<strong>The objective of the game is to find the key to unlock the door
+						and escape the room. To see more of the area, collect more of the
+						light. However, if your light dies so do you! </strong>
+				</div>
+			</div>
+
+			<div id="endgame-alert">
+			</div>
+		<div>
     <script src="libjs/three.min.js"></script>
 		<script src="libjs/OrbitControl.js"></script>
     <script src="libjs/dat.gui.min.js"></script>
@@ -15,45 +31,40 @@
 
     <!-- ---------------- CUSTOM SHADER CODE ------------------------ -->
     <script id="vertexShader" type="x-shader/x-vertex">
- 
+
       uniform vec3 viewVector;
       uniform float c;
       uniform float p;
       varying float intensity;
-      void main() 
+      void main()
       {
           vec3 vNormal = normalize( normalMatrix * normal );
         vec3 vNormel = normalize( normalMatrix * viewVector );
         intensity = pow( c - dot(vNormal, vNormel), p );
-        
+
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
 
     </script>
-    
+
     <!-- fragment shader a.k.a. pixel shader -->
-    <script id="fragmentShader" type="x-shader/x-vertex"> 
-            
+    <script id="fragmentShader" type="x-shader/x-vertex">
+
       uniform vec3 glowColor;
       varying float intensity;
-      void main() 
+      void main()
       {
         vec3 glow = glowColor * intensity;
           gl_FragColor = vec4( glow, 1.0 );
       }
 
-  
+
     </script>
     <!-- END OF SHADER CODE -->
-    
-    <div id="blocker">
-	    <div id="instructions">
-	    	<strong>Click to look!</strong>
-	    </div>
-		</div>
 
 
-    <div id="container"></div>
+
+
     <div id="alert_div" title="alert"> </div>
     <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
 		<script src="js/scene/Obstacles.js"> </script>

@@ -65,7 +65,7 @@ var clock;
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
 
-
+getPointerLock();
 init();
 
 function init() {
@@ -415,4 +415,20 @@ function rayIntersect(ray, distance, objects) {
       }
     }
     return false;
+}
+
+function endGame() {
+    blocker.style.display = '';
+    instructions.innerHTML = "GAME OVER </br></br></br> Press CTRL + R to restart";
+    gameOver = true;
+    instructions.style.display = '';
+    endgameAlert.style.display = 'none';
+}
+
+function wonGame() {
+    blocker.style.display = '';
+    instructions.innerHTML = "YOU ESCAPED </br></br></br> Press CTRL + R to restart";
+    gameOver = true;
+    instructions.style.display = '';
+    endgameAlert.style.display = 'none';
 }
