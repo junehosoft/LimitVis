@@ -44,9 +44,6 @@ function Obstacles(scene) {
   scene.add( lathe );
 
   // add in torus later
-
-
-
   this.update = function(time) {
 
   }

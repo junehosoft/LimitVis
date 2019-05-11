@@ -38,11 +38,13 @@ var orbs = [];
 var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
-var PLAYERCOLLISIONDIST = 20;
+var PLAYERCOLLISIONDIST = 10;
 var PLAYERLIGHTDIST = 10;
+var EPS = 0.1;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
+var endgameAlert = document.getElementById('endgameAlert');
 //var orbitControl;
 
 // control global variables
@@ -100,7 +102,7 @@ function createScene(){
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
   camera.position.y = 2;
-  camera.position.z = 10;
+  camera.position.z = 0;
   scene.add(camera);
 
 	// 3. renderer
@@ -219,6 +221,8 @@ function animate(){
     getLight();
 
     controls.animatePlayer(delta);
+
+    // console.log(controls.getObject().position)
 }
 
 function render(){
@@ -285,8 +289,6 @@ function getLight() {
       pointLight.intensity += 0.05;
     }
   }
-
-
 }
 
 function detectPlayerDeath() {
@@ -295,126 +297,6 @@ function detectPlayerDeath() {
     return true;
   }
   return false;
-}
-
-function detectPlayerCollision() {
-  // rotation matrix to apply direction vector
-  var rotationMat;
-
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-  // check which direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(180));
-  } else if (moveLeft) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(270));
-  }
-
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-    cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-  // if our ray hit a colidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, collidableObjects))
-    return true;
-  else return false;
-
-}
-
-function detectDoorFound() {
-  var rotationMat;
-
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-  // check direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degree(180));
-  } else if (moveLeft) {
-    rotationmat = new THREE.Matrix4();
-    rotationMat.makeROtationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degreesToRadians(270));
-  }
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-  cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-  // if our ray hit a collidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door)) {
-    console.log("a door was found");
-    return true;
-  }
-  return false;
-
-
-}
-
-function detectKeyFound() {
-  var rotationMat;
-
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-  // check direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degree(180));
-  } else if (moveLeft) {
-    rotationmat = new THREE.Matrix4();
-    rotationMat.makeROtationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degreesToRadians(270));
-  }
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-  cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-  // if our ray hit a collidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key)) {
-    console.log("a key was found");
-    return true;
-  }
-  return false;
-
-
-}
-
-
-function rayIntersect(ray, distance, objects) {
-    if (Array.isArray(objects)) {
-      var intersects = ray.intersectObjects(objects);
-      for (var i = 0; i < intersects.length; i++) {
-          // Check if there's a collision
-          if (intersects[i].distance < distance) {
-              return true;
-          }
-      }
-    } else {
-      var intersect = ray.intersectObject(objects);
-      if (intersect.distance < distance) {
-        return true;
-      }
-    }
-    return false;
 }
 
 function endGame() {
@@ -431,4 +313,31 @@ function wonGame() {
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+}
+/* This code was adapted from
+https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-game-js3d
+*/
+
+function rayIntersect(ray, distance, objects) {
+  var close = [];
+  //console.log(distance);
+  if (Array.isArray(objects)) {
+    var intersects = ray.intersectObjects(objects);
+    for (var i = 0; i < intersects.length; i++) {
+      // If there's a collision, push into close
+      if (intersects[i].distance < distance) {
+        //console.log(intersects[i].distance);
+        close.push(intersects[i]);
+      }
+    }
+  }
+  else {
+    var intersect = ray.intersectObject(objects);
+      if (intersect.distance < distance) {
+        close.push(intersect);
+    }
+  }
+  //if (close.length > 0)
+    //console.log("close", close.length);
+  return close;
 }
