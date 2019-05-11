@@ -150,11 +150,12 @@ THREE.PlayerControls = function(camera, domElement) {
 
 		// to determine whether the player died
 		if (detectPlayerDeath() == true) {
+			// alert("test")
 			endGame();
 		}
 
 		// to determine whether the game ends
-		if (detectDoorFound() == true && detectKeyFound() == true) {
+		if (detectDoorFound() == true && foundKey == true) {
 			wonGame();
 		}
 

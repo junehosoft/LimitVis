@@ -87,15 +87,15 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  // fogDensity = 0.01;
-  // scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
+  fogDensity = 0.001;
+  scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
 
   // 1.5. fog effect
-  fogColor = new THREE.Color(0xfba500);
-  scene.background = fogColor;
-  farFog = 50;
-  nearFog = 1;
-  scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+  // fogColor = new THREE.Color(0xfba500);
+  // scene.background = fogColor;
+  // farFog = 50;
+  // nearFog = 1;
+  // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
@@ -194,13 +194,13 @@ function animate(){
     }
 
 
-    // pointLight.intensity -= 0.005;
+    pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
-    scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+    // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
-    // fogCounter += 0.0005;
-    // scene.fog = new THREE.FogExp2(0xf0fff0, fogCounter); //fog grows denser
+    fogDensity += 0.00001;
+    scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //fog grows denser
 
     render();
 
@@ -283,6 +283,14 @@ function getLight() {
       // scene.remove(scene.getObjectByName(orbs[i].name));
       pointLight.distance *= 1.05;
       pointLight.intensity += 0.5;
+
+      if (fogDensity > 0.2) {
+        fogDensity -= 0.2;
+      } else {
+        fogDensity = 0;
+      }
+
+      scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity);
     }
   }
 }
@@ -308,7 +316,7 @@ function getKey() {
 
 function detectPlayerDeath() {
   // console.log(pointLight.intensity)
-  if (pointLight.intensity <= 0) {
+  if (pointLight.intensity <= 0.05) {
     return true;
   }
   return false;
@@ -424,7 +432,7 @@ function endGame() {
 
 function wonGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "YOU ESCAPED </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press CTRL + R to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';

@@ -73,7 +73,7 @@ body {
 	text-align: center;
 	cursor: pointer;
 }
-#endgame-alert {
+#endgameAlert {
 	position: absolute;
   color: #aa0909;
 	width: 100%;
