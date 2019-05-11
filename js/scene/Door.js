@@ -6,8 +6,8 @@ function Door(scene) {
         { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
       door = new THREE.Mesh(geometry, material);
   
-      door.position.set(0,5,10);
-      // door.position.set(0, 5, 20);
+      // door.position.set(0,5,10);
+      door.position.set(0, 5, 20);
       door.rotation.set(0,0,0);
       door.scale.set(.25,.25,.25);
   

@@ -87,7 +87,7 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  fogDensity = 0.001;
+  fogDensity = 0.009;
   scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
 
   // 1.5. fog effect
@@ -284,8 +284,8 @@ function getLight() {
       pointLight.distance *= 1.05;
       pointLight.intensity += 0.5;
 
-      if (fogDensity > 0.2) {
-        fogDensity -= 0.2;
+      if (fogDensity > 0.05) {
+        fogDensity -= 0.05;
       } else {
         fogDensity = 0;
       }
