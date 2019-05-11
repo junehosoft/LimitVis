@@ -159,13 +159,12 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		// if the door is found without picking up the key first
-		if (detectDoorFound() == true && detectKeyFound() == false) {
+		if (detectDoorFound() == true && foundKey == false) {
 			alert("You must find a key to unlock this door");
 		}
 
-		if (detectKeyFound() == true) {
+		if (getKey() == true) {
 			console.log("You found the key");
-			scene.remove(newkey);
 		}
 
 		// handle movement and basic collisions with obstacles

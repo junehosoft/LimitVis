@@ -8,17 +8,17 @@ var scene;
 var renderer;
 var dom;
 var hero;
-var key = [];
-var newkey;
+var key;
 var sceneSubject;
 var pointLight;
 var lightOrb;
-var door = [];
+var door;
 var fogDensity;
 var nearFog;
 var farFog;
 var cube;
 var glowBox;
+var foundKey = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -194,7 +194,7 @@ function animate(){
     }
 
 
-    pointLight.intensity -= 0.005;
+    // pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
@@ -282,12 +282,29 @@ function getLight() {
       NUMLIGHTORBS--;
       // scene.remove(scene.getObjectByName(orbs[i].name));
       pointLight.distance *= 1.05;
-      pointLight.intensity += 0.05;
+      pointLight.intensity += 0.5;
     }
   }
-
-
 }
+
+function getKey() {
+  let currentPos = controls.getObject().position;
+  if (scene.children.indexOf(key) <= 0) {
+    foundKey = true;
+    return false;
+  }
+  let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
+  if (dist < PLAYERLIGHTDIST) {
+    console.log("GOT A KEY");
+    // remove the key
+    let removeIndex = scene.children.indexOf(key);
+    scene.children.splice(removeIndex, 1);
+    scene.remove(key);
+    return true;
+  }
+  return false;
+}
+
 
 function detectPlayerDeath() {
   // console.log(pointLight.intensity)
@@ -331,72 +348,52 @@ function detectPlayerCollision() {
 }
 
 function detectDoorFound() {
-  var rotationMat;
 
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-  // check direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degree(180));
-  } else if (moveLeft) {
-    rotationmat = new THREE.Matrix4();
-    rotationMat.makeROtationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degreesToRadians(270));
+  let currentPos = controls.getObject().position;
+  if (scene.children.indexOf(door) <= 0) {
+    return false;
   }
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-  cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-  // if our ray hit a collidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door)) {
-    console.log("a door was found");
+  let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
+  if (dist < PLAYERLIGHTDIST) {
+    console.log("GOT A DOOR");
     return true;
   }
   return false;
-
-
 }
 
-function detectKeyFound() {
-  var rotationMat;
+// function detectKeyFound() {
+//   var rotationMat;
 
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
+//   // get direction of camera
+//   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
 
-  // check direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degree(180));
-  } else if (moveLeft) {
-    rotationmat = new THREE.Matrix4();
-    rotationMat.makeROtationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationmat.makeRotationY(degreesToRadians(270));
-  }
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-  cameraDirection.applyMatrix4(rotationMat);
+//   // check direction we're moving
+//   if (moveBackward) {
+//     rotationMat = new THREE.Matrix4();
+//     rotationmat.makeRotationY(degree(180));
+//   } else if (moveLeft) {
+//     rotationmat = new THREE.Matrix4();
+//     rotationMat.makeROtationY(degreesToRadians(90));
+//   } else if (moveRight) {
+//     rotationMat = new THREE.Matrix4();
+//     rotationmat.makeRotationY(degreesToRadians(270));
+//   }
+//   // player isn't moving forward, apply rotation matrix needed
+//   if (rotationMat !== undefined)
+//   cameraDirection.applyMatrix4(rotationMat);
 
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
+//   // apply ray to new player camera
+//   var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
 
-  // if our ray hit a collidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key)) {
-    console.log("a key was found");
-    return true;
-  }
-  return false;
+//   // if our ray hit a collidable object return true
+//   if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key)) {
+//     console.log("a key was found");
+//     return true;
+//   }
+//   return false;
 
 
-}
+// }
 
 
 function rayIntersect(ray, distance, objects) {
