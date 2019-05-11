@@ -222,6 +222,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		// to determine whether the game ends
 		if (doorFound && keyFound) {
 			wonGame();
+
 		}
 
 		// if the door is found without picking up the key first
@@ -231,7 +232,6 @@ THREE.PlayerControls = function(camera, domElement) {
 
 		if (keyFound) {
 			console.log("You found the key");
-			scene.remove(newkey);
 		}
 
 		var hits = this.playerCollision(deltaV);

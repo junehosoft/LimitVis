@@ -8,17 +8,17 @@ var scene;
 var renderer;
 var dom;
 var hero;
-var key = [];
-var newkey;
+var key;
 var sceneSubject;
 var pointLight;
 var lightOrb;
-var door = [];
+var door;
 var fogDensity;
 var nearFog;
 var farFog;
 var cube;
 var glowBox;
+var foundKey = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -152,7 +152,7 @@ function animate(){
     }
 
 
-    pointLight.intensity -= 0.005;
+    // pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
@@ -242,10 +242,11 @@ function getLight() {
       NUMLIGHTORBS--;
       // scene.remove(scene.getObjectByName(orbs[i].name));
       pointLight.distance *= 1.05;
-      pointLight.intensity += 0.05;
+      pointLight.intensity += 0.5;
     }
   }
 }
+
 
 function detectPlayerDeath() {
   // console.log(pointLight.intensity)
