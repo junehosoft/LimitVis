@@ -176,7 +176,7 @@ THREE.PlayerControls = function(camera, domElement) {
 
 		let currentPos = controls.getObject().position;
 		if (scene.children.indexOf(key) <= 0) {
-			foundKey = true;
+			foundKey = false;
 			return false;
 		}
 		let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
@@ -237,7 +237,6 @@ THREE.PlayerControls = function(camera, domElement) {
 		// to determine whether the game ends
 		if (doorFound && foundKey) {
 			wonGame();
-
 		}
 
 		// if the door is found without picking up the key first

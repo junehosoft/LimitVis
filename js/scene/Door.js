@@ -2,8 +2,8 @@ function Door(scene) {
 
     let loader = new THREE.STLLoader();
     loader.load('dungeon_door.stl', function (geometry) {
-      let material = new THREE.MeshPhongMaterial(
-        { color: 0x63e7ff, specular: 0xcefdff, shininess: 200 } );
+      let material = new THREE.MeshToonMaterial(
+        { color: 0x63e7ff} );
       door = new THREE.Mesh(geometry, material);
   
       // door.position.set(0,5,10);
