@@ -33,7 +33,7 @@ var rightDist = 250;
 var frontDist = -200;
 
 // obstacles in the game
-var boxes = new Array();
+var boxes = [];
 var orbs = [];
 var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
@@ -143,9 +143,9 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new RandomCube(scene), new Obstacles(scene), new Door(scene)];
-  // console.log("COLLIDABLE OBJECTS")
-  // console.log(collidableObjects)
+  sceneSubject = [new Background(scene), new Key(scene), new Obstacles(scene), new Door(scene)];
+  for (let i = 0; i < 15; i++)
+    sceneSubject.push(new RandomCube(scene));
   for (let i = 0; i < NUMLIGHTORBS; i++)
     sceneSubject.push(new LightOrb(scene));
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );

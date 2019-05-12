@@ -16,6 +16,12 @@ function RandomCube(scene) {
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
     box.position.z = Math.random()*400-200;
+
+    if (Math.abs(box.position.x) < PLAYERCOLLISIONDIST)
+      box.position.x += PLAYERCOLLISIONDIST;
+
+    if (Math.abs(box.position.z) < PLAYERCOLLISIONDIST)
+      box.position.z += PLAYERCOLLISIONDIST;
     // box.receiveShadow = true;
     // box.castShadow = true;
     scene.add(box);

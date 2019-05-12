@@ -19,7 +19,7 @@ function Background(scene) {
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.rotation.y = Math.PI;
   backWall.recieveShadow = true;
-  backWall.castShadow = true;
+  // backWall.castShadow = true;
   backWall.position.y = 50;
   backWall.position.z = backDist;
   scene.add(backWall);
@@ -28,7 +28,7 @@ function Background(scene) {
   // right wall
   rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
   rightWall.recieveShadow = true;
-  rightWall.castShadow = true;
+  // rightWall.castShadow = true;
   rightWall.rotation.y = -Math.PI/2;
   rightWall.position.x = rightDist;
   rightWall.position.y = 50;
@@ -38,7 +38,7 @@ function Background(scene) {
   // left wall
   leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
   leftWall.recieveShadow = true;
-  leftWall.castShadow = true;
+  // leftWall.castShadow = true;
   leftWall.rotation.y = Math.PI/2;
   leftWall.position.x = leftDist;
   leftWall.position.y = 50;
@@ -48,7 +48,7 @@ function Background(scene) {
   // front wall
   frontWall = new THREE.Mesh(wallGeometry, wallMaterial);
   frontWall.recieveShadow = true;
-  frontWall.castShadow = true;
+  // frontWall.castShadow = true;
   frontWall.position.y = 50;
   frontWall.position.z = frontDist;
   scene.add(frontWall);
