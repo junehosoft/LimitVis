@@ -90,7 +90,7 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  fogDensity = 0.009;
+  fogDensity = 0.005;
   scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
   scene.background = new THREE.Color(0xf0fff0);
 
@@ -170,7 +170,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
-    fogDensity += 0.00001;
+    fogDensity += 0.00005;
     scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //fog grows denser
 
     render();
@@ -257,8 +257,8 @@ function getLight() {
       // pointLight.distance *= 1.05;
       // pointLight.intensity += 0.5;
 
-      if (fogDensity > 0.05) {
-        fogDensity -= 0.05;
+      if (fogDensity > 0.01) {
+        fogDensity -= 0.01;
       } else {
         fogDensity = 0;
       }
