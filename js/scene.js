@@ -38,11 +38,13 @@ var orbs = [];
 var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
-var PLAYERCOLLISIONDIST = 20;
+var PLAYERCOLLISIONDIST = 10;
 var PLAYERLIGHTDIST = 10;
+var EPS = 0.1;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
+var endgameAlert = document.getElementById('endgameAlert');
 //var orbitControl;
 
 // control global variables
@@ -101,7 +103,7 @@ function createScene(){
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
   camera.position.y = 2;
-  camera.position.z = 10;
+  camera.position.z = 0;
   scene.add(camera);
 
 	// 3. renderer
@@ -146,50 +148,6 @@ function createScene(){
   // console.log(collidableObjects)
   for (let i = 0; i < NUMLIGHTORBS; i++)
     sceneSubject.push(new LightOrb(scene));
-
-  // // different colors at face vertices create gradient effect
-  // var cubeMaterial = new THREE.MeshBasicMaterial(
-  //   { color: 0xffffff, vertexColors: THREE.VertexColors }
-  // );
-
-  // var color, face, numberOfSides, vertexIndex;
-
-  // var faceIndices = ['a', 'b', 'c', 'd'];
-
-  // // cube gradient trial
-  // var size = 5;
-  // var point;
-  // var cubeGeometry = new THREE.CubeGeometry (size, size, size, 1, 1, 1,);
-  // for (var i = 0; i < cubeGeometry.faces.length; i++) {
-  //   face = cubeGeometry.faces[i];
-  //   // determine if current face is triangle or rectangle
-  //   numberOfSides = (face instanceof THREE.Face3) ? 3 : 4;
-  //   // assign color to each vertex of current face
-  //   for (var j = 0; j < numberOfSides; j++) {
-  //     vertexIndex = face[faceIndices[j]];
-  //     // store coordinates of vertex
-  //     point = cubeGeometry.vertices[vertexIndex];
-  //     // initialize color variable
-  //     color = new THREE.Color(0xffffff);
-  //     color.setRGB(0.5 + point.x / size, 0.5 + point.y / size, 0.5 + point.z / size);
-  //     face.vertexColors[j] = color;
-  //   }
-  // }
-
-
-  // var customGlow = new THREE.ShaderMaterial({
-  //   uniforms: {},
-  //   vertexShader: document.getElementById('vertexShader').textContent,
-  //   fragmentShader: document.getElementById('fragmentShader').textContent,
-  //   side: THREE.BackSide,
-  //   blending: THREE.AdditiveBlending,
-  //   transparent: true
-  // });
-
-  // cube = new THREE.Mesh(cubeGeometry, customGlow);
-  // cube.position.set(10,10,0);
-  // scene.add(cube);
-
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -206,8 +164,6 @@ function animate(){
       glows[i].rotation.y += 0.01;
 
     }
-
-
     // pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
@@ -233,6 +189,8 @@ function animate(){
     getLight();
 
     controls.animatePlayer(delta);
+
+    // console.log(controls.getObject().position)
 }
 
 function render(){
@@ -309,24 +267,6 @@ function getLight() {
   }
 }
 
-function getKey() {
-  let currentPos = controls.getObject().position;
-  if (scene.children.indexOf(key) <= 0) {
-    foundKey = true;
-    return false;
-  }
-  let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
-  if (dist < PLAYERLIGHTDIST) {
-    console.log("GOT A KEY");
-    // remove the key
-    let removeIndex = scene.children.indexOf(key);
-    scene.children.splice(removeIndex, 1);
-    scene.remove(key);
-    return true;
-  }
-  return false;
-}
-
 
 function detectPlayerDeath() {
   // console.log(pointLight.intensity)
@@ -334,106 +274,6 @@ function detectPlayerDeath() {
   //   return true;
   // }
   return false;
-}
-
-function detectPlayerCollision() {
-  // rotation matrix to apply direction vector
-  var rotationMat;
-
-  // get direction of camera
-  var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-  // check which direction we're moving
-  if (moveBackward) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(180));
-  } else if (moveLeft) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(90));
-  } else if (moveRight) {
-    rotationMat = new THREE.Matrix4();
-    rotationMat.makeRotationY(degreesToRadians(270));
-  }
-
-  // player isn't moving forward, apply rotation matrix needed
-  if (rotationMat !== undefined)
-    cameraDirection.applyMatrix4(rotationMat);
-
-  // apply ray to new player camera
-  var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-  // if our ray hit a colidable object return true
-  if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, collidableObjects))
-    return true;
-  else return false;
-
-}
-
-function detectDoorFound() {
-
-  let currentPos = controls.getObject().position;
-  if (scene.children.indexOf(door) <= 0) {
-    return false;
-  }
-  let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
-  if (dist < PLAYERLIGHTDIST) {
-    console.log("GOT A DOOR");
-    return true;
-  }
-  return false;
-}
-
-// function detectKeyFound() {
-//   var rotationMat;
-
-//   // get direction of camera
-//   var cameraDirection = controls.getDirection(new THREE.Vector3()).clone();
-
-//   // check direction we're moving
-//   if (moveBackward) {
-//     rotationMat = new THREE.Matrix4();
-//     rotationmat.makeRotationY(degree(180));
-//   } else if (moveLeft) {
-//     rotationmat = new THREE.Matrix4();
-//     rotationMat.makeROtationY(degreesToRadians(90));
-//   } else if (moveRight) {
-//     rotationMat = new THREE.Matrix4();
-//     rotationmat.makeRotationY(degreesToRadians(270));
-//   }
-//   // player isn't moving forward, apply rotation matrix needed
-//   if (rotationMat !== undefined)
-//   cameraDirection.applyMatrix4(rotationMat);
-
-//   // apply ray to new player camera
-//   var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);
-
-//   // if our ray hit a collidable object return true
-//   if (rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key)) {
-//     console.log("a key was found");
-//     return true;
-//   }
-//   return false;
-
-
-// }
-
-
-function rayIntersect(ray, distance, objects) {
-    if (Array.isArray(objects)) {
-      var intersects = ray.intersectObjects(objects);
-      for (var i = 0; i < intersects.length; i++) {
-          // Check if there's a collision
-          if (intersects[i].distance < distance) {
-              return true;
-          }
-      }
-    } else {
-      var intersect = ray.intersectObject(objects);
-      if (intersect.distance < distance) {
-        return true;
-      }
-    }
-    return false;
 }
 
 function endGame() {
@@ -450,4 +290,31 @@ function wonGame() {
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+}
+/* This code was adapted from
+https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-game-js3d
+*/
+
+function rayIntersect(ray, distance, objects) {
+  var close = [];
+  //console.log(distance);
+  if (Array.isArray(objects)) {
+    var intersects = ray.intersectObjects(objects);
+    for (var i = 0; i < intersects.length; i++) {
+      // If there's a collision, push into close
+      if (intersects[i].distance < distance) {
+        //console.log(intersects[i].distance);
+        close.push(intersects[i]);
+      }
+    }
+  }
+  else {
+    var intersect = ray.intersectObject(objects);
+      if (intersect.distance < distance) {
+        close.push(intersect);
+    }
+  }
+  //if (close.length > 0)
+    //console.log("close", close.length);
+  return close;
 }

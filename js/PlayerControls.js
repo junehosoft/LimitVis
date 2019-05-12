@@ -140,11 +140,53 @@ THREE.PlayerControls = function(camera, domElement) {
 	document.addEventListener( 'keydown', this.onKeyDown, false );
 	document.addEventListener( 'keyup', this.onKeyUp, false );
 
+	this.playerCollision = function(deltaV) {
+		// apply ray to new player camera
+		var playerPos = this.block.position;
+		var dir = deltaV.clone().normalize();
+		var rayCaster = new THREE.Raycaster(playerPos, dir);
+
+		// if our ray hit a colidable object return true
+		var hits = rayIntersect(rayCaster, PLAYERCOLLISIONDIST, collidableObjects);
+		
+		if (hits.length >= 1) {
+			//console.log(hits.length)
+			return hits;
+		}
+		return undefined;
+	}
+
+	this.detectDoorFound = function(deltaV) {
+		var playerPos = this.block.position;
+		var dir = deltaV.clone().normalize();
+		var rayCaster = new THREE.Raycaster(playerPos, dir);
+
+		var hit = rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door);
+
+		if (hit.length > 0)
+			return true;
+		return false;
+	}
+
+	this.detectKeyFound = function(deltaV) {
+		var playerPos = this.block.position;
+		var dir = deltaV.clone().normalize();
+		var rayCaster = new THREE.Raycaster(playerPos, dir);
+
+		var hit = rayIntersect(rayCaster, PLAYERCOLLISIONDIST, key);
+
+		if (hit.length > 0)
+			return true;
+		return false;
+	}
+
 	this.animatePlayer = function(delta) {
 		// Gradual slowdown
 		//console.log(this.getDirection());
 		var speed = 200;
 		var velocity = this.velocity;
+
+		// slow down based on friction
 		velocity.x -= velocity.x * 10 * delta;
 		velocity.z -= velocity.z * 10 * delta;
 
@@ -154,52 +196,60 @@ THREE.PlayerControls = function(camera, domElement) {
 			endGame();
 		}
 
+		// get change in velocity based on 
+		var dir = this.getDirection();
+		dir.y = 0;
+		dir.normalize();
+		dir.multiplyScalar(speed * delta);
+		var deltaV = new THREE.Vector3();
+		if (this.moveForward) {
+			deltaV.add(dir);
+		}
+		if (this.moveBackward) {
+			deltaV.sub(dir);
+		}
+		if (this.moveLeft) {
+			deltaV.x += dir.z;
+			deltaV.z -= dir.x;
+		}
+		if (this.moveRight) {
+			deltaV.x -= dir.z;
+			deltaV.z += dir.x;
+		}
+
+		var doorFound = this.detectDoorFound(deltaV);
+		var keyFound = this.detectKeyFound(deltaV);
+
 		// to determine whether the game ends
-		if (detectDoorFound() == true && foundKey == true) {
+		if (doorFound && keyFound) {
 			wonGame();
+
 		}
 
 		// if the door is found without picking up the key first
-		if (detectDoorFound() == true && foundKey == false) {
+		if (doorFound && !keyFound) {
 			alert("You must find a key to unlock this door");
 		}
 
-		if (getKey() == true) {
+		if (keyFound) {
 			console.log("You found the key");
 		}
 
-		// handle movement and basic collisions with obstacles
-		if (detectPlayerCollision() == false) {
-			// console.log("test")
-			var dir = this.getDirection();
-			dir.y = 0;
-			dir.normalize();
-			dir.multiplyScalar(speed * delta);
-
-			if (this.moveForward) {
-			  	velocity.add(dir);
+		var hits = this.playerCollision(deltaV);
+		if (hits != undefined) {
+			var correction = new THREE.Vector3();
+			for(let i = 0; i < hits.length; i++) {
+				var norm = hits[i].face.normal.clone();
+				var project = deltaV.clone().projectOnVector(norm);
+				correction.add(deltaV.clone().add(project).normalize());
 			}
-			if (this.moveBackward) {
-			  	velocity.sub(dir);
-			}
-			if (this.moveLeft) {
-			  	velocity.x += dir.z;
-			  	velocity.z -= dir.x;
-			}
-			if (this.moveRight) {
-				velocity.x -= dir.z;
-				velocity.z += dir.x;
-			}
-
-			this.block.translateX(velocity.x * delta);
-			this.block.translateZ(velocity.z * delta);
+			//velocity = correction.multiplyScalar(speed * delta);
+			velocty = new THREE.Vector3();
 		} else {
-			// collision or no movement
-			// console.log("collision");
-			velocity.x = 0;
-			velocity.z = 0;
+			velocity.add(deltaV);
 		}
-
+		this.block.translateX(velocity.x * delta);
+		this.block.translateZ(velocity.z * delta);
 	}
 
 	var havePointerLock = 'pointerLockElement' in document ||
