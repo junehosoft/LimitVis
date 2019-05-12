@@ -69,11 +69,11 @@ body {
 	-moz-box-pack: center;
 	-webkit-box-align: center;
 	-moz-box-align: center;
-	color: #8fd4f0;
+	color: #ffffff;
 	text-align: center;
 	cursor: pointer;
 }
-#endgameAlert {
+#endgame-alert {
 	position: absolute;
   color: #aa0909;
 	width: 100%;

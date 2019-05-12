@@ -7,7 +7,7 @@ var camera;
 var scene;
 var renderer;
 var dom;
-var hero;
+var light;
 var key;
 var sceneSubject;
 var pointLight;
@@ -89,6 +89,7 @@ function createScene(){
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
   scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
+  scene.background = new THREE.Color(0xf0fff0);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -118,9 +119,22 @@ function createScene(){
   scene.add(controls.getObject());
 
 	// 4. lights
-  pointLight = new THREE.PointLight( 0xeeef94, 5, 10);
-  pointLight.visible = true;
-  scene.add( pointLight );
+  // scene.add(new THREE.AmbientLight(0x666666));
+  light = new THREE.DirectionalLight(0xe3e8f2, 1.75);
+  light.position.set(50, 200, 100);
+  light.position.multiplyScalar(1.3);
+  light.castShadow = true;
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 1024;
+
+  let d = 300;
+  light.shadow.camera.left = -d;
+  light.shadow.camera.right = d;
+  light.shadow.camera.top = d;
+  light.shadow.camera.bottom = -d;
+  light.shadow.camera.far = 1000;
+
+  scene.add(light);
 
   // setup time
   clock = new THREE.Clock();
@@ -194,7 +208,7 @@ function animate(){
     }
 
 
-    pointLight.intensity -= 0.005;
+    // pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
@@ -211,9 +225,9 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-    pointLight.position.set(currentPos.x + 6, 5, currentPos.z + 6);
-    if (pointLight.distance > 0.01)
-      pointLight.distance -= 0.05*delta;
+    // pointLight.position.set(currentPos.x + 6, 5, currentPos.z + 6);
+    // if (pointLight.distance > 0.01)
+    //   pointLight.distance -= 0.05*delta;
 
     // check if near light
     getLight();
@@ -281,8 +295,8 @@ function getLight() {
       glows.splice(i, 1);
       NUMLIGHTORBS--;
       // scene.remove(scene.getObjectByName(orbs[i].name));
-      pointLight.distance *= 1.05;
-      pointLight.intensity += 0.5;
+      // pointLight.distance *= 1.05;
+      // pointLight.intensity += 0.5;
 
       if (fogDensity > 0.05) {
         fogDensity -= 0.05;
@@ -316,9 +330,9 @@ function getKey() {
 
 function detectPlayerDeath() {
   // console.log(pointLight.intensity)
-  if (pointLight.intensity <= 0.05) {
-    return true;
-  }
+  // if (pointLight.intensity <= 0.05) {
+  //   return true;
+  // }
   return false;
 }
 
