@@ -150,8 +150,6 @@ function animate(){
       glows[i].rotation.y += 0.01;
 
     }
-
-
     // pointLight.intensity -= 0.005;
 
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
