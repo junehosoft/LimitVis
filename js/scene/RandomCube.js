@@ -12,7 +12,6 @@ function RandomCube(scene) {
     opacity: 1.0,
   });
 
-<<<<<<< HEAD
     box = new THREE.Mesh(boxGeo, boxMaterial);
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
@@ -22,17 +21,6 @@ function RandomCube(scene) {
     scene.add(box);
     boxes.push(box);
     // console.log(boxes)
-=======
-  box = new THREE.Mesh(boxGeo, boxMaterial);
-  box.position.x = Math.random()*400-200;// for some reason these are clustering
-  box.position.y = 0;
-  box.position.z = Math.random()*400-200;
-  box.receiveShadow = true;
-  box.castShadow = true;
-  scene.add(box);
-  boxes.push(box);
-  // console.log(boxes)
->>>>>>> feature-endgame
 
   collidableObjects.push(box);
 
