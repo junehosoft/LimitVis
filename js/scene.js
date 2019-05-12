@@ -19,6 +19,7 @@ var farFog;
 var cube;
 var glowBox;
 var foundKey = false;
+var doorFound = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;

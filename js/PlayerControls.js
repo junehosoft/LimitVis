@@ -157,15 +157,19 @@ THREE.PlayerControls = function(camera, domElement) {
 	}
 
 	this.detectDoorFound = function(deltaV) {
-		var playerPos = this.block.position;
-		var dir = deltaV.clone().normalize();
-		var rayCaster = new THREE.Raycaster(playerPos, dir);
+		let currentPos = controls.getObject().position;
 
-		var hit = rayIntersect(rayCaster, PLAYERCOLLISIONDIST, door);
+		if (scene.children.indexOf(door) < 0) {
+			return false;
+		}
 
-		if (hit.length > 0)
+		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
+		if (dist < PLAYERLIGHTDIST) {
+			doorFound = true;
 			return true;
+		}
 		return false;
+
 	}
 
 	this.detectKeyFound = function() {
@@ -225,8 +229,9 @@ THREE.PlayerControls = function(camera, domElement) {
 			deltaV.z += dir.x;
 		}
 
-		var doorFound = this.detectDoorFound(deltaV);
+		// var doorFound = this.detectDoorFound(deltaV);
 		// var keyFound = this.detectKeyFound(deltaV);
+		this.detectDoorFound();
 		this.detectKeyFound();
 
 		// to determine whether the game ends
@@ -236,7 +241,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		// if the door is found without picking up the key first
-		if (doorFound && !keyFound) {
+		if (doorFound && !foundKey) {
 			alert("You must find a key to unlock this door");
 		}
 
