@@ -243,13 +243,11 @@ THREE.PlayerControls = function(camera, domElement) {
 		if (doorFound && !foundKey && firstTimeDoor) {
 			firstTimeDoor = false;
 			gotDoor();
-			endgameAlert.remove();
 		}
 
 		if (foundKey && firstTimeKey) {
 			firstTimeKey = false;
 			gotKey();
-			endgameAlert.remove();
 		}
 
 		var hits = this.playerCollision(deltaV);

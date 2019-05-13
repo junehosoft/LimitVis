@@ -2,8 +2,8 @@ function Door(scene) {
 
     let loader = new THREE.STLLoader();
     loader.load('hoop.stl', function (geometry) {
-      let material = new THREE.MeshNormalMaterial(
-        { } );
+      let material = new THREE.MeshToonMaterial(
+        { color: 0xdaa520} );
       door = new THREE.Mesh(geometry, material);
   
       // door.position.set(0,5,10);

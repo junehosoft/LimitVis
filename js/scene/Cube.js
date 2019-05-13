@@ -8,11 +8,11 @@ function Cube(scene, dimension, position) {
   } else {
     var boxGeo = new THREE.BoxGeometry(dimension.x, Math.round(Math.random()*200+50), dimension.z);
   }
-  boxMaterial = new THREE.MeshPhongMaterial({
-    color: 0x000000,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 1.0,
+  boxMaterial = new THREE.MeshToonMaterial({
+    color: 0x66d8ff,
+    // side: THREE.DoubleSide,
+    // transparent: true,
+    // opacity: 1.0,
   });
 
   box = new THREE.Mesh(boxGeo, boxMaterial);

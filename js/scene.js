@@ -1,5 +1,4 @@
 /*global THREE*/
-var DEBUG = true;
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -28,7 +27,7 @@ var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
-var DEBUG = false;
+var DEBUG = true;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -322,6 +321,7 @@ function getLight() {
 
 var fade_out = function() {
   instructions.innerHTML = ""; 
+  doorFound = false;
 }
 
 function detectPlayerDeath() {
@@ -362,7 +362,6 @@ function gotDoor() {
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
-  
   setTimeout(fade_out, 3000);
 }
 
