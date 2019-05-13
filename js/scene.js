@@ -1,4 +1,3 @@
-/*global THREE*/
 
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
@@ -48,8 +47,8 @@ var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
-var PLAYERLIGHTDIST = 7;
-var PLAYERDOORDIST = 8;
+var PLAYERLIGHTDIST = 6;
+var PLAYERDOORDIST = 9;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -66,11 +65,6 @@ var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
 var clock;
-// Velocity vector for the player
-//var playerVelocity = new THREE.Vector3();
-
-// How fast the player will move
-//var PLAYERSPEED = 500.0;
 
 
 var MOVESPEED = 30,
@@ -79,7 +73,20 @@ var MOVESPEED = 30,
 getPointerLock();
 init();
 
+// this code to restart doesnt work rn...
+// document.addEventListener("keydown", onDocumentKeyDown, false);
+// function onDocumentKeyDown(event) {
+//   var keyCode = event.which;
+//   if (keyCode == 32) {
+//     console.log("attempting to restart");
+//     scene.remove.apply(scene, scene.children);
+//     getPointerLock();
+//     init();
+//   }
+// }
+
 function init() {
+  NUMLIGHTORBS = 50;
   clock = new THREE.Clock();
   //listenForPlayerMovement();
 
@@ -88,7 +95,9 @@ function init() {
 
 	//call game loop
   getPointerLock();
-  animate();
+  document.onclick = function () {
+    animate();
+  }
 
   //console.log("hello");
 }
@@ -100,8 +109,11 @@ function createScene(){
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
   if (DEBUG == false)
-    scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
-  scene.background = new THREE.Color(0xe2c06f);
+    
+    scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog
+    // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+  // scene.background = new THREE.Color(0xe2c06f);
+  scene.background = new THREE.Color(0xfffabf);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -118,7 +130,8 @@ function createScene(){
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
-	renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  // renderer.setClearColor(0xffffff, 1);
 	// renderer.setClearColor(scene.fog.color); // sets it to the grass color
   renderer.shadowMap.enabled = true;//enable shadow
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -128,6 +141,7 @@ function createScene(){
 
   // setup player movement
   controls = new THREE.PlayerControls(camera, dom);
+  controls.getObject().position.set(0, 0, 0);
   scene.add(controls.getObject());
 
 	// 4. lights
@@ -305,7 +319,7 @@ function getLight() {
       } else {
         fogDensity = 0;
       }
-      scene.fog = new THREE.FogExp2(fogDensity);
+      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity);
 
     }
   }
@@ -313,6 +327,7 @@ function getLight() {
 
 var fade_out = function() {
   instructions.innerHTML = ""; 
+  doorFound = false;
 }
 
 function detectPlayerDeath() {
@@ -323,23 +338,41 @@ function detectPlayerDeath() {
 
 function endGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "GAME OVER </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "GAME OVER </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        // console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function wonGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        // console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function gotKey() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE DOOR BEFORE YOUR LIGHT RUNS OUT.";
+  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -349,11 +382,10 @@ function gotKey() {
 
 function gotDoor() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS DOOR.";
+  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
-  
   setTimeout(fade_out, 3000);
 }
 
