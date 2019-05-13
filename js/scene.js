@@ -148,13 +148,13 @@ function createScene(){
     scene.add(light);
   }
   
-  flashlight = new THREE.PointLight(0xffffff, 5, 10);
+  flashlight = new THREE.PointLight(0xffffff, 10, 10);
   flashlight.position.set(0, 0, 0);
   flashlight.visible = true;
   scene.add(flashlight);
 
   // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(flashlight.distance, 64);
+  circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
   circleGeo.vertices.shift();
   circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
   flashlightRad = new THREE.LineLoop(circleGeo, circleMat);
@@ -215,7 +215,7 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(flashlight.distance, 64);
+    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
     circleGeo.vertices.shift();
     flashlightRad.geometry = circleGeo;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
