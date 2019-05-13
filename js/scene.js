@@ -380,7 +380,7 @@ function wonGame() {
 
 function gotKey() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE DOOR BEFORE YOUR LIGHT RUNS OUT.";
+  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -390,7 +390,7 @@ function gotKey() {
 
 function gotDoor() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS DOOR.";
+  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
