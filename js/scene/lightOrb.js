@@ -1,4 +1,7 @@
- function LightOrb (scene) {
+function LightOrb (scene) {
+    // main object of this class
+    var object = new THREE.Object3D();
+    this.object = object;
 
     // middle cube
     var cubeMaterial = new THREE.MeshBasicMaterial(
@@ -23,29 +26,36 @@
         transparent: true
       }
     );
-
-    cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.x = Math.random()*400-200;
-    cube.position.y = 2;
-    cube.position.z = Math.random()*400-200;
+    
+    var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    this.cube = cube;
     cube.receiveShadow = false;
     cube.scale.set(0.3,0.3,0.3)
-    orbs.push(cube);
-    scene.add(cube);
+    object.add(cube)
 
     // now let's add glow effect
     var glowCube = new THREE.CubeGeometry(size, size, size, 1,1,1);
-    glowBox = new THREE.Mesh(glowCube, customMaterial.clone());
+    var glowBox = new THREE.Mesh(glowCube, customMaterial.clone());
+    this.glowBox = glowBox;
     glowBox.position.x = cube.position.x;
     glowBox.position.y = cube.position.y;
     glowBox.position.z = cube.position.z;
     glowBox.receiveShadow = false;
     glowBox.scale.set(0.35,0.35,0.35);
-    glows.push(glowBox);
-    scene.add(glowBox);
+    object.add(glowBox);
 
-  this.update = function (time) {
+    object.position.x = Math.random()*400-200;
+    object.position.y = 2;
+    object.position.z = Math.random()*400-200;
+    scene.add(this.object);
 
-  }
+    this.particles = [];
+    
+    this.update = function() {
+      this.cube.rotation.x += 0.05;
+      this.cube.rotation.y += 0.05;
+      this.glowBox.rotation.x += 0.05;
+      this.glowBox.rotation.y += 0.05;
+    }
 
- }
+}

@@ -28,7 +28,7 @@ var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
-var DEBUG = true;
+var DEBUG = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -45,7 +45,6 @@ var frontDist = -200;
 // obstacles in the game
 var boxes = [];
 var orbs = [];
-var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
@@ -188,7 +187,7 @@ function createScene(){
     }
   }
   for (let i = 0; i < NUMLIGHTORBS; i++)
-    sceneSubject.push(new LightOrb(scene));
+    orbs.push(new LightOrb(scene));
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -198,12 +197,7 @@ function createScene(){
 function animate(){
     //animate
     for (let i = 0; i < NUMLIGHTORBS; i++) {
-
-      orbs[i].rotation.x += 0.01;
-      orbs[i].rotation.y += 0.01;
-      glows[i].rotation.x += 0.01;
-      glows[i].rotation.y += 0.01;
-
+      orbs[i].update();
     }
 
     // get the key to spin or bounce
@@ -228,12 +222,7 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-<<<<<<< HEAD
     circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
-=======
-    //console.log(currentPos);
-    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
->>>>>>> keyspawn
     circleGeo.vertices.shift();
     flashlightRad.geometry = circleGeo;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
@@ -243,13 +232,10 @@ function animate(){
     if (flashlight.intensity > 1.01)
       flashlight.intensity -= 0.4*delta;
 
-    
-
     // check if near light
     getLight();
 
     controls.animatePlayer(delta);
-
     // console.log(controls.getObject().position)
 }
 
@@ -300,17 +286,15 @@ function getLight() {
   let currentPos = controls.getObject().position;
 
   for (let i = 0; i < orbs.length; i++) {
-    let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
+    let dist = new THREE.Vector3().subVectors(orbs[i].object.position, currentPos).length();
     if (dist < PLAYERCOLLISIONDIST) {
       console.log("GOT A LIGHT")
       // remove the object
-      let orbIndex = scene.children.indexOf(orbs[i]);
+      let orbIndex = scene.children.indexOf(orbs[i].object);
+      orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
 
-      let glowIndex = scene.children.indexOf(glows[i]);
-      scene.children.splice(glowIndex, 1);
-      glows.splice(i, 1);
       NUMLIGHTORBS--;
 
       flashlight.distance *= 1.15;
