@@ -79,7 +79,20 @@ var MOVESPEED = 30,
 getPointerLock();
 init();
 
+// this code to restart doesnt work rn...
+// document.addEventListener("keydown", onDocumentKeyDown, false);
+// function onDocumentKeyDown(event) {
+//   var keyCode = event.which;
+//   if (keyCode == 32) {
+//     console.log("attempting to restart");
+//     scene.remove.apply(scene, scene.children);
+//     getPointerLock();
+//     init();
+//   }
+// }
+
 function init() {
+  NUMLIGHTORBS = 50;
   clock = new THREE.Clock();
   //listenForPlayerMovement();
 
@@ -128,6 +141,7 @@ function createScene(){
 
   // setup player movement
   controls = new THREE.PlayerControls(camera, dom);
+  controls.getObject().position.set(0, 0, 0);
   scene.add(controls.getObject());
 
 	// 4. lights
