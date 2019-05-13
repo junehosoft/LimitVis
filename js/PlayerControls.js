@@ -241,6 +241,7 @@ THREE.PlayerControls = function(camera, domElement) {
 
 		// if the door is found without picking up the key first
 		if (doorFound && !foundKey && firstTimeDoor) {
+			doorFound = false;
 			firstTimeDoor = false;
 			gotDoor();
 		}

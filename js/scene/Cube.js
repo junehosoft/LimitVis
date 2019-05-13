@@ -8,7 +8,7 @@ function Cube(scene, dimension, position) {
   } else {
     var boxGeo = new THREE.BoxGeometry(dimension.x, Math.round(Math.random()*200+50), dimension.z);
   }
-  boxMaterial = new THREE.MeshToonMaterial({
+  boxMaterial = new THREE.MeshBasicMaterial({
     color: 0x66d8ff,
     // side: THREE.DoubleSide,
     // transparent: true,
@@ -16,6 +16,7 @@ function Cube(scene, dimension, position) {
   });
 
   box = new THREE.Mesh(boxGeo, boxMaterial);
+  // boxMaterial.lights = true;
   if (position === undefined) {
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;

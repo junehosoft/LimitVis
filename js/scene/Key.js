@@ -2,8 +2,8 @@ function Key(scene) {
 
   let loader = new THREE.STLLoader();
   loader.load('Key.stl', function (geometry) {
-    let material = new THREE.MeshToonMaterial(
-      { color: 0xdaa520} );
+    let material = new THREE.MeshBasicMaterial(
+      { color: 0xff0000} );
     key = new THREE.Mesh(geometry, material);
 
     key.position.set(10,2,0);

@@ -49,7 +49,7 @@ var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
-var PLAYERDOORDIST = 8;
+var PLAYERDOORDIST = 9;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -113,8 +113,11 @@ function createScene(){
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
   if (DEBUG == false)
-    scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
-  scene.background = new THREE.Color(0xe2c06f);
+    
+    scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog
+    // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+  // scene.background = new THREE.Color(0xe2c06f);
+  scene.background = new THREE.Color(0xfffabf);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -131,7 +134,8 @@ function createScene(){
 
 	// 3. renderer
   renderer = new THREE.WebGLRenderer({alpha:true});//renderer with transparent backdrop
-	renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  renderer.setClearColor(0xcce0ff, 1); // enable fog (??)
+  // renderer.setClearColor(0xffffff, 1);
 	// renderer.setClearColor(scene.fog.color); // sets it to the grass color
   renderer.shadowMap.enabled = true;//enable shadow
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -227,7 +231,7 @@ function animate(){
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
       fogDensity += 0.00002;
-      scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
+      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //fog grows denser
     }
 
     render();
@@ -327,7 +331,7 @@ function getLight() {
       } else {
         fogDensity = 0;
       }
-      scene.fog = new THREE.FogExp2(fogDensity);
+      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity);
 
     }
   }
