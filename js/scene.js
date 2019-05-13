@@ -18,6 +18,7 @@ var nearFog;
 var farFog;
 var cube;
 var glowBox;
+var flashlight; 
 var foundKey = false;
 var doorFound = false;
 
@@ -93,9 +94,9 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  fogDensity = 0.005;
-  scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //enable fog
-  scene.background = new THREE.Color(0xf0fff0);
+  fogDensity = 0.009;
+  scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+  scene.background = new THREE.Color(0xe2c06f);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -126,21 +127,25 @@ function createScene(){
 
 	// 4. lights
   // scene.add(new THREE.AmbientLight(0x666666));
-  light = new THREE.DirectionalLight(0xe3e8f2, 1.75);
-  light.position.set(50, 200, 100);
-  light.position.multiplyScalar(1.3);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 1024;
-  light.shadow.mapSize.height = 1024;
+  // light = new THREE.DirectionalLight(0xe3e8f2, 1.75);
+  // light.position.set(50, 200, 100);
+  // light.position.multiplyScalar(1.3);
+  // light.castShadow = true;
+  // light.shadow.mapSize.width = 1024;
+  // light.shadow.mapSize.height = 1024;
 
-  let d = 300;
-  light.shadow.camera.left = -d;
-  light.shadow.camera.right = d;
-  light.shadow.camera.top = d;
-  light.shadow.camera.bottom = -d;
-  light.shadow.camera.far = 1000;
+  // let d = 300;
+  // light.shadow.camera.left = -d;
+  // light.shadow.camera.right = d;
+  // light.shadow.camera.top = d;
+  // light.shadow.camera.bottom = -d;
+  // light.shadow.camera.far = 1000;
 
-  scene.add(light);
+  // scene.add(light);
+  flashlight = new THREE.PointLight(0xffffff, 5, 10);
+  flashlight.position.set(0, 0, 0);
+  flashlight.visible = true;
+  scene.add(flashlight);
 
   // setup time
   clock = new THREE.Clock();
@@ -183,8 +188,8 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
-    fogDensity += 0.00005;
-    scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity); //fog grows denser
+    fogDensity += 0.00001;
+    scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
 
     render();
 
@@ -195,9 +200,11 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-    // pointLight.position.set(currentPos.x + 6, 5, currentPos.z + 6);
-    // if (pointLight.distance > 0.01)
-    //   pointLight.distance -= 0.05*delta;
+    flashlight.position.set(currentPos.x, 5, currentPos.z);
+    if (flashlight.distance > 0.01)
+      flashlight.distance -= 0.05*delta;
+    if (flashlight.intensity > 1.01)
+      flashlight.intensity -= 0.05*delta;
 
     // check if near light
     getLight();
@@ -266,27 +273,18 @@ function getLight() {
       scene.children.splice(glowIndex, 1);
       glows.splice(i, 1);
       NUMLIGHTORBS--;
-      // scene.remove(scene.getObjectByName(orbs[i].name));
-      // pointLight.distance *= 1.05;
-      // pointLight.intensity += 0.5;
 
-      if (fogDensity > 0.01) {
-        fogDensity -= 0.01;
-      } else {
-        fogDensity = 0;
-      }
+      flashlight.distance *= 1.05;
+      flashlight.intensity += 0.5;
 
-      scene.fog = new THREE.FogExp2(0xf0fff0, fogDensity);
     }
   }
 }
 
 
 function detectPlayerDeath() {
-  // console.log(pointLight.intensity)
-  // if (pointLight.intensity <= 0.05) {
-  //   return true;
-  // }
+  if (flashlight.distance < 0.5 || flashlight.intensity < 1.0)
+    return true;
   return false;
 }
 
