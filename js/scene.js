@@ -67,11 +67,6 @@ var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
 var clock;
-// Velocity vector for the player
-//var playerVelocity = new THREE.Vector3();
-
-// How fast the player will move
-//var PLAYERSPEED = 500.0;
 
 
 var MOVESPEED = 30,
@@ -89,7 +84,9 @@ function init() {
 
 	//call game loop
   getPointerLock();
-  animate();
+  document.onclick = function () {
+    animate();
+  }
 
   //console.log("hello");
 }
