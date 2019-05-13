@@ -28,7 +28,7 @@ var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
-var DEBUG = true;
+var DEBUG = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -228,12 +228,7 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-<<<<<<< HEAD
     circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
-=======
-    //console.log(currentPos);
-    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
->>>>>>> keyspawn
     circleGeo.vertices.shift();
     flashlightRad.geometry = circleGeo;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
