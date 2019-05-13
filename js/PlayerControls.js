@@ -146,7 +146,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		var dir = deltaV.clone().normalize();
 		var rayCaster = new THREE.Raycaster(playerPos, dir);
 
-		// if our ray hit a colidable object return true
+		// if our ray hit a collidable object return true
 		var hits = rayIntersect(rayCaster, PLAYERCOLLISIONDIST, collidableObjects);
 		
 		if (hits.length >= 1) {
@@ -243,13 +243,11 @@ THREE.PlayerControls = function(camera, domElement) {
 		if (doorFound && !foundKey && firstTimeDoor) {
 			firstTimeDoor = false;
 			gotDoor();
-			endgameAlert.remove();
 		}
 
 		if (foundKey && firstTimeKey) {
 			firstTimeKey = false;
 			gotKey();
-			endgameAlert.remove();
 		}
 
 		var hits = this.playerCollision(deltaV);

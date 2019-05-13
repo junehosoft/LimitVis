@@ -1,5 +1,4 @@
 /*global THREE*/
-var DEBUG = true;
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -80,7 +79,20 @@ var MOVESPEED = 30,
 getPointerLock();
 init();
 
+// this code to restart doesnt work rn...
+// document.addEventListener("keydown", onDocumentKeyDown, false);
+// function onDocumentKeyDown(event) {
+//   var keyCode = event.which;
+//   if (keyCode == 32) {
+//     console.log("attempting to restart");
+//     scene.remove.apply(scene, scene.children);
+//     getPointerLock();
+//     init();
+//   }
+// }
+
 function init() {
+  NUMLIGHTORBS = 50;
   clock = new THREE.Clock();
   //listenForPlayerMovement();
 
@@ -129,6 +141,7 @@ function createScene(){
 
   // setup player movement
   controls = new THREE.PlayerControls(camera, dom);
+  controls.getObject().position.set(0, 0, 0);
   scene.add(controls.getObject());
 
 	// 4. lights
@@ -213,7 +226,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00003;
+      fogDensity += 0.00002;
       scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
 
@@ -322,6 +335,7 @@ function getLight() {
 
 var fade_out = function() {
   instructions.innerHTML = ""; 
+  doorFound = false;
 }
 
 function detectPlayerDeath() {
@@ -332,23 +346,41 @@ function detectPlayerDeath() {
 
 function endGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "GAME OVER </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "GAME OVER </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        // console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function wonGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        // console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function gotKey() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE DOOR BEFORE YOUR LIGHT RUNS OUT.";
+  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -358,11 +390,10 @@ function gotKey() {
 
 function gotDoor() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS DOOR.";
+  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.";
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
-  
   setTimeout(fade_out, 3000);
 }
 
