@@ -2,7 +2,7 @@ function Door(scene) {
 
     let loader = new THREE.STLLoader();
     loader.load('Transmutation_circle.stl', function (geometry) {
-      let material = new THREE.MeshToonMaterial(
+      let material = new THREE.MeshBasicMaterial(
         { color: 0xc0c0c0} );
       door = new THREE.Mesh(geometry, material);
   
