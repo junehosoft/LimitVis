@@ -1,7 +1,7 @@
 function Background(scene) {
 
   var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
-  var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x9301ad } );
+  var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x3c0047 } );
   ground = new THREE.Mesh( planeGeometry, planeMaterial );
   ground.receiveShadow = true;
   ground.castShadow = false;

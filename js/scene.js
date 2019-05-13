@@ -92,8 +92,8 @@ function createScene(){
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
-  scene.fog = new THREE.FogExp2(0x4f4f4f, fogDensity); //enable fog
-  scene.background = new THREE.Color(0xf0fff0);
+  scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+  scene.background = new THREE.Color(0xe2c06f);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -139,7 +139,7 @@ function createScene(){
   // light.shadow.camera.far = 1000;
 
   // scene.add(light);
-  flashlight = new THREE.PointLight(0xf442e2, 5, 10);
+  flashlight = new THREE.PointLight(0xffffff, 5, 10);
   flashlight.position.set(0, 0, 0);
   flashlight.visible = true;
   scene.add(flashlight);
@@ -176,7 +176,7 @@ function animate(){
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
 
     fogDensity += 0.00001;
-    scene.fog = new THREE.FogExp2(0x4f4f4f, fogDensity); //fog grows denser
+    scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
 
     render();
 
@@ -187,7 +187,7 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
-    flashlight.position.set(currentPos.x, 0, currentPos.z);
+    flashlight.position.set(currentPos.x, 5, currentPos.z);
     if (flashlight.distance > 0.01)
       flashlight.distance -= 0.05*delta;
     if (flashlight.intensity > 1.01)
@@ -270,10 +270,8 @@ function getLight() {
 
 
 function detectPlayerDeath() {
-  // console.log(pointLight.intensity)
-  // if (pointLight.intensity <= 0.05) {
-  //   return true;
-  // }
+  if (flashlight.distance < 0.5 || flashlight.intensity < 1.0)
+    return true;
   return false;
 }
 
