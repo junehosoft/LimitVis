@@ -97,6 +97,7 @@ function init() {
 	//call game loop
   getPointerLock();
   document.onclick = function () {
+    instructions.innerHTML = "";
     animate();
   }
 
