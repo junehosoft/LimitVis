@@ -48,7 +48,7 @@ var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
-var PLAYERLIGHTDIST = 7;
+var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 8;
 
 /****************************** CONTROL VARS **********************************/
@@ -307,7 +307,7 @@ function getLight() {
 
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
-    if (dist < PLAYERLIGHTDIST) {
+    if (dist < PLAYERCOLLISIONDIST) {
       console.log("GOT A LIGHT")
       // remove the object
       let orbIndex = scene.children.indexOf(orbs[i]);
