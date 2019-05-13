@@ -1,4 +1,8 @@
 /*global THREE*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -167,6 +171,9 @@ function createScene(){
     light.shadow.camera.far = 1000;
     scene.add(light);
   }
+  // testing for ambient light
+  scene.add(new THREE.AmbientLight(0x8e8b8b));
+  scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
   
   flashlight = new THREE.PointLight(0xffffff, 10, 10);
   flashlight.position.set(0, 0, 0);
@@ -174,7 +181,7 @@ function createScene(){
   scene.add(flashlight);
 
   // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
+  circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
   circleGeo.vertices.shift();
   circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
   flashlightRad = new THREE.LineLoop(circleGeo, circleMat);
@@ -192,11 +199,11 @@ function createScene(){
       sceneSubject.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
-        if (i == 4 && j == 5)
+        if (i == 5 && j == 5)
           continue;
-        let position = new THREE.Vector3(i * 50 - 200, 0, j * 50 - 250);
+        let position = new THREE.Vector3(i * 50 - 250, 0, j * 50 - 250);
         sceneSubject.push(new Cube(scene, dimensions, position));
       }
     }
@@ -230,28 +237,27 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00002;
-      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //fog grows denser
+      fogDensity += 0.00004;
+      scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
 
     render();
 
     // keep requesting renderer
     requestAnimationFrame(animate);
-
     var delta = clock.getDelta();
 
     // update light position
     let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
+    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
     circleGeo.vertices.shift();
     flashlightRad.geometry = circleGeo;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
     flashlightRad.position.set(currentPos.x, 0.1, currentPos.z);
     if (flashlight.distance > 0.01) 
-      flashlight.distance -= 0.05*delta;
+      flashlight.distance -= 0.4*delta;
     if (flashlight.intensity > 1.01)
-      flashlight.intensity -= 0.05*delta;
+      flashlight.intensity -= 0.4*delta;
 
     
 
@@ -323,7 +329,7 @@ function getLight() {
       glows.splice(i, 1);
       NUMLIGHTORBS--;
 
-      flashlight.distance *= 1.05;
+      flashlight.distance *= 1.15;
       circleGeo.radius *= 1.05;
       flashlight.intensity += 0.5;
       if (fogDensity >= 0.008) {

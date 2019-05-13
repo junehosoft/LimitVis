@@ -164,7 +164,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
-		if (dist < PLAYERCOLLISIONDIST) {
+		if (dist < PLAYERDOORDIST) {
 			doorFound = true;
 			return true;
 		}
@@ -206,6 +206,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		if (detectPlayerDeath() == true) {
 			// alert("test")
 			endGame();
+			return;
 		}
 
 		// get change in velocity based on 
