@@ -226,7 +226,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00001;
+      fogDensity += 0.00002;
       scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
 
@@ -346,18 +346,36 @@ function detectPlayerDeath() {
 
 function endGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "GAME OVER </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "GAME OVER </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function wonGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press CTRL + R to restart";
+    instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
+    // restart code (jess version hopefully this works)
+    document.addEventListener('keydown', function(event) {
+      // var key_press = String.fromCharCode(event.keyCode); 
+
+      if (event.keyCode == 32) {
+        console.log("attempting to restart");
+        location.reload();
+      }
+    });
 }
 
 function gotKey() {
