@@ -1,5 +1,5 @@
 /*global THREE*/
-var DEBUG = true;
+
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -28,7 +28,7 @@ var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
-var DEBUG = false;
+var DEBUG = true;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -175,11 +175,11 @@ function createScene(){
       sceneSubject.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
-        if (i == 4 && j == 5)
+        if (i == 5 && j == 5)
           continue;
-        let position = new THREE.Vector3(i * 50 - 200, 0, j * 50 - 250);
+        let position = new THREE.Vector3(i * 50 - 250, 0, j * 50 - 250);
         sceneSubject.push(new Cube(scene, dimensions, position));
       }
     }
@@ -221,11 +221,11 @@ function animate(){
 
     // keep requesting renderer
     requestAnimationFrame(animate);
-
     var delta = clock.getDelta();
 
     // update light position
     let currentPos = controls.getObject().position;
+    //console.log(currentPos);
     circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
     circleGeo.vertices.shift();
     flashlightRad.geometry = circleGeo;

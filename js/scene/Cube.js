@@ -25,11 +25,11 @@ function Cube(scene, dimension, position) {
     box.position.y = 0;
     box.position.z = position.z;
   }
-  if (Math.abs(box.position.x) < PLAYERCOLLISIONDIST)
-    box.position.x += PLAYERCOLLISIONDIST;
+  //if (Math.abs(box.position.x) < PLAYERCOLLISIONDIST)
+    //box.position.x += PLAYERCOLLISIONDIST;
 
-  if (Math.abs(box.position.z) < PLAYERCOLLISIONDIST)
-    box.position.z += PLAYERCOLLISIONDIST;
+  //if (Math.abs(box.position.z) < PLAYERCOLLISIONDIST)
+    //box.position.z += PLAYERCOLLISIONDIST;
   // box.receiveShadow = true;
   // box.castShadow = true;
   scene.add(box);
