@@ -1,15 +1,15 @@
 function Door(scene) {
 
     let loader = new THREE.STLLoader();
-    loader.load('dungeon_door.stl', function (geometry) {
-      let material = new THREE.MeshToonMaterial(
-        { color: 0x63e7ff} );
+    loader.load('hoop.stl', function (geometry) {
+      let material = new THREE.MeshNormalMaterial(
+        { } );
       door = new THREE.Mesh(geometry, material);
   
       // door.position.set(0,5,10);
-      door.position.set(0, 5, 20);
+      door.position.set(0, 6, 20);
       door.rotation.set(0,0,0);
-      door.scale.set(.25,.25,.25);
+      door.scale.set(.1,.1,.1);
   
       door.castShadow = true;
       door.receiveShadow = true;

@@ -49,8 +49,8 @@ var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
-var PLAYERLIGHTDIST = 5;
-var PLAYERDOORDIST = 10;
+var PLAYERLIGHTDIST = 7;
+var PLAYERDOORDIST = 8;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -213,7 +213,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00001;
+      fogDensity += 0.00003;
       scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
 
@@ -309,6 +309,12 @@ function getLight() {
       flashlight.distance *= 1.05;
       circleGeo.radius *= 1.05;
       flashlight.intensity += 0.5;
+      if (fogDensity >= 0.008) {
+        fogDensity -= 0.008;
+      } else {
+        fogDensity = 0;
+      }
+      scene.fog = new THREE.FogExp2(fogDensity);
 
     }
   }
