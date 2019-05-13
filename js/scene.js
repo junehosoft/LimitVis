@@ -1,5 +1,5 @@
 /*global THREE*/
-var DEBUG = false;
+var DEBUG = true;
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -20,6 +20,7 @@ var glowBox;
 var flashlight; 
 var flashlightRad;
 var circleGeo; // geometry for flashlightRad
+var circleMat;
 var foundKey = false;
 var doorFound = false;
 
@@ -153,9 +154,10 @@ function createScene(){
   scene.add(flashlight);
 
   // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(flashlight.distance);
-  var circleMat = new THREE.MeshBasicMaterial({color: 0xffffff});
+  circleGeo = new THREE.CircleGeometry(flashlight.distance, 64);
+  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
   flashlightRad = new THREE.Mesh(circleGeo, circleMat);
+  flashlightRad.rotation.x = -Math.PI/2;
   scene.add(flashlightRad);
 
   // setup time
@@ -213,11 +215,14 @@ function animate(){
     // update light position
     let currentPos = controls.getObject().position;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
-    flashlightRad.position.set(currentPos.x, 0, currentPos.z)
-    if (flashlight.distance > 0.01)
+    flashlightRad.position.set(currentPos.x, 0.1, currentPos.z);
+    if (flashlight.distance > 0.01) 
       flashlight.distance -= 0.05*delta;
     if (flashlight.intensity > 1.01)
       flashlight.intensity -= 0.05*delta;
+
+    circleGeo.radius = flashlight.distance;
+    flashlightRad = new THREE.Mesh(circleGeo, circleMat);
 
     // check if near light
     getLight();
