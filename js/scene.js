@@ -355,7 +355,7 @@ function endGame() {
       // var key_press = String.fromCharCode(event.keyCode); 
 
       if (event.keyCode == 32) {
-        console.log("attempting to restart");
+        // console.log("attempting to restart");
         location.reload();
       }
     });
@@ -372,7 +372,7 @@ function wonGame() {
       // var key_press = String.fromCharCode(event.keyCode); 
 
       if (event.keyCode == 32) {
-        console.log("attempting to restart");
+        // console.log("attempting to restart");
         location.reload();
       }
     });
