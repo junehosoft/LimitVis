@@ -1,5 +1,5 @@
 /*global THREE*/
-
+var DEBUG = true;
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -10,7 +10,6 @@ var dom;
 var light;
 var key;
 var sceneSubject;
-var pointLight;
 var lightOrb;
 var door;
 var fogDensity;
@@ -19,6 +18,9 @@ var farFog;
 var cube;
 var glowBox;
 var flashlight; 
+var flashlightRad;
+var circleGeo; // geometry for flashlightRad
+var circleMat;
 var foundKey = false;
 var doorFound = false;
 
@@ -143,13 +145,21 @@ function createScene(){
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
     light.shadow.camera.far = 1000;
+    scene.add(light);
   }
-
-  // scene.add(light);
-  flashlight = new THREE.PointLight(0xffffff, 5, 10);
+  
+  flashlight = new THREE.PointLight(0xffffff, 10, 10);
   flashlight.position.set(0, 0, 0);
   flashlight.visible = true;
   scene.add(flashlight);
+
+  // radius of flashlight circle 
+  circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
+  circleGeo.vertices.shift();
+  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
+  flashlightRad = new THREE.LineLoop(circleGeo, circleMat);
+  flashlightRad.rotation.x = -Math.PI/2;
+  scene.add(flashlightRad);
 
   // setup time
   clock = new THREE.Clock();
@@ -207,11 +217,17 @@ function animate(){
 
     // update light position
     let currentPos = controls.getObject().position;
+    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.7, 64, 3);
+    circleGeo.vertices.shift();
+    flashlightRad.geometry = circleGeo;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
-    if (flashlight.distance > 0.01)
+    flashlightRad.position.set(currentPos.x, 0.1, currentPos.z);
+    if (flashlight.distance > 0.01) 
       flashlight.distance -= 0.05*delta;
     if (flashlight.intensity > 1.01)
       flashlight.intensity -= 0.05*delta;
+
+    
 
     // check if near light
     getLight();
@@ -282,6 +298,7 @@ function getLight() {
       NUMLIGHTORBS--;
 
       flashlight.distance *= 1.05;
+      circleGeo.radius *= 1.05;
       flashlight.intensity += 0.5;
 
     }
