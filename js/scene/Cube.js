@@ -16,7 +16,7 @@ function Cube(scene, dimension, position) {
   });
 
   box = new THREE.Mesh(boxGeo, boxMaterial);
-  if (pistion === undefined) {
+  if (position === undefined) {
     box.position.x = Math.random()*400-200;// for some reason these are clustering
     box.position.y = 0;
     box.position.z = Math.random()*400-200;

@@ -153,9 +153,10 @@ function createScene(){
       sceneSubject.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 4; j++) {
-        sceneSubject.push(new Cube(scene, dimensions));
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 5; j++) {
+        let position = new THREE.Vector3(i * 100 - 200, 0, j * 100 - 250);
+        sceneSubject.push(new Cube(scene, dimensions, position));
       }
     }
   }
