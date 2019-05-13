@@ -1,7 +1,9 @@
 function Background(scene) {
 
   var planeGeometry = new THREE.PlaneGeometry(1000, 1000, 4);
-  var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x3c0047 } );
+  // var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x3c0047 } );
+  // var planeMaterial = new THREE.MeshBasicMaterial({color: 0x3c0047});
+  var planeMaterial = new THREE.MeshBasicMaterial({color: 0xd284ff})
   ground = new THREE.Mesh( planeGeometry, planeMaterial );
   ground.receiveShadow = true;
   ground.castShadow = false;
@@ -14,7 +16,10 @@ function Background(scene) {
   // set up back wall
   var wallGeometry = new THREE.PlaneGeometry(600, 600);
   // var wallMaterial = new THREE.MeshStandardMaterial({color: 0xdfaff7 });
-  var wallMaterial = new THREE.MeshBasicMaterial({color: 0xdfaff7});
+  // var wallMaterial = new THREE.MeshBasicMaterial({color: 0xdfaff7});
+  var wallMaterial = new THREE.MeshBasicMaterial({color: 0xff6666});
+  // wallMaterial.lights = true;
+
   wallMaterial.fog = true;
   backWall = new THREE.Mesh(wallGeometry, wallMaterial);
   backWall.rotation.y = Math.PI;
