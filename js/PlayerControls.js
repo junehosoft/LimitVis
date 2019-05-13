@@ -164,7 +164,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
-		if (dist < PLAYERDOORDIST) {
+		if (dist < PLAYERCOLLISIONDIST) {
 			doorFound = true;
 			return true;
 		}
@@ -179,7 +179,7 @@ THREE.PlayerControls = function(camera, domElement) {
 			return false;
 		}
 		let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
-		if (dist < PLAYERLIGHTDIST) {
+		if (dist < PLAYERCOLLISIONDIST) {
 			console.log("GOT A KEY");
 			// remove the key
 			let removeIndex = scene.children.indexOf(key);

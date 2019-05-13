@@ -294,7 +294,7 @@ function getLight() {
 
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
-    if (dist < PLAYERLIGHTDIST) {
+    if (dist < PLAYERCOLLISIONDIST) {
       console.log("GOT A LIGHT")
       // remove the object
       let orbIndex = scene.children.indexOf(orbs[i]);
