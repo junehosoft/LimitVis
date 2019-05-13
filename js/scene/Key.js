@@ -5,11 +5,16 @@ function Key(scene) {
     let material = new THREE.MeshToonMaterial(
       { color: 0xdaa520} );
     key = new THREE.Mesh(geometry, material);
-
-    key.position.set(10,2,0);
-    key.rotation.set(0,0,0);
-    key.scale.set(.6,.6,.6);
-
+    
+    var index = Math.floor(Math.random() * 64);
+    {
+      let x = (index / 10 * 50) - 175;
+      let z = (index % 10 * 50) - 175;
+      key.position.set(x,2,z);
+      key.rotation.set(0,0,0);
+      key.scale.set(.6,.6,.6);
+      console.log(key.position);
+    }
     key.castShadow = true;
     // key.receiveShadow = true;
     scene.add(key);
