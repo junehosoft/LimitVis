@@ -156,7 +156,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		return undefined;
 	}
 
-	this.detectDoorFound = function(deltaV) {
+	this.detectDoorFound = function() {
 		let currentPos = controls.getObject().position;
 
 		if (scene.children.indexOf(door) < 0) {
@@ -164,7 +164,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
-		if (dist < PLAYERLIGHTDIST) {
+		if (dist < PLAYERDOORDIST) {
 			doorFound = true;
 			return true;
 		}
@@ -176,7 +176,6 @@ THREE.PlayerControls = function(camera, domElement) {
 
 		let currentPos = controls.getObject().position;
 		if (scene.children.indexOf(key) <= 0) {
-			foundKey = false;
 			return false;
 		}
 		let dist = new THREE.Vector3().subVectors(key.position, currentPos).length();
@@ -186,6 +185,7 @@ THREE.PlayerControls = function(camera, domElement) {
 			let removeIndex = scene.children.indexOf(key);
 			scene.children.splice(removeIndex, 1);
 			scene.remove(key);
+			foundKey = true;
 			return true;
 		}
 		return false;

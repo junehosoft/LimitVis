@@ -48,6 +48,7 @@ var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 5;
+var PLAYERDOORDIST = 10;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
