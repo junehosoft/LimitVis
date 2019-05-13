@@ -1,8 +1,4 @@
 /*global THREE*/
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
