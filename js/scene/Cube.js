@@ -9,7 +9,7 @@ function Cube(scene, dimension, position) {
     var boxGeo = new THREE.BoxGeometry(dimension.x, Math.round(Math.random()*200+50), dimension.z);
   }
   boxMaterial = new THREE.MeshPhongMaterial({
-    color: 0x000000,
+    color: 0x66d8ff,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 1.0,

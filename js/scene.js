@@ -150,6 +150,9 @@ function createScene(){
     light.shadow.camera.far = 1000;
     scene.add(light);
   }
+  // testing for ambient light
+  scene.add(new THREE.AmbientLight(0x8e8b8b));
+  scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
   
   flashlight = new THREE.PointLight(0xffffff, 10, 10);
   flashlight.position.set(0, 0, 0);
@@ -213,7 +216,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00003;
+      fogDensity += 0.00004;
       scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
 
