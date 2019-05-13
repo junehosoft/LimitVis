@@ -206,6 +206,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		if (detectPlayerDeath() == true) {
 			// alert("test")
 			endGame();
+			return;
 		}
 
 		// get change in velocity based on 
