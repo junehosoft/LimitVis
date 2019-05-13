@@ -34,8 +34,8 @@ var rightWall;
 var frontWall; // front means facing player initially
 
 var backDist = 200;
-var leftDist = -250;
-var rightDist = 250;
+var leftDist = -200;
+var rightDist = 200;
 var frontDist = -200;
 
 // obstacles in the game
