@@ -10,7 +10,6 @@ var dom;
 var light;
 var key;
 var sceneSubject;
-var pointLight;
 var lightOrb;
 var door;
 var fogDensity;
@@ -19,6 +18,8 @@ var farFog;
 var cube;
 var glowBox;
 var flashlight; 
+var flashlightRad;
+var circleGeo; // geometry for flashlightRad
 var foundKey = false;
 var doorFound = false;
 
@@ -143,13 +144,19 @@ function createScene(){
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
     light.shadow.camera.far = 1000;
+    scene.add(light);
   }
-
-  // scene.add(light);
+  
   flashlight = new THREE.PointLight(0xffffff, 5, 10);
   flashlight.position.set(0, 0, 0);
   flashlight.visible = true;
   scene.add(flashlight);
+
+  // radius of flashlight circle 
+  circleGeo = new THREE.CircleGeometry(flashlight.distance);
+  var circleMat = new THREE.MeshBasicMaterial({color: 0xffffff});
+  flashlightRad = new THREE.Mesh(circleGeo, circleMat);
+  scene.add(flashlightRad);
 
   // setup time
   clock = new THREE.Clock();
@@ -206,6 +213,7 @@ function animate(){
     // update light position
     let currentPos = controls.getObject().position;
     flashlight.position.set(currentPos.x, 6, currentPos.z);
+    flashlightRad.position.set(currentPos.x, 0, currentPos.z)
     if (flashlight.distance > 0.01)
       flashlight.distance -= 0.05*delta;
     if (flashlight.intensity > 1.01)
@@ -280,6 +288,7 @@ function getLight() {
       NUMLIGHTORBS--;
 
       flashlight.distance *= 1.05;
+      circleGeo.radius *= 1.05;
       flashlight.intensity += 0.5;
 
     }
