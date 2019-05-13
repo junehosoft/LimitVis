@@ -164,7 +164,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
-		if (dist < PLAYERCOLLISIONDIST) {
+		if (dist < PLAYERDOORDIST) {
 			doorFound = true;
 			return true;
 		}
