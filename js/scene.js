@@ -21,6 +21,9 @@ var glowBox;
 var foundKey = false;
 var doorFound = false;
 
+/****************************** FLAGS *****************************************/
+var random = false;
+
 /****************************** ROOM VARS *************************************/
 var ground;
 var backWall;
@@ -145,8 +148,18 @@ function createScene(){
 
   // create the background
   sceneSubject = [new Background(scene), new Key(scene), new Obstacles(scene), new Door(scene)];
-  for (let i = 0; i < 15; i++)
-    sceneSubject.push(new RandomCube(scene));
+  if (random) {
+    for (let i = 0; i < 15; i++) 
+      sceneSubject.push(new Cube(scene));
+  } else {
+    let dimensions = new THREE.Vector3(30, 100, 30);
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 5; j++) {
+        let position = new THREE.Vector3(i * 100 - 200, 0, j * 100 - 250);
+        sceneSubject.push(new Cube(scene, dimensions, position));
+      }
+    }
+  }
   for (let i = 0; i < NUMLIGHTORBS; i++)
     sceneSubject.push(new LightOrb(scene));
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
