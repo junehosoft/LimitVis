@@ -2,14 +2,14 @@ function Cube(scene, dimension, position) {
   if (dimension === undefined) {
   // random cubes
     var width = Math.round(Math.random()*50+10);
-    var height = Math.round(Math.random()*200+100);
+    var height = Math.round(Math.random()*200+50);
     var depth = Math.round(Math.random()*50+10);
     var boxGeo = new THREE.BoxGeometry(width, height, depth);
   } else {
-    var boxGeo = new THREE.BoxGeometry(dimension.x, dimension.y, dimension.z);
+    var boxGeo = new THREE.BoxGeometry(dimension.x, Math.round(Math.random()*200+50), dimension.z);
   }
   boxMaterial = new THREE.MeshPhongMaterial({
-    color: 0xaaaaaa,
+    color: 0x000000,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 1.0,

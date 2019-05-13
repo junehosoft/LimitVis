@@ -1,5 +1,5 @@
 /*global THREE*/
-var DEBUG = false;
+
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -24,6 +24,7 @@ var doorFound = false;
 
 /****************************** FLAGS *****************************************/
 var random = false;
+var DEBUG = false;
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -43,9 +44,8 @@ var orbs = [];
 var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
-var PLAYERCOLLISIONDIST = 10;
-var PLAYERLIGHTDIST = 10;
-var EPS = 0.1;
+var PLAYERCOLLISIONDIST = 5;
+var PLAYERLIGHTDIST = 5;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -156,15 +156,17 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new Obstacles(scene), new Door(scene)];
+  sceneSubject = [new Background(scene), new Key(scene), new Door(scene)];
   if (random) {
     for (let i = 0; i < 15; i++) 
       sceneSubject.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 5; j++) {
-        let position = new THREE.Vector3(i * 100 - 200, 0, j * 100 - 250);
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 10; j++) {
+        if (i == 4 && j == 5)
+          continue;
+        let position = new THREE.Vector3(i * 50 - 200, 0, j * 50 - 250);
         sceneSubject.push(new Cube(scene, dimensions, position));
       }
     }
