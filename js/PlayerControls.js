@@ -240,13 +240,17 @@ THREE.PlayerControls = function(camera, domElement) {
 		}
 
 		// if the door is found without picking up the key first
-		if (doorFound && !foundKey) {
-			alert("You must find a key to unlock this door");
+		if (doorFound && !foundKey && firstTimeDoor) {
+			firstTimeDoor = false;
+			gotDoor();
+			endgameAlert.remove();
 		}
 
-		// if (keyFound) {
-		// 	console.log("You found the key");
-		// }
+		if (foundKey && firstTimeKey) {
+			firstTimeKey = false;
+			gotKey();
+			endgameAlert.remove();
+		}
 
 		var hits = this.playerCollision(deltaV);
 		if (hits != undefined) {

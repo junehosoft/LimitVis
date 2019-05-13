@@ -23,6 +23,8 @@ var circleGeo; // geometry for flashlightRad
 var circleMat;
 var foundKey = false;
 var doorFound = false;
+var firstTimeDoor = true;
+var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
@@ -306,6 +308,9 @@ function getLight() {
   }
 }
 
+var fade_out = function() {
+  instructions.innerHTML = ""; 
+}
 
 function detectPlayerDeath() {
   if (flashlight.distance < 0.5 || flashlight.intensity < 1.0)
@@ -328,6 +333,28 @@ function wonGame() {
     instructions.style.display = '';
     endgameAlert.style.display = 'none';
 }
+
+function gotKey() {
+  blocker.style.display = '';
+  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE DOOR BEFORE YOUR LIGHT RUNS OUT.";
+  gameOver = false;
+  instructions.style.display = '';
+  endgameAlert.style.display = 'none';
+  
+  setTimeout(fade_out, 3000);
+}
+
+function gotDoor() {
+  blocker.style.display = '';
+  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS DOOR.";
+  gameOver = false;
+  instructions.style.display = '';
+  endgameAlert.style.display = 'none';
+  
+  setTimeout(fade_out, 3000);
+}
+
+
 /* This code was adapted from
 https://docs.microsoft.com/en-us/windows/uwp/get-started/get-started-tutorial-game-js3d
 */
