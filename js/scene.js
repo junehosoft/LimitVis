@@ -48,7 +48,7 @@ var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
-var PLAYERLIGHTDIST = 7;
+var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 8;
 
 /****************************** CONTROL VARS **********************************/
