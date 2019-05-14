@@ -46,7 +46,7 @@ var frontDist = -200;
 var boxes = [];
 var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
-var NUMLIGHTORBS = 50;
+var NUMLIGHTORBS = 100;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 9;
@@ -232,7 +232,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00004;
+      fogDensity += 0.00002;
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
@@ -320,11 +320,11 @@ function getLight() {
 
       NUMLIGHTORBS--;
 
-      flashlight.distance *= 1.15;
-      circleGeo.radius *= 1.05;
+      flashlight.distance *= 1.25;
+      circleGeo.radius *= 1.15;
       flashlight.intensity += 0.5;
-      if (fogDensity >= 0.008) {
-        fogDensity -= 0.008;
+      if (fogDensity >= 0.009) {
+        fogDensity -= 0.009;
       } else {
         fogDensity = 0;
       }
@@ -350,7 +350,7 @@ function endGame() {
     instructions.innerHTML = "<strong>GAME OVER </br></br></br> Press [SPACEBAR] to restart</strong>";
     gameOver = true;
     instructions.style.display = '';
-    instructions.style.color = "blue"
+    instructions.style.color = "SlateBlue";
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
     document.addEventListener('keydown', function(event) {
@@ -369,9 +369,10 @@ function wonGame() {
     instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
-    instructions.style.color = "blue"
+    instructions.style.color = "SlateBlue";
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
+    // let forearmRadius = 10000;
     document.addEventListener('keydown', function(event) {
       // var key_press = String.fromCharCode(event.keyCode); 
 
@@ -387,7 +388,7 @@ function wonGame() {
 function gotKey() {
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.</strong>";
-  instructions.style.color = "red"
+  instructions.style.color = 'SlateBlue';
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -398,7 +399,7 @@ function gotKey() {
 function gotDoor() {
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.</strong>";
-  instructions.style.color = "red"
+  instructions.style.color = 'SlateBlue';
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';

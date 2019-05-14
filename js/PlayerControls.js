@@ -238,6 +238,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		// to determine whether the game ends
 		if (doorFound && foundKey) {
 			wonGame();
+			return;
 		}
 
 		// if the door is found without picking up the key first

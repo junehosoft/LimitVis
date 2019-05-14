@@ -31,7 +31,8 @@
 body {
 	background-color: #000;
 	color: #888;
-	font-family: Helvetica;
+	font-family: 'BankGothic Lt BT';
+	font-weight: bold;
 	line-height: 26px;
 	margin: 0px;
 	overflow: hidden;
@@ -59,7 +60,7 @@ body {
 	width: 100%;
 	height: 100%;
   	font-size: 30px;
-  	font-family: 'Courier New';
+  	font-family: 'BankGothic Lt BT';
 	display: -webkit-box;
 	display: -moz-box;
 	display: box;
@@ -75,10 +76,11 @@ body {
 }
 #endgameAlert {
 	position: absolute;
-  	color: #aa0909;
 	width: 100%;
+	font-family: 'BankGothic Lt BT';
+	font-weight: bold;
 	height: 5%;
   	text-align: center;
   	padding-top:2%;
-  	vertical-align:middle;
+  	vertical-align:center;
 }
