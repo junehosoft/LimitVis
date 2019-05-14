@@ -10,7 +10,7 @@ function Key(scene) {
     {
       let x = (index / 10 * 50) - 175;
       let z = (index % 10 * 50) - 175;
-      key.position.set(10,1.5,0);
+      key.position.set(x,1.5,z);
       key.rotation.set(0,0,0);
       key.scale.set(.6,.6,.6);
       console.log(key.position);
