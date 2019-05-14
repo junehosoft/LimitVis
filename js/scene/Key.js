@@ -1,5 +1,5 @@
 function Key(scene) {
-
+  this.time = 0;
   let loader = new THREE.STLLoader();
   loader.load('Key.stl', function (geometry) {
     let material = new THREE.MeshBasicMaterial(
@@ -10,7 +10,7 @@ function Key(scene) {
     {
       let x = (index / 10 * 50) - 175;
       let z = (index % 10 * 50) - 175;
-      key.position.set(x,2,z);
+      key.position.set(10,1.5,0);
       key.rotation.set(0,0,0);
       key.scale.set(.6,.6,.6);
       console.log(key.position);
@@ -21,10 +21,10 @@ function Key(scene) {
 
   });
 
-
-  this.update = function(time) {
-
-
+  this.update = function(delta) {
+    this.time += delta;
+    key.position.y = Math.sin(this.time * Math.PI) * 0.5 + 1.5;
   }
+
 
 }

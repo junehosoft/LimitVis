@@ -8,13 +8,13 @@ var renderer;
 var dom;
 var light;
 var key;
+var keyObject;
 var sceneSubject;
-var lightOrb;
 var door;
 var fogDensity;
 var nearFog;
 var farFog;
-var cube;
+var cubes;
 var glowBox;
 var flashlight; 
 var flashlightRad;
@@ -185,10 +185,12 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new Door(scene)];
+  keyObject = new Key(scene);
+  sceneSubject = [new Background(scene), new Door(scene)];
+  cubes = [];
   if (random) {
     for (let i = 0; i < 15; i++) 
-      sceneSubject.push(new Cube(scene));
+      cubes.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
     for (let i = 0; i < 10; i++) {
@@ -196,7 +198,7 @@ function createScene(){
         if (i == 5 && j == 5)
           continue;
         let position = new THREE.Vector3(i * 50 - 250, 0, j * 50 - 250);
-        sceneSubject.push(new Cube(scene, dimensions, position));
+        cubes.push(new Cube(scene, dimensions, position));
       }
     }
   }
@@ -209,6 +211,7 @@ function createScene(){
 }
 
 function animate(){
+    var delta = clock.getDelta();
     //animate
     for (let i = 0; i < NUMLIGHTORBS; i++) {
       orbs[i].update();
@@ -216,7 +219,7 @@ function animate(){
 
     // get the key to spin or bounce
     if (scene.children.indexOf(key) >= 0) {
-      key.rotation.y += 0.01;
+      keyObject.update(delta);
     }
 
     // pointLight.intensity -= 0.005;
@@ -232,7 +235,7 @@ function animate(){
 
     // keep requesting renderer
     requestAnimationFrame(animate);
-    var delta = clock.getDelta();
+    
 
     // update light position
     let currentPos = controls.getObject().position;
