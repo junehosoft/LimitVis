@@ -117,10 +117,10 @@ function createScene(){
   if (DEBUG == false)
     
     // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
-  scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
+  scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
   // scene.background = new THREE.Color(0xe2c06f);
-  scene.background = new THREE.Color(0xfffabf);
+  scene.background = new THREE.Color(0xffffff);
 
   // 1.5. fog effect
   // fogColor = new THREE.Color(0xfba500);
@@ -234,7 +234,7 @@ function animate(){
     if (DEBUG == false) {
       fogDensity += 0.00004;
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
-      scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
+      scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
 
     render();
@@ -328,7 +328,7 @@ function getLight() {
       } else {
         fogDensity = 0;
       }
-      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity);
+      scene.fog = new THREE.FogExp2(0xffffff, fogDensity);
 
     }
   }

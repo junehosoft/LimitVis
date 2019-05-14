@@ -9,7 +9,7 @@ function Cube(scene, dimension, position) {
     var boxGeo = new THREE.BoxGeometry(dimension.x, Math.round(Math.random()*200+50), dimension.z);
   }
 
-  var randomColors = [0x66d8ff, 0x66ff87, 0xff6693, 0x66ffdb]
+  var randomColors = [0xecd4ff, 0xfcc2ff, 0xc5a3ff, 0xd5aaff]
   boxMaterial = new THREE.MeshBasicMaterial({
     color: randomColors[Math.floor(Math.random()*4)],
   });
