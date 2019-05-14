@@ -114,20 +114,13 @@ function createScene(){
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
-  if (DEBUG == false)
-    
+  if (DEBUG == false) {
     // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
-  scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
-    // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
-  // scene.background = new THREE.Color(0xe2c06f);
-  scene.background = new THREE.Color(0xffffff);
-
-  // 1.5. fog effect
-  // fogColor = new THREE.Color(0xfba500);
-  // scene.background = fogColor;
-  // farFog = 50;
-  // nearFog = 1;
-  // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+    scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
+      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+    // scene.background = new THREE.Color(0xe2c06f);
+    scene.background = new THREE.Color(0xffffff);
+  }
 
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
