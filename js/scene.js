@@ -28,7 +28,7 @@ var firstTimeKey = true;
 /****************************** FLAGS *****************************************/
 var random = false;
 var DEBUG = false;
-var STATE = "start";
+var STATE = "instructions";
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -72,19 +72,13 @@ var MOVESPEED = 30,
     LOOKSPEED = 0.075
 
 getPointerLock();
-init();
+document.onclick = function () {  
+  if (STATE == "instructions"){
+    init();
+    STATE = "start"
+  }
+}
 
-// this code to restart doesnt work rn...
-// document.addEventListener("keydown", onDocumentKeyDown, false);
-// function onDocumentKeyDown(event) {
-//   var keyCode = event.which;
-//   if (keyCode == 32) {
-//     console.log("attempting to restart");
-//     scene.remove.apply(scene, scene.children);
-//     getPointerLock();
-//     init();
-//   }
-// }
 
 function init() {
   NUMLIGHTORBS = 50;
@@ -171,8 +165,8 @@ function createScene(){
     scene.add(light);
   }
   // testing for ambient light
-  scene.add(new THREE.AmbientLight(0x8e8b8b));
-  scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
+  // scene.add(new THREE.AmbientLight(0x8e8b8b));
+  // scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
   
   flashlight = new THREE.PointLight(0xffffff, 10, 10);
   flashlight.position.set(0, 0, 0);
