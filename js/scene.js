@@ -1,4 +1,4 @@
-
+/*global THREE*/
 /****************************** SCENE GLOBAL VARS ******************************/
 var sceneWidth;
 var sceneHeight;
@@ -46,7 +46,7 @@ var frontDist = -200;
 var boxes = [];
 var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
-var NUMLIGHTORBS = 50;
+var NUMLIGHTORBS = 100;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 9;
@@ -60,6 +60,7 @@ var endgameAlert = document.getElementById('endgameAlert');
 var player;
 var controls;
 var controlsEnabled = false;
+var gameStarted = false;
 // Flags to determine which direction the player is moving
 var moveForward = false;
 var moveBackward = false;
@@ -81,25 +82,21 @@ document.onclick = function () {
 
 
 function init() {
-  NUMLIGHTORBS = 50;
-  clock = new THREE.Clock();
-  clock.start();
   //listenForPlayerMovement();
 
+  clock = new THREE.Clock();
+  clock.start();
+
 	// set up the scene
-	createScene();
+  createScene();
 
 	//call game loop
   getPointerLock();
-  document.onclick = function () {
-    instructions.innerHTML = "";
-    if (STATE == "start") {
-      STATE = "play"
-      animate();
-    }
-  }
+  instructions.innerHTML = "";
+  STATE = "play"
+  animate();
 
-  //console.log("hello");
+  // console.log("hello");
 }
 
 function createScene(){
@@ -108,20 +105,13 @@ function createScene(){
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
   fogDensity = 0.009;
-  if (DEBUG == false)
-    
+  if (DEBUG == false) {
     // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
-  scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
-    // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
-  // scene.background = new THREE.Color(0xe2c06f);
-  scene.background = new THREE.Color(0xfffabf);
-
-  // 1.5. fog effect
-  // fogColor = new THREE.Color(0xfba500);
-  // scene.background = fogColor;
-  // farFog = 50;
-  // nearFog = 1;
-  // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+    scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
+      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
+    // scene.background = new THREE.Color(0xe2c06f);
+    scene.background = new THREE.Color(0xffffff);
+  }
 
 	// 2. camera
   camera = new THREE.PerspectiveCamera( 75, sceneWidth / sceneHeight, .4, 2000 );//perspective camera
@@ -223,10 +213,12 @@ function animate(){
 
     // pointLight.intensity -= 0.005;
 
-    if (DEBUG == false && detectPlayerDeath() == false) {
-      fogDensity += 0.00004;
+    // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
+    // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+    if (DEBUG == false) {
+      fogDensity += 0.00002;
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
-      scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
+      scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
 
     render();
@@ -271,7 +263,13 @@ function getPointerLock() {
   document.onclick = function () {
     dom.requestPointerLock();
   }
-  document.addEventListener('pointerlockchange', lockChange, false);
+  if (!gameStarted) {
+    document.addEventListener('pointerlockchange', lockChange, false);
+    gameStarted = true;
+    console.log("ruh roh")
+  } else {
+    console.log("uh oh")
+  }
 }
 
 function lockChange() {
@@ -280,11 +278,13 @@ function lockChange() {
         // Hide blocker and instructions
         blocker.style.display = "none";
         controls.enabled = true;
+        gameStarted = true;
     // Turn off the controls
     } else {
       // Display the blocker and instruction
         blocker.style.display = "";
         controls.enabled = false;
+        gameStarted = true;
     }
 }
 
@@ -312,15 +312,15 @@ function getLight() {
 
       NUMLIGHTORBS--;
 
-      flashlight.distance *= 1.15;
-      circleGeo.radius *= 1.05;
+      flashlight.distance *= 1.25;
+      circleGeo.radius *= 1.10;
       flashlight.intensity += 0.5;
-      if (fogDensity >= 0.008) {
-        fogDensity -= 0.008;
+      if (fogDensity >= 0.009) {
+        fogDensity -= 0.009;
       } else {
         fogDensity = 0;
       }
-      scene.fog = new THREE.FogExp2(0xfffabf, fogDensity);
+      scene.fog = new THREE.FogExp2(0xffffff, fogDensity);
 
     }
   }
@@ -342,7 +342,7 @@ function endGame() {
     instructions.innerHTML = "<strong>GAME OVER </br></br></br> Press [SPACEBAR] to restart</strong>";
     gameOver = true;
     instructions.style.display = '';
-    instructions.style.color = "blue"
+    instructions.style.color = "SlateBlue";
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
     document.addEventListener('keydown', function(event) {
@@ -361,9 +361,10 @@ function wonGame() {
     instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
-    instructions.style.color = "blue"
+    instructions.style.color = "SlateBlue";
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
+    // let forearmRadius = 10000;
     document.addEventListener('keydown', function(event) {
       // var key_press = String.fromCharCode(event.keyCode); 
 
@@ -379,7 +380,7 @@ function wonGame() {
 function gotKey() {
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.</strong>";
-  instructions.style.color = "red"
+  instructions.style.color = 'SlateBlue';
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -390,7 +391,7 @@ function gotKey() {
 function gotDoor() {
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.</strong>";
-  instructions.style.color = "red"
+  instructions.style.color = 'SlateBlue';
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
