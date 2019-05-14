@@ -46,7 +46,7 @@ var frontDist = -200;
 var boxes = [];
 var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
-var MAXLIGHTORBS = 50;
+var MAXLIGHTORBS = 70;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 9;
@@ -193,14 +193,17 @@ function createScene(){
     for (let j = 0; j < 16; j++) {
       if (i % 2 == 0 && j % 2 == 0)
         continue;
-      let flip = (Math.random() <= 0.5);
+      let flip = (Math.random() <= 0.3);
       if (flip) {
         let position = new THREE.Vector3(i * 25 - 200, 0, j * 25 - 200);
         orbs.push(new LightOrb(scene, position));
       }
-      //if (orbs.length >= MAXLIGHTORBS) 
-        //break;
-      
+      if (orbs.length >= MAXLIGHTORBS) {
+        break;
+      }
+    }
+    if (orbs.length >= MAXLIGHTORBS) {
+      break;
     }
   }
     

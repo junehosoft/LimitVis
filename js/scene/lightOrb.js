@@ -82,9 +82,9 @@ function LightOrb (scene, position) {
     object.position.y = 2;
     object.position.z = Math.random()*400-200;
   } else {
-    object.position.x = position.x;
+    object.position.x = position.x + Math.random() * 10 - 5;
     object.position.y = 2;
-    object.position.z = position.z;
+    object.position.z = position.z + Math.random() * 10 - 5;
   }
   scene.add(this.object);
   
