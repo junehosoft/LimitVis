@@ -347,9 +347,10 @@ function detectPlayerDeath() {
 
 function endGame() {
     blocker.style.display = '';
-    instructions.innerHTML = "GAME OVER </br></br></br> Press [SPACEBAR] to restart";
+    instructions.innerHTML = "<strong>GAME OVER </br></br></br> Press [SPACEBAR] to restart</strong>";
     gameOver = true;
     instructions.style.display = '';
+    instructions.style.color = "blue"
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
     document.addEventListener('keydown', function(event) {
@@ -368,6 +369,7 @@ function wonGame() {
     instructions.innerHTML = "CONGRATULATIONS, YOU ESCAPED </br></br></br> Press [SPACEBAR] to restart";
     gameOver = true;
     instructions.style.display = '';
+    instructions.style.color = "blue"
     endgameAlert.style.display = 'none';
     // restart code (jess version hopefully this works)
     document.addEventListener('keydown', function(event) {
@@ -384,7 +386,8 @@ function wonGame() {
 
 function gotKey() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.";
+  instructions.innerHTML = "<strong>YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.</strong>";
+  instructions.style.color = "red"
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
@@ -394,7 +397,8 @@ function gotKey() {
 
 function gotDoor() {
   blocker.style.display = '';
-  instructions.innerHTML = "YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.";
+  instructions.innerHTML = "<strong>YOU CANNOT EXIT BEFORE YOU FIND THE KEY THAT UNLOCKS THIS PORTAL.</strong>";
+  instructions.style.color = "red"
   gameOver = false;
   instructions.style.display = '';
   endgameAlert.style.display = 'none';
