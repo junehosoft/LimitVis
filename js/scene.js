@@ -326,7 +326,7 @@ function getLight() {
       NUMLIGHTORBS--;
 
       flashlight.distance *= 1.25;
-      circleGeo.radius *= 1.15;
+      circleGeo.radius *= 1.10;
       flashlight.intensity += 0.5;
       if (fogDensity >= 0.009) {
         fogDensity -= 0.009;
