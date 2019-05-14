@@ -27,7 +27,7 @@ var firstTimeKey = true;
 
 /****************************** FLAGS *****************************************/
 var random = false;
-var DEBUG = false;
+var DEBUG = true;
 var STATE = "start";
 
 /****************************** ROOM VARS *************************************/

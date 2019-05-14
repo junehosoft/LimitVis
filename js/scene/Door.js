@@ -3,7 +3,7 @@ function Door(scene) {
     let loader = new THREE.STLLoader();
     loader.load('Transmutation_circle.stl', function (geometry) {
       let material = new THREE.MeshBasicMaterial(
-        { color: 0xff9cee} );
+        { color: 0xfdfd96} );
       door = new THREE.Mesh(geometry, material);
   
       // door.position.set(0,5,10);
