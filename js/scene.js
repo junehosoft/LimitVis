@@ -96,6 +96,7 @@ function init() {
 	//call game loop
   getPointerLock();
   document.onclick = function () {
+    instructions.innerHTML = "";
     animate();
   }
 
@@ -224,9 +225,7 @@ function animate(){
 
     // pointLight.intensity -= 0.005;
 
-    // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
-    // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
-    if (DEBUG == false) {
+    if (DEBUG == false && detectPlayerDeath() == false) {
       fogDensity += 0.00004;
       scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
     }
