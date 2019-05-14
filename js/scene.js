@@ -46,7 +46,7 @@ var frontDist = -200;
 var boxes = [];
 var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
-var NUMLIGHTORBS = 75;
+var MAXLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 9;
@@ -171,14 +171,12 @@ function createScene(){
   flashlightRad.rotation.x = -Math.PI/2;
   scene.add(flashlightRad);
 
-  
-
   // create the background
   keyObject = new Key(scene);
   sceneSubject = [new Background(scene), new Door(scene)];
   cubes = [];
   if (random) {
-    for (let i = 0; i < 15; i++) 
+    for (let i = 0; i < 25; i++) 
       cubes.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
@@ -191,8 +189,21 @@ function createScene(){
       }
     }
   }
-  for (let i = 0; i < NUMLIGHTORBS; i++)
-    orbs.push(new LightOrb(scene));
+  for (let i = 0; i < 16; i++) {
+    for (let j = 0; j < 16; j++) {
+      if (i % 2 == 0 && j % 2 == 0)
+        continue;
+      let flip = (Math.random() <= 0.5);
+      if (flip) {
+        let position = new THREE.Vector3(i * 25 - 200, 0, j * 25 - 200);
+        orbs.push(new LightOrb(scene, position));
+      }
+      //if (orbs.length >= MAXLIGHTORBS) 
+        //break;
+      
+    }
+  }
+    
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -202,7 +213,7 @@ function createScene(){
 function animate(){
     var delta = clock.getDelta();
     //animate
-    for (let i = 0; i < NUMLIGHTORBS; i++) {
+    for (let i = 0; i < orbs.length; i++) {
       orbs[i].update();
     }
 
@@ -309,8 +320,6 @@ function getLight() {
       orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
-
-      NUMLIGHTORBS--;
 
       flashlight.distance *= 1.10;
       if (circleGeo.radius < 90) {

@@ -1,4 +1,4 @@
-function LightOrb (scene) {
+function LightOrb (scene, position) {
   // main object of this class
   var object = new THREE.Object3D();
   this.object = object;
@@ -77,9 +77,15 @@ function LightOrb (scene) {
   
   // add it to the object
   object.add(particleSystem);
-  object.position.x = Math.random()*400-200;
-  object.position.y = 2;
-  object.position.z = Math.random()*400-200;
+  if (position === undefined) {
+    object.position.x = Math.random()*400-200;
+    object.position.y = 2;
+    object.position.z = Math.random()*400-200;
+  } else {
+    object.position.x = position.x;
+    object.position.y = 2;
+    object.position.z = position.z;
+  }
   scene.add(this.object);
   
   this.update = function() {
