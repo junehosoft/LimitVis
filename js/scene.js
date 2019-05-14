@@ -216,7 +216,7 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00002;
+      fogDensity += 0.00001;
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
@@ -312,8 +312,10 @@ function getLight() {
 
       NUMLIGHTORBS--;
 
-      flashlight.distance *= 1.25;
-      circleGeo.radius *= 1.10;
+      flashlight.distance *= 1.10;
+      if (circleGeo.radius < 90) {
+        circleGeo.radius *= 1.10;
+      }
       flashlight.intensity += 0.5;
       if (fogDensity >= 0.009) {
         fogDensity -= 0.009;
