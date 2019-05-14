@@ -8,13 +8,13 @@ var renderer;
 var dom;
 var light;
 var key;
+var keyObject;
 var sceneSubject;
-var lightOrb;
 var door;
 var fogDensity;
 var nearFog;
 var farFog;
-var cube;
+var cubes;
 var glowBox;
 var flashlight; 
 var flashlightRad;
@@ -44,7 +44,6 @@ var frontDist = -200;
 // obstacles in the game
 var boxes = [];
 var orbs = [];
-var glows = [];
 var collidableObjects = []; // An array of collidable objects used later
 var NUMLIGHTORBS = 50;
 var PLAYERCOLLISIONDIST = 5;
@@ -66,11 +65,6 @@ var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
 var clock;
-// Velocity vector for the player
-//var playerVelocity = new THREE.Vector3();
-
-// How fast the player will move
-//var PLAYERSPEED = 500.0;
 
 
 var MOVESPEED = 30,
@@ -101,7 +95,10 @@ function init() {
 
 	//call game loop
   getPointerLock();
-  animate();
+  document.onclick = function () {
+    instructions.innerHTML = "";
+    animate();
+  }
 
   //console.log("hello");
 }
@@ -189,10 +186,12 @@ function createScene(){
   clock.start();
 
   // create the background
-  sceneSubject = [new Background(scene), new Key(scene), new Door(scene)];
+  keyObject = new Key(scene);
+  sceneSubject = [new Background(scene), new Door(scene)];
+  cubes = [];
   if (random) {
     for (let i = 0; i < 15; i++) 
-      sceneSubject.push(new Cube(scene));
+      cubes.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
     for (let i = 0; i < 10; i++) {
@@ -200,12 +199,12 @@ function createScene(){
         if (i == 5 && j == 5)
           continue;
         let position = new THREE.Vector3(i * 50 - 250, 0, j * 50 - 250);
-        sceneSubject.push(new Cube(scene, dimensions, position));
+        cubes.push(new Cube(scene, dimensions, position));
       }
     }
   }
   for (let i = 0; i < NUMLIGHTORBS; i++)
-    sceneSubject.push(new LightOrb(scene));
+    orbs.push(new LightOrb(scene));
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -213,19 +212,15 @@ function createScene(){
 }
 
 function animate(){
+    var delta = clock.getDelta();
     //animate
     for (let i = 0; i < NUMLIGHTORBS; i++) {
-
-      orbs[i].rotation.x += 0.01;
-      orbs[i].rotation.y += 0.01;
-      glows[i].rotation.x += 0.01;
-      glows[i].rotation.y += 0.01;
-
+      orbs[i].update();
     }
 
     // get the key to spin or bounce
     if (scene.children.indexOf(key) >= 0) {
-      key.rotation.y += 0.01;
+      keyObject.update(delta);
     }
 
     // pointLight.intensity -= 0.005;
@@ -241,7 +236,7 @@ function animate(){
 
     // keep requesting renderer
     requestAnimationFrame(animate);
-    var delta = clock.getDelta();
+    
 
     // update light position
     let currentPos = controls.getObject().position;
@@ -255,13 +250,10 @@ function animate(){
     if (flashlight.intensity > 1.01)
       flashlight.intensity -= 0.4*delta;
 
-    
-
     // check if near light
     getLight();
 
     controls.animatePlayer(delta);
-
     // console.log(controls.getObject().position)
 }
 
@@ -312,17 +304,15 @@ function getLight() {
   let currentPos = controls.getObject().position;
 
   for (let i = 0; i < orbs.length; i++) {
-    let dist = new THREE.Vector3().subVectors(orbs[i].position, currentPos).length();
+    let dist = new THREE.Vector3().subVectors(orbs[i].object.position, currentPos).length();
     if (dist < PLAYERCOLLISIONDIST) {
       console.log("GOT A LIGHT")
       // remove the object
-      let orbIndex = scene.children.indexOf(orbs[i]);
+      let orbIndex = scene.children.indexOf(orbs[i].object);
+      orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
 
-      let glowIndex = scene.children.indexOf(glows[i]);
-      scene.children.splice(glowIndex, 1);
-      glows.splice(i, 1);
       NUMLIGHTORBS--;
 
       flashlight.distance *= 1.15;
