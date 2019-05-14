@@ -203,7 +203,7 @@ THREE.PlayerControls = function(camera, domElement) {
 		velocity.z -= velocity.z * 10 * delta;
 
 		// to determine whether the player died
-		if (detectPlayerDeath() == true) {
+		if (!doorFound && detectPlayerDeath() == true) {
 			// alert("test")
 			endGame();
 			return;

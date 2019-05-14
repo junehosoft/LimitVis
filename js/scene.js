@@ -60,6 +60,7 @@ var endgameAlert = document.getElementById('endgameAlert');
 var player;
 var controls;
 var controlsEnabled = false;
+var gameStarted = false;
 // Flags to determine which direction the player is moving
 var moveForward = false;
 var moveBackward = false;
@@ -72,7 +73,10 @@ var MOVESPEED = 30,
     LOOKSPEED = 0.075
 
 getPointerLock();
-init();
+if (gameStarted) {
+  init();
+}
+// init();
 
 // this code to restart doesnt work rn...
 // document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -87,13 +91,13 @@ init();
 // }
 
 function init() {
-  NUMLIGHTORBS = 50;
-  clock = new THREE.Clock();
-  clock.start();
   //listenForPlayerMovement();
 
+  clock = new THREE.Clock();
+  clock.start();
+
 	// set up the scene
-	createScene();
+  createScene();
 
 	//call game loop
   getPointerLock();
@@ -105,7 +109,7 @@ function init() {
     }
   }
 
-  //console.log("hello");
+  // console.log("hello");
 }
 
 function createScene(){
@@ -272,7 +276,13 @@ function getPointerLock() {
   document.onclick = function () {
     dom.requestPointerLock();
   }
-  document.addEventListener('pointerlockchange', lockChange, false);
+  if (!gameStarted) {
+    document.addEventListener('pointerlockchange', lockChange, false);
+    gameStarted = true;
+    console.log("ruh roh")
+  } else {
+    console.log("uh oh")
+  }
 }
 
 function lockChange() {
@@ -281,11 +291,13 @@ function lockChange() {
         // Hide blocker and instructions
         blocker.style.display = "none";
         controls.enabled = true;
+        gameStarted = true;
     // Turn off the controls
     } else {
       // Display the blocker and instruction
         blocker.style.display = "";
         controls.enabled = false;
+        gameStarted = true;
     }
 }
 
