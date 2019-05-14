@@ -88,6 +88,7 @@ init();
 function init() {
   NUMLIGHTORBS = 50;
   clock = new THREE.Clock();
+  clock.start();
   //listenForPlayerMovement();
 
 	// set up the scene
@@ -181,9 +182,7 @@ function createScene(){
   flashlightRad.rotation.x = -Math.PI/2;
   scene.add(flashlightRad);
 
-  // setup time
-  clock = new THREE.Clock();
-  clock.start();
+  
 
   // create the background
   keyObject = new Key(scene);
@@ -368,6 +367,7 @@ function wonGame() {
       if (event.keyCode == 32) {
         // console.log("attempting to restart");
         location.reload();
+        
       }
     });
 }
