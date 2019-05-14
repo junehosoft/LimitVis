@@ -28,6 +28,7 @@ var firstTimeKey = true;
 /****************************** FLAGS *****************************************/
 var random = false;
 var DEBUG = false;
+var STATE = "start";
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -97,7 +98,10 @@ function init() {
   getPointerLock();
   document.onclick = function () {
     instructions.innerHTML = "";
-    animate();
+    if (STATE == "start") {
+      STATE = "play"
+      animate();
+    }
   }
 
   //console.log("hello");
@@ -111,7 +115,8 @@ function createScene(){
   fogDensity = 0.009;
   if (DEBUG == false)
     
-    scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog
+    // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
+  scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
     // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
   // scene.background = new THREE.Color(0xe2c06f);
   scene.background = new THREE.Color(0xfffabf);
@@ -227,7 +232,8 @@ function animate(){
 
     if (DEBUG == false && detectPlayerDeath() == false) {
       fogDensity += 0.00004;
-      scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
+      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
+      scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
     }
 
     render();
@@ -350,6 +356,7 @@ function endGame() {
 
       if (event.keyCode == 32) {
         // console.log("attempting to restart");
+        STATE = "start";
         location.reload();
       }
     });
@@ -367,6 +374,7 @@ function wonGame() {
 
       if (event.keyCode == 32) {
         // console.log("attempting to restart");
+        STATE = "start";
         location.reload();
       }
     });
