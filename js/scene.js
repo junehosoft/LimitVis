@@ -28,6 +28,7 @@ var firstTimeKey = true;
 /****************************** FLAGS *****************************************/
 var random = false;
 var DEBUG = false;
+var STATE = "start";
 
 /****************************** ROOM VARS *************************************/
 var ground;
@@ -88,6 +89,7 @@ init();
 function init() {
   NUMLIGHTORBS = 50;
   clock = new THREE.Clock();
+  clock.start();
   //listenForPlayerMovement();
 
 	// set up the scene
@@ -97,7 +99,10 @@ function init() {
   getPointerLock();
   document.onclick = function () {
     instructions.innerHTML = "";
-    animate();
+    if (STATE == "start") {
+      STATE = "play"
+      animate();
+    }
   }
 
   //console.log("hello");
@@ -111,7 +116,8 @@ function createScene(){
   fogDensity = 0.009;
   if (DEBUG == false)
     
-    scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog
+    // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
+  scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
     // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
   // scene.background = new THREE.Color(0xe2c06f);
   scene.background = new THREE.Color(0xfffabf);
@@ -181,9 +187,7 @@ function createScene(){
   flashlightRad.rotation.x = -Math.PI/2;
   scene.add(flashlightRad);
 
-  // setup time
-  clock = new THREE.Clock();
-  clock.start();
+  
 
   // create the background
   keyObject = new Key(scene);
@@ -229,7 +233,8 @@ function animate(){
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
       fogDensity += 0.00004;
-      scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
+      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
+      scene.fog = new THREE.FogExp2(0x848484, fogDensity); //enable fog 
     }
 
     render();
@@ -352,6 +357,7 @@ function endGame() {
 
       if (event.keyCode == 32) {
         // console.log("attempting to restart");
+        STATE = "start";
         location.reload();
       }
     });
@@ -369,7 +375,9 @@ function wonGame() {
 
       if (event.keyCode == 32) {
         // console.log("attempting to restart");
+        STATE = "start";
         location.reload();
+        
       }
     });
 }
