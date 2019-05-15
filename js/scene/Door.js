@@ -18,7 +18,6 @@ function Door(scene) {
   
     });
   
-  
     this.update = function(time) {
   
   

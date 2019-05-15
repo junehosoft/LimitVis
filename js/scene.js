@@ -58,7 +58,7 @@ var collidableObjects = []; // An array of collidable objects used later
 var MAXLIGHTORBS = 70;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
-var PLAYERDOORDIST = 9;
+var PLAYERDOORDIST = 7;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -105,7 +105,7 @@ function init() {
 }
 
 function calcFog(health) {
-  return 1.0 / ((health + 0.1) * 0.7);
+  return 1.0 / ((health + 0.1));
 }
 
 function calcRad(health) {
