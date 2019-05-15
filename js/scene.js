@@ -101,8 +101,14 @@ function init() {
   instructions.innerHTML = "";
   STATE = "play"
   animate();
+}
 
-  // console.log("hello");
+function calcFog(health) {
+  return 1.0 / ((health + 0.1) * 0.7);
+}
+
+function calcRad(health) {
+  return health * 0.3;
 }
 
 function createScene(){
@@ -110,7 +116,7 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  fogDensity = 1.0 / health;
+  fogDensity = calcFog(health);
   if (DEBUG == false) {
     scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     scene.background = new THREE.Color(0xffffff);
@@ -157,17 +163,9 @@ function createScene(){
     light.shadow.camera.far = 1000;
     scene.add(light);
   }
-  // testing for ambient light
-  // scene.add(new THREE.AmbientLight(0x8e8b8b));
-  // scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
-  
-  //flashlight = new THREE.PointLight(0xffffff, 10, 10);
-  //flashlight.position.set(0, 0, 0);
-  //flashlight.visible = true;
-  //scene.add(flashlight);
 
   // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(health*0.3, 64, 3);
+  circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);
   circleGeo.vertices.shift();
   circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
   circle = new THREE.LineLoop(circleGeo, circleMat);
@@ -232,14 +230,14 @@ function animate(){
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity = 1.0 / health;
+      fogDensity = calcFog(health);
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
     
     // update circle position
     let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(health*0.3, 64, 3);
+    circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);
     circleGeo.vertices.shift();
     circle.geometry = circleGeo;
     circle.position.set(currentPos.x, 0.1, currentPos.z);
@@ -319,13 +317,13 @@ function getLight() {
       orbs.splice(i, 1);
 
       //increase health 
-      health += 20;
+      health += 25;
       if (health > MAXHEALTH)
         health = MAXHEALTH;
 
-      circleGeo.radius = health * 0.3;
+      circleGeo.radius = calcRad(health);
 
-      fogDensity = 1.0 / health;
+      fogDensity = calcFog(health);
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity);
 
     }
