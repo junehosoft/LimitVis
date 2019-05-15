@@ -16,13 +16,14 @@ function Orb (scene, position) {
       {
         "c": {type: "f", value: .2},
         "p": {type: "f", value: 1.9},
-        glowColor: {type: "c", value: new THREE.Color(0xffff00)},
+        glowColor: {type: "c", value: new THREE.Color(0x050326)},
         viewVector: {type: "v3", value: camera.position}
       },
       vertexShader: document.getElementById('vertexShader').textContent,
       fragmentShader: document.getElementById('fragmentShader').textContent,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      blending: THREE.SubtractiveBlending,
+      // color: THREE.NoColors,
       transparent: true
     }
   );
