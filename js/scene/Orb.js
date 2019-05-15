@@ -52,7 +52,7 @@ function Orb (scene, position) {
     size: 0.3,
     map: new THREE.TextureLoader().load("images/particle.png"),
     blending: THREE.AdditiveBlending,
-    transparent: true
+    //transparent: true
   });
 
   // now create the individual particles
