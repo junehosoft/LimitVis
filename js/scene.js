@@ -167,7 +167,7 @@ function createScene(){
   // radius of flashlight circle 
   circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);
   circleGeo.vertices.shift();
-  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
+  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
   circle = new THREE.LineLoop(circleGeo, circleMat);
   circle.rotation.x = -Math.PI/2;
   scene.add(circle);
