@@ -1,4 +1,4 @@
-function LightOrb (scene) {
+function Orb (scene, position) {
   // main object of this class
   var object = new THREE.Object3D();
   this.object = object;
@@ -50,9 +50,9 @@ function LightOrb (scene) {
   var pMaterial = new THREE.PointsMaterial({
     color: 0x66F9FF,
     size: 0.3,
-    map: new THREE.TextureLoader().load("../../images/particle.png"),
+    map: new THREE.TextureLoader().load("images/particle.png"),
     blending: THREE.AdditiveBlending,
-    transparent: true
+    //transparent: true
   });
 
   // now create the individual particles
@@ -77,9 +77,15 @@ function LightOrb (scene) {
   
   // add it to the object
   object.add(particleSystem);
-  object.position.x = Math.random()*400-200;
-  object.position.y = 2;
-  object.position.z = Math.random()*400-200;
+  if (position === undefined) {
+    object.position.x = Math.random()*400-200;
+    object.position.y = 2;
+    object.position.z = Math.random()*400-200;
+  } else {
+    object.position.x = position.x + Math.random() * 10 - 5;
+    object.position.y = 2;
+    object.position.z = position.z + Math.random() * 10 - 5;
+  }
   scene.add(this.object);
   
   this.update = function() {

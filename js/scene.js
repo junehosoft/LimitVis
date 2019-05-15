@@ -6,20 +6,28 @@ var camera;
 var scene;
 var renderer;
 var dom;
+var clock;
+
+// objects related to scene objects
 var light;
 var key;
 var keyObject;
 var sceneSubject;
 var door;
-var fogDensity;
 var nearFog;
 var farFog;
 var cubes;
 var glowBox;
-var flashlight; 
-var flashlightRad;
-var circleGeo; // geometry for flashlightRad
+
+// objects related to timer/health
+var fogDensity;
+var circleRad;
+var circleGeo; 
 var circleMat;
+var health;
+var MAXHEALTH = 100;
+
+// game state booleans
 var foundKey = false;
 var doorFound = false;
 var firstTimeDoor = true;
@@ -46,7 +54,7 @@ var frontDist = -200;
 var boxes = [];
 var orbs = [];
 var collidableObjects = []; // An array of collidable objects used later
-var NUMLIGHTORBS = 75;
+var MAXLIGHTORBS = 70;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
 var PLAYERDOORDIST = 9;
@@ -66,8 +74,6 @@ var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
-var clock;
-
 
 var MOVESPEED = 30,
     LOOKSPEED = 0.075
@@ -80,23 +86,29 @@ document.onclick = function () {
   }
 }
 
-
 function init() {
   //listenForPlayerMovement();
 
   clock = new THREE.Clock();
   clock.start();
+  health = 100;
 
 	// set up the scene
   createScene();
-
+  
 	//call game loop
   getPointerLock();
   instructions.innerHTML = "";
   STATE = "play"
   animate();
+}
 
-  // console.log("hello");
+function calcFog(health) {
+  return 1.0 / ((health + 0.1) * 0.7);
+}
+
+function calcRad(health) {
+  return health * 0.3;
 }
 
 function createScene(){
@@ -104,12 +116,9 @@ function createScene(){
   sceneWidth=window.innerWidth;
   sceneHeight=window.innerHeight;
   scene = new THREE.Scene();//the 3d scene
-  fogDensity = 0.009;
+  fogDensity = calcFog(health);
   if (DEBUG == false) {
-    // scene.fog = new THREE.FogExp2(0xfffabf, fogDensity); //enable fog ORANGE COLOR
     scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
-      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //enable fog
-    // scene.background = new THREE.Color(0xe2c06f);
     scene.background = new THREE.Color(0xffffff);
   }
 
@@ -154,31 +163,21 @@ function createScene(){
     light.shadow.camera.far = 1000;
     scene.add(light);
   }
-  // testing for ambient light
-  // scene.add(new THREE.AmbientLight(0x8e8b8b));
-  // scene.add(new THREE.DirectionalLight(0x8f939b, 1.75));
-  
-  flashlight = new THREE.PointLight(0xffffff, 10, 10);
-  flashlight.position.set(0, 0, 0);
-  flashlight.visible = true;
-  scene.add(flashlight);
 
   // radius of flashlight circle 
-  circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
+  circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);
   circleGeo.vertices.shift();
-  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 1,});
-  flashlightRad = new THREE.LineLoop(circleGeo, circleMat);
-  flashlightRad.rotation.x = -Math.PI/2;
-  scene.add(flashlightRad);
-
-  
+  circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
+  circle = new THREE.LineLoop(circleGeo, circleMat);
+  circle.rotation.x = -Math.PI/2;
+  scene.add(circle);
 
   // create the background
   keyObject = new Key(scene);
   sceneSubject = [new Background(scene), new Door(scene)];
   cubes = [];
   if (random) {
-    for (let i = 0; i < 15; i++) 
+    for (let i = 0; i < 25; i++) 
       cubes.push(new Cube(scene));
   } else {
     let dimensions = new THREE.Vector3(30, 100, 30);
@@ -191,8 +190,24 @@ function createScene(){
       }
     }
   }
-  for (let i = 0; i < NUMLIGHTORBS; i++)
-    orbs.push(new LightOrb(scene));
+  for (let i = 0; i < 16; i++) {
+    for (let j = 0; j < 16; j++) {
+      if (i % 2 == 0 && j % 2 == 0)
+        continue;
+      let flip = (Math.random() <= 0.3);
+      if (flip) {
+        let position = new THREE.Vector3(i * 25 - 200, 0, j * 25 - 200);
+        orbs.push(new   Orb(scene, position));
+      }
+      if (orbs.length >= MAXLIGHTORBS) {
+        break;
+      }
+    }
+    if (orbs.length >= MAXLIGHTORBS) {
+      break;
+    }
+  }
+    
 	//var helper = new THREE.CameraHelper( sun.shadow.camera );
 	//scene.add( helper );// enable to see the light cone
 
@@ -202,7 +217,7 @@ function createScene(){
 function animate(){
     var delta = clock.getDelta();
     //animate
-    for (let i = 0; i < NUMLIGHTORBS; i++) {
+    for (let i = 0; i < orbs.length; i++) {
       orbs[i].update();
     }
 
@@ -211,39 +226,31 @@ function animate(){
       keyObject.update(delta);
     }
 
-    // pointLight.intensity -= 0.005;
-
+    health -= 0.1;
     // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
     // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
     if (DEBUG == false) {
-      fogDensity += 0.00001;
+      fogDensity = calcFog(health);
       // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
-
-    render();
-
-    // keep requesting renderer
-    requestAnimationFrame(animate);
     
-
-    // update light position
+    // update circle position
     let currentPos = controls.getObject().position;
-    circleGeo = new THREE.CircleGeometry(flashlight.distance*0.6, 64, 3);
+    circleGeo = new THREE.CircleGeometry(calcRad(health), 64, 3);
     circleGeo.vertices.shift();
-    flashlightRad.geometry = circleGeo;
-    flashlight.position.set(currentPos.x, 6, currentPos.z);
-    flashlightRad.position.set(currentPos.x, 0.1, currentPos.z);
-    if (flashlight.distance > 0.01) 
-      flashlight.distance -= 0.4*delta;
-    if (flashlight.intensity > 1.01)
-      flashlight.intensity -= 0.4*delta;
+    circle.geometry = circleGeo;
+    circle.position.set(currentPos.x, 0.1, currentPos.z);
 
     // check if near light
     getLight();
 
     controls.animatePlayer(delta);
-    // console.log(controls.getObject().position)
+
+    render();
+
+    // keep requesting renderer
+    requestAnimationFrame(animate);
 }
 
 function render(){
@@ -303,25 +310,20 @@ function getLight() {
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].object.position, currentPos).length();
     if (dist < PLAYERCOLLISIONDIST) {
-      console.log("GOT A LIGHT")
       // remove the object
       let orbIndex = scene.children.indexOf(orbs[i].object);
       orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
 
-      NUMLIGHTORBS--;
+      //increase health 
+      health += 25;
+      if (health > MAXHEALTH)
+        health = MAXHEALTH;
 
-      flashlight.distance *= 1.10;
-      if (circleGeo.radius < 90) {
-        circleGeo.radius *= 1.10;
-      }
-      flashlight.intensity += 0.5;
-      if (fogDensity >= 0.009) {
-        fogDensity -= 0.009;
-      } else {
-        fogDensity = 0;
-      }
+      circleGeo.radius = calcRad(health);
+
+      fogDensity = calcFog(health);
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity);
 
     }
@@ -334,8 +336,10 @@ var fade_out = function() {
 }
 
 function detectPlayerDeath() {
-  if (flashlight.distance < 0.5 || flashlight.intensity < 1.0)
+  if (health <= 0) {
+    health = 0;
     return true;
+  }
   return false;
 }
 
