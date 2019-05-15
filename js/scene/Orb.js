@@ -1,4 +1,4 @@
-function LightOrb (scene, position) {
+function Orb (scene, position) {
   // main object of this class
   var object = new THREE.Object3D();
   this.object = object;

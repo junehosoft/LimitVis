@@ -197,7 +197,7 @@ function createScene(){
       let flip = (Math.random() <= 0.3);
       if (flip) {
         let position = new THREE.Vector3(i * 25 - 200, 0, j * 25 - 200);
-        orbs.push(new LightOrb(scene, position));
+        orbs.push(new Orb(scene, position));
       }
       if (orbs.length >= MAXLIGHTORBS) {
         break;
