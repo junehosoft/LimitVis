@@ -50,7 +50,7 @@ function Orb (scene, position) {
   var pMaterial = new THREE.PointsMaterial({
     color: 0x66F9FF,
     size: 0.3,
-    map: new THREE.TextureLoader().load("../../images/particle.png"),
+    map: new THREE.TextureLoader().load("images/particle.png"),
     blending: THREE.AdditiveBlending,
     transparent: true
   });

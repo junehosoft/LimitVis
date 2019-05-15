@@ -1,7 +1,7 @@
 function Key(scene) {
   this.time = 0;
   let loader = new THREE.STLLoader();
-  loader.load('Key.stl', function (geometry) {
+  loader.load('objects/Key.stl', function (geometry) {
     let material = new THREE.MeshBasicMaterial(
       { color: 0xfdfd96} );
     key = new THREE.Mesh(geometry, material);
