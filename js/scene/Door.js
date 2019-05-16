@@ -64,7 +64,7 @@ function Door(scene) {
   pMaterial);
   //particleSystem.sortParticles = true;
   this.points = particleSystem;
-  
+  particleSystem.visible = false;
   // add it to the object
   object.add(this.points);
 
@@ -81,4 +81,7 @@ function Door(scene) {
     //this.points.rotation.z -= 0.2;
   }
 
+  this.show = function() {
+    this.points.visible = true;
+  }
 }

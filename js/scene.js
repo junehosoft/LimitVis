@@ -231,7 +231,8 @@ function animate(){
       doorObject.update();
 
     health -= 0.1;
-
+    if (health < -0.1)
+      health = -0.1;
     // check if near light
     getLight();
 
@@ -380,6 +381,7 @@ function wonGame() {
 }
 
 function gotKey() {
+  doorObject.show();
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.</strong>";
   instructions.style.color = 'SlateBlue';
