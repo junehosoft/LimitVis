@@ -16,14 +16,13 @@ function Orb (scene, position) {
       {
         "c": {type: "f", value: .2},
         "p": {type: "f", value: 1.9},
-        glowColor: {type: "c", value: new THREE.Color(0x050326)},
+        glowColor: {type: "c", value: new THREE.Color(0xffff00)},
         viewVector: {type: "v3", value: camera.position}
       },
       vertexShader: document.getElementById('vertexShader').textContent,
       fragmentShader: document.getElementById('fragmentShader').textContent,
-      side: THREE.DoubleSide,
-      blending: THREE.SubtractiveBlending,
-      // color: THREE.NoColors,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
       transparent: true
     }
   );
@@ -82,9 +81,9 @@ function Orb (scene, position) {
     object.position.y = 2;
     object.position.z = Math.random()*400-200;
   } else {
-    object.position.x = position.x + Math.random() * 10 - 5;
+    object.position.x = position.x + Math.random() * 14 - 7;
     object.position.y = 2;
-    object.position.z = position.z + Math.random() * 10 - 5;
+    object.position.z = position.z + Math.random() * 14 - 7;
   }
   scene.add(this.object);
   

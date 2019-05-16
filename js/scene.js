@@ -22,9 +22,11 @@ var glowBox;
 
 // objects related to timer/health
 var fogDensity;
-var circleRad;
+var circle;
 var circleGeo; 
 var circleMat;
+var circleEffect;
+var effectTime = 0;
 var health;
 var MAXHEALTH = 100;
 
@@ -171,7 +173,9 @@ function createScene(){
   circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
   circle = new THREE.LineLoop(circleGeo, circleMat);
   circle.rotation.x = -Math.PI/2;
+  circle.visible = false;
   scene.add(circle);
+  circleEffect = new CircleEffect(scene);
 
   // create the background
   keyObject = new Key(scene);
@@ -230,8 +234,12 @@ function animate(){
     if (scene.children.indexOf(doorObject.object) >= 0)
       doorObject.update();
 
-    health -= 0.1;
+    if (scene.children.indexOf(circleEffect.object) >= 0)
+      circleEffect.update();
 
+    health -= 0.1;
+    if (health < -0.1)
+      health = -0.1;
     // check if near light
     getLight();
 
@@ -312,16 +320,19 @@ function getLight() {
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].object.position, currentPos).length();
     if (dist < PLAYERCOLLISIONDIST) {
+      //increase health 
+      health += 25;
+      if (health > MAXHEALTH)
+        health = MAXHEALTH;
+
+      // add circle effect
+      circleEffect.start();
+
       // remove the object
       let orbIndex = scene.children.indexOf(orbs[i].object);
       orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
-
-      //increase health 
-      health += 25;
-      if (health > MAXHEALTH)
-        health = MAXHEALTH;
     }
   }
 }
@@ -380,6 +391,7 @@ function wonGame() {
 }
 
 function gotKey() {
+  doorObject.show();
   blocker.style.display = '';
   instructions.innerHTML = "<strong>YOU FOUND THE KEY! FIND THE PORTAL BEFORE YOUR LIGHT RUNS OUT.</strong>";
   instructions.style.color = 'SlateBlue';

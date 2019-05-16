@@ -72,6 +72,10 @@ THREE.PlayerControls = function(camera, domElement) {
 		return this.block;
 	};
 
+	this.getPosition = function() {
+		return this.block.position;
+	}
+	
 	this.getDirection = function () {
 		var direction = new THREE.Vector3( 0, 0, 0 );
 		camera.getWorldDirection(direction);

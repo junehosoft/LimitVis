@@ -25,6 +25,4 @@ function Key(scene) {
     this.time += delta;
     key.position.y = Math.sin(this.time * Math.PI) * 0.5 + 1.5;
   }
-
-
 }
