@@ -22,9 +22,10 @@ var glowBox;
 
 // objects related to timer/health
 var fogDensity;
-var circleRad;
+var circle;
 var circleGeo; 
 var circleMat;
+var circleEffect;
 var health;
 var MAXHEALTH = 100;
 
@@ -172,6 +173,7 @@ function createScene(){
   circle = new THREE.LineLoop(circleGeo, circleMat);
   circle.rotation.x = -Math.PI/2;
   scene.add(circle);
+  circleEffect = new CircleEffect(scene);
 
   // create the background
   keyObject = new Key(scene);
@@ -229,6 +231,9 @@ function animate(){
     }
     if (scene.children.indexOf(doorObject.object) >= 0)
       doorObject.update();
+
+    if (scene.children.indexOf(circleEffect.object) >= 0)
+      circleEffect.update();
 
     health -= 0.1;
     if (health < -0.1)
