@@ -21,7 +21,7 @@ function Orb (scene, position) {
       },
       vertexShader: document.getElementById('vertexShader').textContent,
       fragmentShader: document.getElementById('fragmentShader').textContent,
-      side: THREE.BackSide,
+      side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
       transparent: true
     }
