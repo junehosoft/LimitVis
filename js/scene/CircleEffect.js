@@ -8,7 +8,7 @@ function CircleEffect(scene) {
 
     var pMaterial = new THREE.PointsMaterial({
         color: 0xfa9bff,
-        size: 0.4,
+        size: 0.7,
         map: new THREE.TextureLoader().load('images/particle.png'),
         blending: THREE.AdditiveBlending,
         //transparent: true
