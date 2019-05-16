@@ -73,7 +73,6 @@ function Orb (scene, position) {
   var particleSystem = new THREE.Points(
   particles,
   pMaterial);
-  particleSystem.sortParticles = true;
   this.points = particleSystem;
   
   // add it to the object
