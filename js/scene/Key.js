@@ -7,14 +7,13 @@ function Key(scene) {
     key = new THREE.Mesh(geometry, material);
     
     var index = Math.floor(Math.random() * 64);
-    {
-      let x = (index / 8 * 50) - 175;
-      let z = (index % 8 * 50) - 175;
-      key.position.set(x,1.5,z);
-      key.rotation.set(0,0,0);
-      key.scale.set(.6,.6,.6);
-      console.log(key.position);
-    }
+    console.log(index);
+    let x = (Math.floor(index / 8) * 50) - 175;
+    let z = (index % 8 * 50) - 175;
+    key.position.set(x,1.5,z);
+    key.rotation.set(0,0,0);
+    key.scale.set(.6,.6,.6);
+    
     key.castShadow = true;
     // key.receiveShadow = true;
     console.log(key.position);
