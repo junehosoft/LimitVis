@@ -159,11 +159,11 @@ THREE.PlayerControls = function(camera, domElement) {
 	this.detectDoorFound = function() {
 		let currentPos = controls.getObject().position;
 
-		if (scene.children.indexOf(door) < 0) {
+		if (scene.children.indexOf(doorObject.object) < 0) {
 			return false;
 		}
 
-		let dist = new THREE.Vector3().subVectors(door.position, currentPos).length();
+		let dist = new THREE.Vector3().subVectors(doorObject.object.position, currentPos).length();
 		if (dist < PLAYERDOORDIST) {
 			doorFound = true;
 			return true;

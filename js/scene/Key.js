@@ -8,8 +8,8 @@ function Key(scene) {
     
     var index = Math.floor(Math.random() * 64);
     {
-      let x = (index / 10 * 50) - 175;
-      let z = (index % 10 * 50) - 175;
+      let x = (index / 8 * 50) - 175;
+      let z = (index % 8 * 50) - 175;
       key.position.set(x,1.5,z);
       key.rotation.set(0,0,0);
       key.scale.set(.6,.6,.6);
@@ -17,6 +17,7 @@ function Key(scene) {
     }
     key.castShadow = true;
     // key.receiveShadow = true;
+    console.log(key.position);
     scene.add(key);
 
   });

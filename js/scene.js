@@ -227,6 +227,8 @@ function animate(){
     if (scene.children.indexOf(key) >= 0) {
       keyObject.update(delta);
     }
+    if (scene.children.indexOf(doorObject.object) >= 0)
+      doorObject.update();
 
     health -= 0.1;
 
