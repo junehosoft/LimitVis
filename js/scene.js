@@ -26,6 +26,7 @@ var circle;
 var circleGeo; 
 var circleMat;
 var circleEffect;
+var effectTime = 0;
 var health;
 var MAXHEALTH = 100;
 
@@ -172,6 +173,7 @@ function createScene(){
   circleMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5,});
   circle = new THREE.LineLoop(circleGeo, circleMat);
   circle.rotation.x = -Math.PI/2;
+  circle.visible = false;
   scene.add(circle);
   circleEffect = new CircleEffect(scene);
 
@@ -318,16 +320,19 @@ function getLight() {
   for (let i = 0; i < orbs.length; i++) {
     let dist = new THREE.Vector3().subVectors(orbs[i].object.position, currentPos).length();
     if (dist < PLAYERCOLLISIONDIST) {
+      //increase health 
+      health += 25;
+      if (health > MAXHEALTH)
+        health = MAXHEALTH;
+
+      // add circle effect
+      circleEffect.start();
+
       // remove the object
       let orbIndex = scene.children.indexOf(orbs[i].object);
       orbs[i].object.children = [];
       scene.children.splice(orbIndex, 1);
       orbs.splice(i, 1);
-
-      //increase health 
-      health += 25;
-      if (health > MAXHEALTH)
-        health = MAXHEALTH;
     }
   }
 }
