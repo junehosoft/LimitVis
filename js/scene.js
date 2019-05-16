@@ -14,6 +14,7 @@ var key;
 var keyObject;
 var sceneSubject;
 var door;
+var doorObject;
 var nearFog;
 var farFog;
 var cubes;
@@ -57,7 +58,7 @@ var collidableObjects = []; // An array of collidable objects used later
 var MAXLIGHTORBS = 70;
 var PLAYERCOLLISIONDIST = 5;
 var PLAYERLIGHTDIST = 6;
-var PLAYERDOORDIST = 9;
+var PLAYERDOORDIST = 7;
 
 /****************************** CONTROL VARS **********************************/
 var blocker = document.getElementById('blocker');
@@ -104,7 +105,7 @@ function init() {
 }
 
 function calcFog(health) {
-  return 1.0 / ((health + 0.1) * 0.7);
+  return 1.0 / ((health + 0.1));
 }
 
 function calcRad(health) {
@@ -174,7 +175,8 @@ function createScene(){
 
   // create the background
   keyObject = new Key(scene);
-  sceneSubject = [new Background(scene), new Door(scene)];
+  doorObject = new Door(scene);
+  sceneSubject = [new Background(scene)];
   cubes = [];
   if (random) {
     for (let i = 0; i < 25; i++) 
@@ -227,11 +229,12 @@ function animate(){
     }
 
     health -= 0.1;
-    // if (farFog > nearFog) farFog -= 0.06; // COMMENT THIS BACK IN LATER
-    // scene.fog = new THREE.Fog(fogColor, nearFog, farFog);
+
+    // check if near light
+    getLight();
+
     if (DEBUG == false) {
       fogDensity = calcFog(health);
-      // scene.fog = new THREE.FogExp2(0xe2c06f, fogDensity); //fog grows denser
       scene.fog = new THREE.FogExp2(0xffffff, fogDensity); //enable fog 
     }
     
@@ -241,9 +244,6 @@ function animate(){
     circleGeo.vertices.shift();
     circle.geometry = circleGeo;
     circle.position.set(currentPos.x, 0.1, currentPos.z);
-
-    // check if near light
-    getLight();
 
     controls.animatePlayer(delta);
 
@@ -320,12 +320,6 @@ function getLight() {
       health += 25;
       if (health > MAXHEALTH)
         health = MAXHEALTH;
-
-      circleGeo.radius = calcRad(health);
-
-      fogDensity = calcFog(health);
-      scene.fog = new THREE.FogExp2(0xffffff, fogDensity);
-
     }
   }
 }
