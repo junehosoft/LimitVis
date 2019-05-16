@@ -273,9 +273,9 @@ function getPointerLock() {
   if (!gameStarted) {
     document.addEventListener('pointerlockchange', lockChange, false);
     gameStarted = true;
-    console.log("ruh roh")
+    // console.log("ruh roh")
   } else {
-    console.log("uh oh")
+    // console.log("uh oh")
   }
 }
 
