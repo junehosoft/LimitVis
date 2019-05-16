@@ -25,6 +25,8 @@ function CircleEffect(scene) {
             this.points2.rotation.y -= 0.01;
             this.points1.position.y += 0.1;
             this.points2.position.y += 0.1;
+            this.pMaterial.needsUpdate = true;
+            this.pMaterial.opacity = effectTime / 75;
             /*this.points1.geometry.verticesNeedUpdate = true;
             this.points2.geometry.verticesNeedUpdate = true;
             for (let i = 0; i < this.points1.geometry.vertices.length; i++) {
@@ -39,6 +41,7 @@ function CircleEffect(scene) {
     this.start = function() {
         this.object.children = [];
         effectTime = 75;
+        this.pMaterial.opacity = 1;
         var particleCount = 150,
         particles1 = new THREE.Geometry(),
         particles2 = new THREE.Geometry();
