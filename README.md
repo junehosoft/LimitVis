@@ -1,6 +1,9 @@
 # LimitVis
 A game about limited sight
 
+## Notes
+- Alice's laptop died during the last week so she borrowed a friend's laptop, which is why you might see commits from "Zak Dasaro" 
+
 ## Languages/Tools
 - Javascript
 - ThreeJS
@@ -38,3 +41,5 @@ Dean's Date. Project Due date.
 ## Objects in scene
 - Mostly primitives (cubes, triangles)
 - some spikes
+
+
